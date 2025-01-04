@@ -34,15 +34,15 @@ services:
     networks:
       - chatbot-net
 
-volumes:
-  open-webui:
-
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
     restart: unless-stopped
     networks:
       - chatbot-net
+
+volumes:
+  open-webui:
 
 networks:
   chatbot-net:
