@@ -22,7 +22,10 @@ services:
     image: ghcr.io/open-webui/open-webui:0.3.10
     container_name: open-webui
     depends_on:
-      - webui-db
+      webui-db:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
     ports:
       - 3002:8080
     environment:
@@ -44,6 +47,16 @@ services:
       - "11434:11434"
     networks:
       - chatbot-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      sh -c "ollama serve &
+             sleep 5 &&
+             ollama pull tinyllama &&
+             wait"
 
 volumes:
   open-webui:
