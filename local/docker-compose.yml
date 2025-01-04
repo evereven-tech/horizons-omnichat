@@ -40,6 +40,8 @@ services:
     restart: unless-stopped
     volumes:
       - ollama-data:/root/.ollama
+    ports:
+      - "11434:11434"
     networks:
       - chatbot-net
 
