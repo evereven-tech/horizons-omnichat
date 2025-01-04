@@ -52,11 +52,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    command: >
-      sh -c "ollama serve &
-             sleep 5 &&
-             ollama pull tinyllama &&
-             wait"
+    volumes:
+      - ollama-data:/root/.ollama
+      - ./init-ollama.sh:/init-ollama.sh
+    command: ["/bin/sh", "/init-ollama.sh"]
 
 volumes:
   open-webui:
