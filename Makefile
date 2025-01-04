@@ -1,4 +1,4 @@
-.PHONY: init validate
+.PHONY: init validate local-up local-down
 
 # Basic commands
 init:
@@ -8,3 +8,12 @@ init:
 validate:
 	@echo "Validating configuration..."
 	@test -f .env || (echo "Error: .env file not found. Copy .env.example to .env first." && exit 1)
+
+# Local deployment commands
+local-up: validate
+	@echo "Starting local deployment..."
+	cd local && docker compose up -d
+
+local-down:
+	@echo "Stopping local deployment..."
+	cd local && docker compose down
