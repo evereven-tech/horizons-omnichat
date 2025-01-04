@@ -1,0 +1,16 @@
+FROM ollama/ollama:latest
+
+# Instalar curl y gettext
+RUN apt-get update && apt-get install -y curl gettext-base && rm -rf /var/lib/apt/lists/*
+
+# Copiar el script de inicialización
+COPY init-ollama.sh /init-ollama.sh
+RUN chmod +x /init-ollama.sh
+
+# Puerto por defecto de Ollama
+EXPOSE 11434
+
+# Variable para modelos (valor por defecto si no se especifica en .env)
+ENV OLLAMA_MODELS=tinyllama
+
+CMD ["/init-ollama.sh"]
