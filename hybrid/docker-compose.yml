@@ -71,7 +71,7 @@ services:
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
       - AWS_REGION=${AWS_REGION:-us-west-1}
       - AWS_DEFAULT_REGION=${AWS_REGION:-us-west-1}
-      - API_KEY_PARAM_NAME=${BEDROCK_API_KEY}
+      - API_KEY=${BEDROCK_API_KEY}
     ports:
       - "8000:80"
     healthcheck:
