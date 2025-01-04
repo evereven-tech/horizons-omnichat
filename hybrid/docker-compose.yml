@@ -47,7 +47,7 @@ services:
 
   ollama:
     build:
-      context: .
+      context: ../common
       dockerfile: Dockerfile.ollama
     container_name: ollama
     restart: unless-stopped
