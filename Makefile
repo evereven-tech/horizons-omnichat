@@ -1,16 +1,16 @@
-.PHONY: init validate local-up local-down
+.PHONY: init validate-local local-up local-down
 
 # Basic commands
 init:
 	git submodule add https://github.com/aws-samples/bedrock-access-gateway.git external/bedrock-gateway
 	git submodule update --init --recursive
 
-validate:
-	@echo "Validating configuration..."
-	@test -f .env || (echo "Error: .env file not found. Copy .env.example to .env first." && exit 1)
+validate-local:
+	@echo "Validating local configuration..."
+	@cd local && test -f .env || (echo "Error: .env file not found in local/. Copy local/.env.example to local/.env first." && exit 1)
 
 # Local deployment commands
-local-up: validate
+local-up: validate-local
 	@echo "Starting local deployment..."
 	@echo "GPU Support: $(OLLAMA_USE_GPU)"
 	@cd local && if [ "$(OLLAMA_USE_GPU)" = "true" ]; then \
