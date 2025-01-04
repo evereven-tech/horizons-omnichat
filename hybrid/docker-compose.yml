@@ -62,7 +62,7 @@ services:
 
   bedrock-gateway:
     build:
-      context: ../external/bedrock-gateway
+      context: ../external/bedrock-gateway/src/
       dockerfile: Dockerfile_ecs
     container_name: bedrock-gateway
     environment:
@@ -71,7 +71,6 @@ services:
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
       - AWS_REGION=${AWS_REGION}
       - API_KEY_PARAM_NAME=${BEDROCK_API_KEY}
-      - DEBUG=true
     ports:
       - "8000:80"
     healthcheck:
