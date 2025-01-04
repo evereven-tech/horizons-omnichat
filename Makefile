@@ -1,8 +1,10 @@
-.PHONY: init validate-local local-up local-down
+.PHONY: init validate-local validate-hybrid local-up local-down hybrid-up hybrid-down
 
 # Basic commands
 init:
-	git submodule add https://github.com/aws-samples/bedrock-access-gateway.git external/bedrock-gateway
+	@if [ ! -d "external/bedrock-gateway" ]; then \
+		git submodule add https://github.com/aws-samples/bedrock-access-gateway.git external/bedrock-gateway; \
+	fi
 	git submodule update --init --recursive
 
 validate-local:
@@ -23,3 +25,23 @@ local-up: validate-local
 local-down:
 	@echo "Stopping local deployment..."
 	@cd local && docker compose down
+
+# Hybrid deployment commands
+validate-hybrid:
+	@echo "Validating hybrid configuration..."
+	@cd hybrid && test -f .env || (echo "Error: .env file not found in hybrid/. Copy hybrid/.env.example to hybrid/.env first." && exit 1)
+	@test -d external/bedrock-gateway || (echo "Error: bedrock-gateway not found. Run 'make init' first." && exit 1)
+
+hybrid-up: validate-hybrid
+	@echo "Starting hybrid deployment..."
+	@cd hybrid && export OLLAMA_USE_GPU=$$(grep OLLAMA_USE_GPU .env | cut -d '=' -f2) && \
+	echo "GPU Support: $$OLLAMA_USE_GPU" && \
+	if [ "$$OLLAMA_USE_GPU" = "true" ]; then \
+		docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d; \
+	else \
+		docker compose up -d; \
+	fi
+
+hybrid-down:
+	@echo "Stopping hybrid deployment..."
+	@cd hybrid && docker compose down
