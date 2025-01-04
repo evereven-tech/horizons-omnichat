@@ -9,10 +9,18 @@ validate:
 	@echo "Validating configuration..."
 	@test -f .env || (echo "Error: .env file not found. Copy .env.example to .env first." && exit 1)
 
+# Include environment variables
+include .env
+export
+
 # Local deployment commands
 local-up: validate
 	@echo "Starting local deployment..."
-	cd local && docker compose up -d
+	@cd local && if [ "$(OLLAMA_USE_GPU)" = "true" ]; then \
+		docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d; \
+	else \
+		docker compose up -d; \
+	fi
 
 local-down:
 	@echo "Stopping local deployment..."
