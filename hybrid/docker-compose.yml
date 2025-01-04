@@ -19,7 +19,7 @@ services:
       - chatbot-net
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:0.3.10
+    image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     container_name: open-webui
     depends_on:
       webui-db:

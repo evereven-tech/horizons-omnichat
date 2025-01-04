@@ -19,7 +19,7 @@ services:
       - chatbot-net
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:0.3.10
+    image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     container_name: open-webui
     depends_on:
       webui-db:
@@ -33,6 +33,12 @@ services:
       - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
       - 'WEBUI_DB_HOST=webui-db'
       - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     restart: unless-stopped
     networks:
       - chatbot-net
