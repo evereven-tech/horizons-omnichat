@@ -1,0 +1,43 @@
+services:
+  webui-db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+    restart: always
+    volumes:
+      - open-webui:/var/lib/postgresql/data
+    networks:
+      - chatbot-net
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:0.3.10
+    container_name: open-webui
+    depends_on:
+      - webui-db
+    ports:
+      - 3002:8080
+    environment:
+      - 'OLLAMA_BASE_URL=http://host.docker.internal:11434'
+      - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
+      - 'WEBUI_DB_HOST=webui-db'
+      - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    restart: unless-stopped
+    networks:
+      - chatbot-net
+
+volumes:
+  open-webui:
+
+networks:
+  chatbot-net:
