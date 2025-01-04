@@ -45,6 +45,7 @@ services:
 
 volumes:
   open-webui:
+  ollama-data:
 
 networks:
   chatbot-net:
