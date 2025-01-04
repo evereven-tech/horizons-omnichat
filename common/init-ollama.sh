@@ -11,11 +11,15 @@ until curl -s -f "http://localhost:11434/api/tags" > /dev/null 2>&1; do
 done
 
 # Leer los modelos desde la variable de entorno y descargarlos
-echo "Downloading specified models..."
+echo "Checking and downloading specified models..."
 IFS=',' read -ra MODELS <<< "$OLLAMA_MODELS"
 for model in "${MODELS[@]}"; do
-    echo "Pulling model: $model"
-    ollama pull "$model"
+    if ollama list | grep -q "^$model\s"; then
+        echo "Model $model already exists, skipping..."
+    else
+        echo "Pulling model: $model"
+        ollama pull "$model"
+    fi
 done
 
 echo "Setup complete, keeping container alive..."
