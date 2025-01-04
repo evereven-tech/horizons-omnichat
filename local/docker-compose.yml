@@ -26,18 +26,23 @@ services:
     ports:
       - 3002:8080
     environment:
-      - 'OLLAMA_BASE_URL=http://host.docker.internal:11434'
+      - 'OLLAMA_BASE_URL=http://ollama:11434'
       - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
       - 'WEBUI_DB_HOST=webui-db'
       - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
-    extra_hosts:
-      - host.docker.internal:host-gateway
     restart: unless-stopped
     networks:
       - chatbot-net
 
 volumes:
   open-webui:
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    networks:
+      - chatbot-net
 
 networks:
   chatbot-net:
