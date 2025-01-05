@@ -26,8 +26,8 @@ services:
         condition: service_healthy
       ollama:
         condition: service_healthy
-      bedrock-gateway:
-        condition: service_healthy
+#      bedrock-gateway:
+#        condition: service_healthy
     ports:
       - 3002:8080
     environment:
@@ -35,12 +35,6 @@ services:
       - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
       - 'WEBUI_DB_HOST=webui-db'
       - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
     restart: unless-stopped
     networks:
       - chatbot-net
@@ -82,24 +76,9 @@ services:
       - "8000:80"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/health"]
-      interval: 30s
-      timeout: 10s
+      interval: 60s
+      timeout: 15s
       retries: 5
-    networks:
-      - chatbot-net
-
-  webui-init:
-    image: curlimages/curl:latest
-    depends_on:
-      open-webui:
-        condition: service_healthy
-      bedrock-gateway:
-        condition: service_healthy
-    environment:
-      - BEDROCK_API_KEY=${BEDROCK_API_KEY}
-    volumes:
-      - ./init-webui.sh:/init-webui.sh
-    command: ["/bin/sh", "/init-webui.sh"]
     networks:
       - chatbot-net
 
