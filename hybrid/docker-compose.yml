@@ -18,16 +18,26 @@ services:
     networks:
       - chatbot-net
 
+  config-init:
+    image: alpine
+    volumes:
+      - ./config.json.template:/config.json.template
+      - ./config.json:/config.json
+    command: >
+      /bin/sh -c "envsubst < /config.json.template > /config.json"
+    environment:
+      - BEDROCK_API_KEY=${BEDROCK_API_KEY}
+
   open-webui:
     image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     container_name: open-webui
     depends_on:
+      config-init:
+        condition: service_completed_successfully
       webui-db:
         condition: service_healthy
       ollama:
         condition: service_healthy
-#      bedrock-gateway:
-#        condition: service_healthy
     ports:
       - 3002:8080
     environment:
@@ -35,6 +45,8 @@ services:
       - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
       - 'WEBUI_DB_HOST=webui-db'
       - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
+    volumes:
+      - ./config.json:/app/backend/data/config.json
     restart: unless-stopped
     networks:
       - chatbot-net
