@@ -18,22 +18,22 @@ services:
     networks:
       - chatbot-net
 
-  config-init:
-    image: alpine
-    volumes:
-      - ./config.json.template:/config.json.template
-      - ./config.json:/config.json
-    command: >
-      /bin/sh -c "envsubst < /config.json.template > /config.json"
-    environment:
-      - BEDROCK_API_KEY=${BEDROCK_API_KEY}
+#  config-init:
+#    image: alpine
+#    volumes:
+#      - ./config.json.template:/config.json.template
+#      - ./config.json:/config.json
+#    command: >
+#      /bin/sh -c "envsubst < /config.json.template > /config.json"
+#    environment:
+#      - BEDROCK_API_KEY=${BEDROCK_API_KEY}
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     container_name: open-webui
     depends_on:
-      config-init:
-        condition: service_completed_successfully
+#      config-init:
+#        condition: service_completed_successfully
       webui-db:
         condition: service_healthy
       ollama:
@@ -76,8 +76,8 @@ services:
     build:
       context: ../external/bedrock-gateway/src/
       dockerfile: Dockerfile_ecs
-    command: >
-      /bin/sh -c "apt-get update && apt-get install -y netcat-openbsd && /app/start.sh"
+#    command: >
+#      /bin/sh -c "apt-get update && apt-get install -y netcat-openbsd && /app/start.sh"
     container_name: bedrock-gateway
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
@@ -88,14 +88,14 @@ services:
       - API_KEY=${BEDROCK_API_KEY}
     ports:
       - "8000:80"
-    healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "80"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 20s
-    networks:
-      - chatbot-net
+#    healthcheck:
+#      test: ["CMD", "nc", "-z", "localhost", "80"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
+#      start_period: 20s
+#    networks:
+#      - chatbot-net
 
 volumes:
   open-webui:
