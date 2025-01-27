@@ -17,14 +17,14 @@ local-up: validate-local
 	@cd local && export OLLAMA_USE_GPU=$$(grep OLLAMA_USE_GPU .env | cut -d '=' -f2) && \
 	echo "GPU Support enabled: $$OLLAMA_USE_GPU" && \
 	if [ "$$OLLAMA_USE_GPU" = "true" ]; then \
-		docker compose -f docker-compose.yml -f ../common/docker-compose.gpu.yml up -d; \
+		podman compose --in-pod false -f docker-compose.yml -f ../common/docker-compose.gpu.yml up -d; \
 	else \
-		docker compose up -d; \
+		podman compose up -d; \
 	fi
 
 local-down:
 	@echo "Stopping local deployment..."
-	@cd local && docker compose down
+	@cd local && podman compose down
 
 # Hybrid deployment commands
 validate-hybrid:
@@ -37,11 +37,11 @@ hybrid-up: validate-hybrid
 	@cd hybrid && export OLLAMA_USE_GPU=$$(grep OLLAMA_USE_GPU .env | cut -d '=' -f2) && \
 	echo "GPU Support: $$OLLAMA_USE_GPU" && \
 	if [ "$$OLLAMA_USE_GPU" = "true" ]; then \
-		docker compose -f docker-compose.yml -f ../common/docker-compose.gpu.yml up -d; \
+		podman compose --in-pod false -f docker-compose.yml -f ../common/docker-compose.gpu.yml up -d; \
 	else \
-		docker compose up -d; \
+		podman compose up -d; \
 	fi
 
 hybrid-down:
 	@echo "Stopping hybrid deployment..."
-	@cd hybrid && docker compose down
+	@cd hybrid && podman compose down
