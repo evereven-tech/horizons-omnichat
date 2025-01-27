@@ -38,7 +38,7 @@ services:
       - chatbot-net
 
   ollama:
-    build:
+    build:    
       context: ../common
       dockerfile: Dockerfile.ollama
     container_name: ollama
@@ -48,21 +48,21 @@ services:
     networks:
       - chatbot-net
     environment:
-      - OLLAMA_MODELS=${OLLAMA_MODELS}
+      - INSTALLED_MODELS=${INSTALLED_MODELS}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 30s
-#    volumes:
-#      - type: volume
-#        source: ollama-data
-#        target: /root/.ollama
+    volumes:
+      - type: volume
+        source: ollama-data
+        target: /root/.ollama
 
 volumes:
   open-webui:
-#  ollama-data:
+  ollama-data:
 
 networks:
   chatbot-net:

@@ -14,7 +14,7 @@ RUN chmod +x /usr/local/bin/init-ollama.sh
 EXPOSE 11434
 
 # Variable para modelos (valor por defecto si no se especifica en .env)
-ENV OLLAMA_MODELS=tinyllama
+ENV INSTALLED_MODELS=tinyllama
 ENV OLLAMA_HOST=0.0.0.0
 
 VOLUME ["/root/.ollama"]

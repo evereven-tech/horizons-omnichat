@@ -23,7 +23,7 @@ fi
 
 # Leer los modelos desde la variable de entorno y descargarlos
 echo "Checking and downloading specified models..."
-IFS=',' read -ra MODELS <<< "$OLLAMA_MODELS"
+IFS=',' read -ra MODELS <<< "$INSTALLED_MODELS"
 for model in "${MODELS[@]}"; do
     if ollama list | grep -q "^$model\s"; then
         echo "Model $model already exists, skipping..."
