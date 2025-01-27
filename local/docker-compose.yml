@@ -55,14 +55,14 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
-    volumes:
-      - type: volume
-        source: ollama-data
-        target: /root/.ollama
+#    volumes:
+#      - type: volume
+#        source: ollama-data
+#        target: /root/.ollama
 
 volumes:
   open-webui:
-  ollama-data:
+#  ollama-data:
 
 networks:
   chatbot-net:
