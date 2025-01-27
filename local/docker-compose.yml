@@ -1,6 +1,6 @@
 services:
   webui-db:
-    image: postgres:13
+    image: docker.io/library/postgres:13
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}

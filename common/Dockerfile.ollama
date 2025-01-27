@@ -1,4 +1,4 @@
-FROM ollama/ollama:latest
+FROM docker.io/ollama/ollama:latest
 
 # Instalar curl y gettext
 RUN apt-get update && apt-get install -y curl gettext-base && rm -rf /var/lib/apt/lists/*

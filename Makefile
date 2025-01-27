@@ -15,7 +15,7 @@ validate-local:
 local-up: validate-local
 	@echo "Starting local deployment..."
 	@cd local && export OLLAMA_USE_GPU=$$(grep OLLAMA_USE_GPU .env | cut -d '=' -f2) && \
-	echo "GPU Support: $$OLLAMA_USE_GPU" && \
+	echo "GPU Support enabled: $$OLLAMA_USE_GPU" && \
 	if [ "$$OLLAMA_USE_GPU" = "true" ]; then \
 		docker compose -f docker-compose.yml -f ../common/docker-compose.gpu.yml up -d; \
 	else \
