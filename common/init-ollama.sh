@@ -1,14 +1,25 @@
 #!/bin/bash
 set -e
 
-echo "Starting Ollama server..."
-ollama serve &
+# Función para verificar si Ollama ya está corriendo
+is_ollama_running() {
+    curl -s -f "http://localhost:11434/api/tags" > /dev/null 2>&1
+    return $?
+}
 
-echo "Waiting for Ollama server to be ready..."
-until curl -s -f "http://localhost:11434/api/tags" > /dev/null 2>&1; do
-    echo "Waiting for Ollama server..."
-    sleep 5
-done
+# Solo iniciar el servidor si no está corriendo ya
+if ! is_ollama_running; then
+    echo "Starting Ollama server..."
+    ollama serve &
+
+    echo "Waiting for Ollama server to be ready..."
+    until is_ollama_running; do
+        echo "Waiting for Ollama server..."
+        sleep 5
+    done
+else
+    echo "Ollama server already running"
+fi
 
 # Leer los modelos desde la variable de entorno y descargarlos
 echo "Checking and downloading specified models..."
