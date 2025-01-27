@@ -3,6 +3,9 @@ FROM docker.io/ollama/ollama:latest
 # Instalar curl y gettext
 RUN apt-get update && apt-get install -y curl gettext-base && rm -rf /var/lib/apt/lists/*
 
+# Crear y asegurar el directorio de ollama
+RUN mkdir -p /root/.ollama && chmod 755 /root/.ollama
+
 # Copiar el script de inicialización
 COPY init-ollama.sh /usr/local/bin/init-ollama.sh
 RUN chmod +x /usr/local/bin/init-ollama.sh
@@ -12,6 +15,9 @@ EXPOSE 11434
 
 # Variable para modelos (valor por defecto si no se especifica en .env)
 ENV OLLAMA_MODELS=tinyllama
+ENV OLLAMA_HOST=0.0.0.0
+
+VOLUME ["/root/.ollama"]
 
 # Usar /bin/bash explícitamente para ejecutar el script
 ENTRYPOINT ["/bin/bash", "/usr/local/bin/init-ollama.sh"]
