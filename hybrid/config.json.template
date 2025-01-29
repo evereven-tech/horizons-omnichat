@@ -56,11 +56,16 @@
   },
   "openai": {
     "api_base_urls": [
-      "http://bedrock-gateway:8000/v1"
+      "http://bedrock-gateway:80/api/v1"
     ],
     "api_keys": [
       "${BEDROCK_API_KEY}"
     ],
     "enable": true
+	},
+	"ollama": {
+		"base_urls": [
+			"http://ollama:11434"
+		]
   }
 }
