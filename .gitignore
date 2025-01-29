@@ -3,9 +3,9 @@
 .aider*
 
 # Environment files & examples
-!local/.env.example
+.env*
+!/**/.env.example
 
-.env
 hybrid/config.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/terraform
