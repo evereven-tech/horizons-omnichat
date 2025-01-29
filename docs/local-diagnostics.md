@@ -63,6 +63,37 @@ docker exec -it ollama /bin/bash
 docker exec ollama ps aux | grep ollama
 ```
 
+## Bedrock-gateway Service Health
+
+```bash
+
+# Debug from docker host
+export OPENAI_API_KEY=123456
+export OPENAI_BASE_URL=http://localhost:8000/api/v1
+
+# List models availables at Bedrock
+curl http://localhost:8000/api/v1/models \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY"
+
+# Test a model
+curl $OPENAI_BASE_URL/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -d '{
+    "model": "anthropic.claude-3-sonnet-20240229-v1:0",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello!"
+      }
+    ]
+  }'
+
+
+```
+
+
 ## Database Health
 
 ```bash
