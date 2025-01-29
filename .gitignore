@@ -2,6 +2,9 @@
 .vscode
 .aider*
 
+# Environment files & examples
+!local/.env.example
+
 .env
 hybrid/config.json
 
