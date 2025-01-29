@@ -62,7 +62,7 @@ services:
     networks:
       - chatbot-net
     environment:
-      - OLLAMA_MODELS=${OLLAMA_MODELS}
+      - INSTALLED_MODELS=${INSTALLED_MODELS}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
       interval: 30s
