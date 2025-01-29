@@ -4,7 +4,9 @@
 
 # Environment files & examples
 .env*
-!/**/.env.example
+!.env.example
+!*/.env.example
+!**/.env.example
 
 hybrid/config.json
 
