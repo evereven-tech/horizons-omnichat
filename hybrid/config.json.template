@@ -59,7 +59,7 @@
       "http://bedrock-gateway:80/api/v1"
     ],
     "api_keys": [
-      "${BEDROCK_API_KEY}"
+      "BEDROCK_API_KEY"
     ],
     "enable": true
 	},

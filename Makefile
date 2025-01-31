@@ -1,4 +1,12 @@
+CONTAINER_RUNTIME := $(shell which podman 2>/dev/null || which docker 2>/dev/null)
+ENV_FILE := hybrid/.env
+JSON_FILE := hybrid/config.json
+BEDROCK_API := BEDROCK_API_KEY
 .PHONY: init validate-local validate-hybrid local-up local-down hybrid-up hybrid-down
+
+# Incluir variables del .env
+include $(ENV_FILE)
+export $(shell sed 's/=.*//' $(ENV_FILE))
 
 # Basic commands
 init:
@@ -17,14 +25,14 @@ local-up: validate-local
 	@cd local && export OLLAMA_USE_GPU=$$(grep OLLAMA_USE_GPU .env | cut -d '=' -f2) && \
 	echo "GPU Support enabled: $$OLLAMA_USE_GPU" && \
 	if [ "$$OLLAMA_USE_GPU" = "true" ]; then \
-		podman compose --in-pod false -f docker-compose.yml -f ../common/docker-compose.gpu.yml up -d; \
+		$(CONTAINER_RUNTIME) compose --in-pod false -f docker-compose.yml -f ../common/docker-compose.gpu.yml up -d; \
 	else \
-		podman compose up -d; \
+		$(CONTAINER_RUNTIME) compose up -d; \
 	fi
 
 local-down:
 	@echo "Stopping local deployment..."
-	@cd local && podman compose down
+	@cd local && $(CONTAINER_RUNTIME) compose down
 
 # Hybrid deployment commands
 validate-hybrid:
@@ -35,14 +43,15 @@ validate-hybrid:
 
 hybrid-up: validate-hybrid
 	@echo "Starting hybrid deployment..."
+	@sed -i 's/"$(BEDROCK_API)"/"$(BEDROCK_API_KEY)"/' $(JSON_FILE)
 	@cd hybrid && export OLLAMA_USE_GPU=$$(grep OLLAMA_USE_GPU .env | cut -d '=' -f2) && \
 	echo "GPU Support: $$OLLAMA_USE_GPU" && \
 	if [ "$$OLLAMA_USE_GPU" = "true" ]; then \
-		podman compose --in-pod false -f docker-compose.yml -f ../common/docker-compose.gpu.yml up -d; \
+		$(CONTAINER_RUNTIME) compose --in-pod false -f docker-compose.yml -f ../common/docker-compose.gpu.yml up -d; \
 	else \
-		podman compose up -d; \
+		$(CONTAINER_RUNTIME) compose up -d; \
 	fi
 
 hybrid-down:
 	@echo "Stopping hybrid deployment..."
-	@cd hybrid && podman compose down
+	@cd hybrid && $(CONTAINER_RUNTIME) compose down
