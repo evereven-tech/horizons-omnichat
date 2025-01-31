@@ -1,86 +1,87 @@
 services:
   webui-db:
+    container_name: open-webui-db
+    restart: always
     image: docker.io/library/postgres:13
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - open-webui:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - chatbot-net
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 3s
       timeout: 5s
       retries: 5
-    restart: always
-    volumes:
-      - open-webui:/var/lib/postgresql/data
-    networks:
-      - chatbot-net
-
-#  config-init:
-#    image: alpine
-#    volumes:
-#      - ./config.json.template:/config.json.template
-#      - ./config.json:/config.json
-#    command: >
-#      /bin/sh -c "envsubst < /config.json.template > /config.json"
-#    environment:
-#      - BEDROCK_API_KEY=${BEDROCK_API_KEY}
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     container_name: open-webui
+    restart: unless-stopped
+    image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     depends_on:
-#      config-init:
-#        condition: service_completed_successfully
       webui-db:
         condition: service_healthy
       ollama:
         condition: service_healthy
+      bedrock-gateway:
+        condition: service_healthy
     ports:
       - 3002:8080
+    networks:
+      - chatbot-net
     environment:
       - 'OLLAMA_BASE_URL=http://ollama:11434'
       - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
       - 'WEBUI_DB_HOST=webui-db'
       - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
     volumes:
+      #- ./tmp/:/app/backend/data/                                  # Useful for blocking updates
       - ./config.json:/app/backend/data/config.json
-    restart: unless-stopped
-    networks:
-      - chatbot-net
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
   ollama:
+    container_name: ollama
+    restart: unless-stopped
     build:
       context: ../common
       dockerfile: Dockerfile.ollama
-    container_name: ollama
-    restart: unless-stopped
     ports:
       - "11434:11434"
     networks:
       - chatbot-net
     environment:
       - INSTALLED_MODELS=${INSTALLED_MODELS}
+    volumes:
+      - type: volume
+        source: ollama-data
+        target: /root/.ollama
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 30s
-    volumes:
-      - type: volume
-        source: ollama-data
-        target: /root/.ollama
 
   bedrock-gateway:
+    container_name: bedrock-gateway
+    restart: unless-stopped
     build:
       context: ../external/bedrock-gateway/src/
       dockerfile: Dockerfile_ecs
-#    command: >
-#      /bin/sh -c "apt-get update && apt-get install -y netcat-openbsd && /app/start.sh"
-    container_name: bedrock-gateway
+    ports:
+      - "8000:80"
+    networks:
+      - chatbot-net
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
@@ -88,16 +89,12 @@ services:
       - AWS_REGION=${AWS_REGION:-us-west-1}
       - AWS_DEFAULT_REGION=${AWS_REGION:-us-west-1}
       - API_KEY=${BEDROCK_API_KEY}
-    ports:
-      - "8000:80"
-#    healthcheck:
-#      test: ["CMD", "nc", "-z", "localhost", "80"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 10
-#      start_period: 20s
-#    networks:
-#      - chatbot-net
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "80"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
 
 volumes:
   open-webui:
