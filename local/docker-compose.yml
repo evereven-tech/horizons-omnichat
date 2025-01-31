@@ -1,26 +1,28 @@
 services:
   webui-db:
+    container_name: open-webui-db
+    restart: always
     image: docker.io/library/postgres:13
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - open-webui:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - chatbot-net
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 3s
       timeout: 5s
-      retries: 5
-    restart: always
-    volumes:
-      - open-webui:/var/lib/postgresql/data
-    networks:
-      - chatbot-net
+      retries: 5    
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     container_name: open-webui
+    restart: unless-stopped
+    image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}    
     depends_on:
       webui-db:
         condition: service_healthy
@@ -28,37 +30,43 @@ services:
         condition: service_healthy
     ports:
       - 3002:8080
+    networks:
+      - chatbot-net
     environment:
       - 'OLLAMA_BASE_URL=http://ollama:11434'
       - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
       - 'WEBUI_DB_HOST=webui-db'
       - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
-    restart: unless-stopped
-    networks:
-      - chatbot-net
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s    
 
   ollama:
-    build:    
-      context: ../common
-      dockerfile: Dockerfile.ollama
     container_name: ollama
     restart: unless-stopped
+    build:
+      context: ../common
+      dockerfile: Dockerfile.ollama
     ports:
       - "11434:11434"
     networks:
       - chatbot-net
     environment:
       - INSTALLED_MODELS=${INSTALLED_MODELS}
+    volumes:
+      - type: volume
+        source: ollama-data
+        target: /root/.ollama
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 30s
-    volumes:
-      - type: volume
-        source: ollama-data
-        target: /root/.ollama
+
 
 volumes:
   open-webui:
