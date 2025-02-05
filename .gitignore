@@ -2,6 +2,9 @@
 .vscode
 .aider*
 
+# AWS Environment variables
+.env.aws
+
 # Environment files & examples
 .env*
 !.env.example
