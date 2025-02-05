@@ -27,7 +27,7 @@ resource "aws_security_group" "rds" {
 # Subnet Group para RDS
 resource "aws_db_subnet_group" "rds" {
   name       = "${var.project_name}-${var.environment}-rds"
-  subnet_ids = aws_subnet.private[*].id
+  subnet_ids = [aws_subnet.private[0].id]  # Solo usar la primera subnet privada
 
   tags = {
     Name        = "${var.project_name}-${var.environment}-rds"
