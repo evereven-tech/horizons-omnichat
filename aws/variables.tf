@@ -60,3 +60,33 @@ variable "webui_secret_key" {
   type        = string
   sensitive   = true
 }
+
+variable "webui_version" {
+  description = "Version of OpenWebUI to deploy"
+  type        = string
+  default     = "0.5.7"
+}
+
+variable "postgres_db" {
+  description = "PostgreSQL database name"
+  type        = string
+  default     = "chatbot_db"
+}
+
+variable "postgres_user" {
+  description = "PostgreSQL username"
+  type        = string
+  default     = "chatbot_user"
+}
+
+variable "postgres_password" {
+  description = "PostgreSQL password"
+  type        = string
+  sensitive   = true
+}
+
+variable "webui_desired_count" {
+  description = "Desired number of OpenWebUI tasks"
+  type        = number
+  default     = 1
+}
