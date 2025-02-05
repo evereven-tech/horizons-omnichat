@@ -36,8 +36,14 @@ resource "aws_cognito_user_pool_client" "main" {
   allowed_oauth_scopes = ["email", "openid", "profile"]
 
   # URLs de callback
-  callback_urls = ["http://localhost:3002"] # Añadiremos más URLs cuando tengamos el ALB
-  logout_urls  = ["http://localhost:3002"]
+  callback_urls = [
+    "https://${var.domain_name}/oauth/callback",
+    "http://localhost:3002/oauth/callback"
+  ]
+  logout_urls = [
+    "https://${var.domain_name}",
+    "http://localhost:3002"
+  ]
 
   # Configuración de tokens
   refresh_token_validity = 30
@@ -53,13 +59,7 @@ resource "aws_cognito_user_pool_client" "main" {
 
 # User Pool Domain
 resource "aws_cognito_user_pool_domain" "main" {
-  domain       = "horizons-${random_string.random.result}"
+  domain       = var.cognito_domain_prefix
   user_pool_id = aws_cognito_user_pool.main.id
 }
 
-# Generador de string aleatorio para el dominio
-resource "random_string" "random" {
-  length  = 8
-  special = false
-  upper   = false
-}

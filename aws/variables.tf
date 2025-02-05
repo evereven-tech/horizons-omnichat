@@ -37,3 +37,8 @@ variable "domain_name" {
   description = "Domain name for the application"
   type        = string
 }
+
+variable "cognito_domain_prefix" {
+  description = "Prefix for Cognito domain"
+  type        = string
+}
