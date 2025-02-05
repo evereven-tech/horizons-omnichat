@@ -63,7 +63,7 @@ resource "aws_db_instance" "webui" {
   # Mejoras de rendimiento
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
-  monitoring_interval                   = 60
+  monitoring_interval                   = 0  # Desactivar monitoreo mejorado por ahora
   
   # Configuración de disponibilidad
   multi_az               = false
