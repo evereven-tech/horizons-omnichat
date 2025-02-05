@@ -74,12 +74,19 @@ resource "aws_lb_listener" "https" {
   certificate_arn   = var.certificate_arn
 
   default_action {
-    type = "authenticate-cognito"
+    order = 1
+    type  = "authenticate-cognito"
 
     authenticate_cognito {
       user_pool_arn       = aws_cognito_user_pool.main.arn
       user_pool_client_id = aws_cognito_user_pool_client.main.id
       user_pool_domain    = aws_cognito_user_pool_domain.main.domain
     }
+  }
+
+  default_action {
+    order            = 2
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.webui.arn
   }
 }
