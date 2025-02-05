@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "webui" {
         },
         {
           name  = "OPENAI_API_BASE"
-          value = "http://bedrock-gateway.${var.project_name}-${var.environment}:80/api/v1"
+          value = "http://bedrock-gateway.${var.project_name}-${var.environment}.local:80/api/v1"
         },
         {
           name  = "OPENAI_API_KEY"
@@ -102,6 +102,10 @@ resource "aws_ecs_service" "webui" {
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
     weight           = 100
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.bedrock.arn
   }
 
   tags = {
@@ -241,6 +245,33 @@ resource "aws_cloudwatch_log_group" "bedrock" {
   tags = {
     Name        = "${var.project_name}-${var.environment}-bedrock-logs"
     Environment = var.environment
+  }
+}
+
+# Service Discovery Namespace
+resource "aws_service_discovery_private_dns_namespace" "main" {
+  name        = "${var.project_name}-${var.environment}"
+  vpc         = aws_vpc.main.id
+  description = "Service Discovery namespace for ${var.project_name}-${var.environment}"
+}
+
+# Service Discovery Service para Bedrock Gateway
+resource "aws_service_discovery_service" "bedrock" {
+  name = "bedrock-gateway"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.main.id
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 1
   }
 }
 
