@@ -50,6 +50,57 @@ resource "aws_iam_role" "webui_task" {
   }
 }
 
+# ECS Task Role for Bedrock Gateway
+resource "aws_iam_role" "bedrock_task" {
+  name = "${var.project_name}-${var.environment}-bedrock-task"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-bedrock-task"
+    Environment = var.environment
+  }
+}
+
+# Policy for Bedrock Gateway task role
+resource "aws_iam_role_policy" "bedrock_task" {
+  name = "${var.project_name}-${var.environment}-bedrock-task-policy"
+  role = aws_iam_role.bedrock_task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "${aws_cloudwatch_log_group.bedrock.arn}:*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "bedrock:InvokeModel",
+          "bedrock:ListFoundationModels"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Policy for OpenWebUI task role
 resource "aws_iam_role_policy" "webui_task" {
   name = "${var.project_name}-${var.environment}-webui-task-policy"
