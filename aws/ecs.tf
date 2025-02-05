@@ -108,6 +108,8 @@ resource "aws_ecs_service" "webui" {
     registry_arn = aws_service_discovery_service.bedrock.arn
   }
 
+  enable_execute_command = true
+
   tags = {
     Name        = "${var.project_name}-${var.environment}-webui"
     Environment = var.environment
@@ -204,6 +206,8 @@ resource "aws_ecs_service" "bedrock" {
     capacity_provider = "FARGATE_SPOT"
     weight           = 100
   }
+
+  enable_execute_command = true
 
   tags = {
     Name        = "${var.project_name}-${var.environment}-bedrock"
