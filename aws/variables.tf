@@ -54,3 +54,9 @@ variable "cognito_domain_prefix" {
   description = "Prefix for Cognito domain"
   type        = string
 }
+
+variable "webui_secret_key" {
+  description = "Secret key for OpenWebUI"
+  type        = string
+  sensitive   = true
+}
