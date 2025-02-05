@@ -4,6 +4,18 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
+variable "project_name" {
+  description = "Name of the project"
+  type        = string
+  default     = "horizons"
+}
+
+variable "environment" {
+  description = "Environment (dev, staging, prod)"
+  type        = string
+  default     = "dev"
+}
+
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
   type        = string
