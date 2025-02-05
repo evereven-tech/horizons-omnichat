@@ -156,6 +156,7 @@ resource "aws_ecs_task_definition" "bedrock" {
     {
       name  = "bedrock-gateway"
       image = var.bedrock_image
+      enableExecuteCommand = true
       portMappings = [
         {
           containerPort = 80

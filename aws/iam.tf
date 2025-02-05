@@ -73,6 +73,28 @@ resource "aws_iam_role" "bedrock_task" {
   }
 }
 
+# SSM Policy for ECS Exec
+resource "aws_iam_role_policy" "ecs_exec" {
+  name = "${var.project_name}-${var.environment}-ecs-exec"
+  role = aws_iam_role.bedrock_task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Policy for Bedrock Gateway task role
 resource "aws_iam_role_policy" "bedrock_task" {
   name = "${var.project_name}-${var.environment}-bedrock-task-policy"
