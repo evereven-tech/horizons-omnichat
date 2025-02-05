@@ -93,7 +93,8 @@ resource "aws_iam_role_policy" "bedrock_task" {
         Effect = "Allow"
         Action = [
           "bedrock:InvokeModel",
-          "bedrock:ListFoundationModels"
+          "bedrock:ListFoundationModels",
+          "bedrock:ListInferenceProfiles"
         ]
         Resource = "*"
       }
