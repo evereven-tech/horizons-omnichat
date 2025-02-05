@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "webui" {
         },
         {
           name  = "OPENAI_API_BASE"
-          value = "http://bedrock-gateway.horizons-dev.local:80/api/v1"
+          value = "http://bedrock-gateway.${var.project_name}-${var.environment}:80/api/v1"
         },
         {
           name  = "OPENAI_API_KEY"
@@ -105,7 +105,7 @@ resource "aws_ecs_service" "webui" {
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.bedrock.arn
+    registry_arn = aws_service_discovery_service.webui.arn
   }
 
   enable_execute_command = true
@@ -258,6 +258,26 @@ resource "aws_service_discovery_private_dns_namespace" "main" {
   name        = "${var.project_name}-${var.environment}"
   vpc         = aws_vpc.main.id
   description = "Service Discovery namespace for ${var.project_name}-${var.environment}"
+}
+
+# Service Discovery Service para OpenWebUI
+resource "aws_service_discovery_service" "webui" {
+  name = "webui"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.main.id
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 1
+  }
 }
 
 # Service Discovery Service para Bedrock Gateway
