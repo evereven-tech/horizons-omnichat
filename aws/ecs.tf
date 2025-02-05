@@ -128,7 +128,115 @@ resource "aws_security_group" "ecs_tasks" {
   }
 }
 
-# CloudWatch Log Group
+# Task Definition para Bedrock Gateway
+resource "aws_ecs_task_definition" "bedrock" {
+  family                   = "${var.project_name}-${var.environment}-bedrock"
+  requires_compatibilities = ["FARGATE"]
+  network_mode            = "awsvpc"
+  cpu                     = 512
+  memory                  = 1024
+  execution_role_arn      = aws_iam_role.ecs_task_execution.arn
+  task_role_arn          = aws_iam_role.bedrock_task.arn
+
+  container_definitions = jsonencode([
+    {
+      name  = "bedrock-gateway"
+      image = var.bedrock_image
+      portMappings = [
+        {
+          containerPort = 80
+          protocol      = "tcp"
+        }
+      ]
+      environment = [
+        {
+          name  = "API_KEY"
+          value = var.bedrock_api_key
+        },
+        {
+          name  = "AWS_REGION"
+          value = var.aws_region
+        }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.bedrock.name
+          "awslogs-region"        = var.aws_region
+          "awslogs-stream-prefix" = "bedrock"
+        }
+      }
+    }
+  ])
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-bedrock"
+    Environment = var.environment
+  }
+}
+
+# Servicio ECS para Bedrock Gateway
+resource "aws_ecs_service" "bedrock" {
+  name            = "${var.project_name}-${var.environment}-bedrock"
+  cluster         = aws_ecs_cluster.fargate.id
+  task_definition = aws_ecs_task_definition.bedrock.arn
+  desired_count   = var.bedrock_desired_count
+
+  network_configuration {
+    subnets          = aws_subnet.private[*].id
+    security_groups  = [aws_security_group.bedrock_tasks.id]
+    assign_public_ip = false
+  }
+
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    weight           = 100
+  }
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-bedrock"
+    Environment = var.environment
+  }
+}
+
+# Security Group para Bedrock Gateway
+resource "aws_security_group" "bedrock_tasks" {
+  name        = "${var.project_name}-${var.environment}-bedrock-tasks"
+  description = "Allow inbound traffic from WebUI to Bedrock Gateway"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ecs_tasks.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-bedrock-tasks"
+    Environment = var.environment
+  }
+}
+
+# CloudWatch Log Group para Bedrock Gateway
+resource "aws_cloudwatch_log_group" "bedrock" {
+  name              = "/ecs/${var.project_name}-${var.environment}/bedrock"
+  retention_in_days = 30
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-bedrock-logs"
+    Environment = var.environment
+  }
+}
+
+# CloudWatch Log Group para WebUI
 resource "aws_cloudwatch_log_group" "webui" {
   name              = "/ecs/${var.project_name}-${var.environment}/webui"
   retention_in_days = 30

@@ -90,3 +90,21 @@ variable "webui_desired_count" {
   type        = number
   default     = 1
 }
+
+variable "bedrock_image" {
+  description = "URI de la imagen de Bedrock Gateway en ECR"
+  type        = string
+  default     = "533267020467.dkr.ecr.eu-west-1.amazonaws.com/horizons-bedrock-gateway:latest"
+}
+
+variable "bedrock_api_key" {
+  description = "API Key for Bedrock Gateway"
+  type        = string
+  sensitive   = true
+}
+
+variable "bedrock_desired_count" {
+  description = "Desired number of Bedrock Gateway tasks"
+  type        = number
+  default     = 1
+}
