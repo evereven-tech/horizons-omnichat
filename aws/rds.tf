@@ -65,10 +65,6 @@ resource "aws_db_instance" "webui" {
   performance_insights_retention_period = 7
   monitoring_interval                   = 60
   
-  # Configuración de almacenamiento
-  iops                  = 3000
-  storage_throughput    = 125
-
   # Configuración de disponibilidad
   multi_az               = false
   publicly_accessible    = false
