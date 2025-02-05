@@ -78,7 +78,6 @@ resource "aws_ecs_service" "webui" {
   cluster         = aws_ecs_cluster.fargate.id
   task_definition = aws_ecs_task_definition.webui.arn
   desired_count   = var.webui_desired_count
-  launch_type     = "FARGATE"
 
   network_configuration {
     subnets          = aws_subnet.private[*].id
