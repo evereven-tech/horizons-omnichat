@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "webui" {
         },
         {
           name  = "OPENAI_API_BASE"
-          value = "http://bedrock-gateway.${var.project_name}-${var.environment}.local:80/api/v1"
+          value = "http://bedrock-gateway.horizons-dev.local:80/api/v1"
         },
         {
           name  = "OPENAI_API_KEY"
