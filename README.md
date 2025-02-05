@@ -1,4 +1,4 @@
-# OmniChatbot BedRock
+# horizons BedRock
 
 A flexible chatbot solution that can be deployed in multiple environments:
 - **Local**: Simple setup with Ollama + Open-WebUI

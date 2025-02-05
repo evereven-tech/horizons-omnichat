@@ -14,7 +14,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Project     = "omnichatbot"
+      Project     = "horizons"
       Terraform   = "true"
     }
   }

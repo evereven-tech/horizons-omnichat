@@ -1,6 +1,6 @@
 # Local Deployment Diagnostics Guide
 
-This guide provides a comprehensive list of diagnostic commands for troubleshooting the local deployment of OmniChatbot.
+This guide provides a comprehensive list of diagnostic commands for troubleshooting the local deployment of horizons.
 
 ## Environment Setup
 

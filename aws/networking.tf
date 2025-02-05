@@ -4,7 +4,7 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
 
   tags = {
-    Name = "omnichatbot-vpc"
+    Name = "horizons-vpc"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "omnichatbot-igw"
+    Name = "horizons-igw"
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "omnichatbot-public-${var.availability_zones[count.index]}"
+    Name = "horizons-public-${var.availability_zones[count.index]}"
   }
 }
 
@@ -38,7 +38,7 @@ resource "aws_subnet" "private" {
   availability_zone = var.availability_zones[count.index]
 
   tags = {
-    Name = "omnichatbot-private-${var.availability_zones[count.index]}"
+    Name = "horizons-private-${var.availability_zones[count.index]}"
   }
 }
 
@@ -48,7 +48,7 @@ resource "aws_eip" "nat" {
   domain = "vpc"
 
   tags = {
-    Name = "omnichatbot-nat-eip-${count.index + 1}"
+    Name = "horizons-nat-eip-${count.index + 1}"
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name = "omnichatbot-nat-${count.index + 1}"
+    Name = "horizons-nat-${count.index + 1}"
   }
 
   depends_on = [aws_internet_gateway.main]
@@ -74,7 +74,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "omnichatbot-public-rt"
+    Name = "horizons-public-rt"
   }
 }
 
@@ -88,7 +88,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "omnichatbot-private-rt-${count.index + 1}"
+    Name = "horizons-private-rt-${count.index + 1}"
   }
 }
 
