@@ -124,6 +124,28 @@ resource "aws_iam_role_policy" "bedrock_task" {
   })
 }
 
+# SSM Policy for WebUI ECS Exec
+resource "aws_iam_role_policy" "webui_ecs_exec" {
+  name = "${var.project_name}-${var.environment}-webui-ecs-exec"
+  role = aws_iam_role.webui_task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Policy for OpenWebUI task role
 resource "aws_iam_role_policy" "webui_task" {
   name = "${var.project_name}-${var.environment}-webui-task-policy"
