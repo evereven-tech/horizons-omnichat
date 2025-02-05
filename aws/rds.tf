@@ -88,23 +88,15 @@ resource "aws_db_parameter_group" "postgres13" {
   name   = "${var.project_name}-${var.environment}-pg13"
 
   parameter {
-    name  = "shared_buffers"
-    value = "{DBInstanceClassMemory/4096}"
-  }
-
-  parameter {
     name  = "work_mem"
     value = "16384"
+    apply_method = "pending-reboot"
   }
 
   parameter {
     name  = "maintenance_work_mem"
     value = "128000"
-  }
-
-  parameter {
-    name  = "effective_cache_size"
-    value = "{DBInstanceClassMemory/2048}"
+    apply_method = "pending-reboot"
   }
 
   tags = {
