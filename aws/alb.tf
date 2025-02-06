@@ -36,7 +36,7 @@ resource "aws_lb" "main" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb.id]
-  subnets           = aws_subnet.public[*].id
+  subnets            = aws_subnet.public[*].id
 
   enable_deletion_protection = false
 
@@ -57,10 +57,10 @@ resource "aws_lb_target_group" "webui" {
     enabled             = true
     healthy_threshold   = 2
     interval            = 30
-    matcher            = "200"
-    path               = "/health"
-    port               = "traffic-port"
-    timeout            = 5
+    matcher             = "200"
+    path                = "/health"
+    port                = "traffic-port"
+    timeout             = 5
     unhealthy_threshold = 2
   }
 }

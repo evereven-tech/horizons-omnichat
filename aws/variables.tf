@@ -1,3 +1,5 @@
+# Common ######################################################################
+
 variable "aws_region" {
   description = "AWS region"
   type        = string
@@ -15,6 +17,8 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
+
+# Networking ##################################################################
 
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
@@ -40,6 +44,8 @@ variable "public_subnets" {
   default     = ["10.0.101.0/24", "10.0.102.0/24"]
 }
 
+# Delivery ####################################################################
+
 variable "certificate_arn" {
   description = "ARN of SSL certificate for ALB"
   type        = string
@@ -54,6 +60,8 @@ variable "cognito_domain_prefix" {
   description = "Prefix for Cognito domain"
   type        = string
 }
+
+# App #########################################################################
 
 variable "webui_secret_key" {
   description = "Secret key for OpenWebUI"
@@ -91,16 +99,18 @@ variable "webui_desired_count" {
   default     = 1
 }
 
-variable "bedrock_image" {
-  description = "URI de la imagen de Bedrock Gateway en ECR"
-  type        = string
-  default     = "533267020467.dkr.ecr.eu-west-1.amazonaws.com/horizons-bedrock-gateway:latest"
-}
-
 variable "bedrock_api_key" {
   description = "API Key for Bedrock Gateway"
   type        = string
   sensitive   = true
+}
+
+# Containers ##################################################################
+
+variable "bedrock_image" {
+  description = "ECR URI to Bedrock Gateway Image"
+  type        = string
+  default     = "533267020467.dkr.ecr.eu-west-1.amazonaws.com/horizons-bedrock-gateway:latest"
 }
 
 variable "bedrock_desired_count" {

@@ -17,7 +17,7 @@ output "vpc_cidr_block" {
   description = "The CIDR block of the VPC"
   value       = aws_vpc.main.cidr_block
 }
-# Outputs para los repositorios ECR
+
 output "repository_urls" {
   description = "URLs of the ECR repositories"
   value = {

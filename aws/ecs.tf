@@ -21,7 +21,7 @@ resource "aws_ecs_cluster_capacity_providers" "fargate" {
 
   default_capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
-    weight           = 100
+    weight            = 100
   }
 }
 
@@ -29,11 +29,11 @@ resource "aws_ecs_cluster_capacity_providers" "fargate" {
 resource "aws_ecs_task_definition" "webui" {
   family                   = "${var.project_name}-${var.environment}-webui"
   requires_compatibilities = ["FARGATE"]
-  network_mode            = "awsvpc"
-  cpu                     = 1024
-  memory                  = 2048
-  execution_role_arn      = aws_iam_role.ecs_task_execution.arn
-  task_role_arn          = aws_iam_role.webui_task.arn
+  network_mode             = "awsvpc"
+  cpu                      = 1024
+  memory                   = 2048
+  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
+  task_role_arn            = aws_iam_role.webui_task.arn
 
   container_definitions = jsonencode([
     {
@@ -101,7 +101,7 @@ resource "aws_ecs_service" "webui" {
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
-    weight           = 100
+    weight            = 100
   }
 
   service_registries {
@@ -146,16 +146,16 @@ resource "aws_security_group" "ecs_tasks" {
 resource "aws_ecs_task_definition" "bedrock" {
   family                   = "${var.project_name}-${var.environment}-bedrock"
   requires_compatibilities = ["FARGATE"]
-  network_mode            = "awsvpc"
-  cpu                     = 512
-  memory                  = 1024
-  execution_role_arn      = aws_iam_role.ecs_task_execution.arn
-  task_role_arn          = aws_iam_role.bedrock_task.arn
+  network_mode             = "awsvpc"
+  cpu                      = 512
+  memory                   = 1024
+  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
+  task_role_arn            = aws_iam_role.bedrock_task.arn
 
   container_definitions = jsonencode([
     {
-      name  = "bedrock-gateway"
-      image = var.bedrock_image
+      name                 = "bedrock-gateway"
+      image                = var.bedrock_image
       enableExecuteCommand = true
       portMappings = [
         {
@@ -205,7 +205,7 @@ resource "aws_ecs_service" "bedrock" {
 
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
-    weight           = 100
+    weight            = 100
   }
 
   service_registries {
@@ -242,17 +242,6 @@ resource "aws_security_group" "bedrock_tasks" {
 
   tags = {
     Name        = "${var.project_name}-${var.environment}-bedrock-tasks"
-    Environment = var.environment
-  }
-}
-
-# CloudWatch Log Group para Bedrock Gateway
-resource "aws_cloudwatch_log_group" "bedrock" {
-  name              = "/ecs/${var.project_name}-${var.environment}/bedrock"
-  retention_in_days = 30
-
-  tags = {
-    Name        = "${var.project_name}-${var.environment}-bedrock-logs"
     Environment = var.environment
   }
 }
@@ -301,16 +290,5 @@ resource "aws_service_discovery_service" "bedrock" {
 
   health_check_custom_config {
     failure_threshold = 1
-  }
-}
-
-# CloudWatch Log Group para WebUI
-resource "aws_cloudwatch_log_group" "webui" {
-  name              = "/ecs/${var.project_name}-${var.environment}/webui"
-  retention_in_days = 30
-
-  tags = {
-    Name        = "${var.project_name}-${var.environment}-webui-logs"
-    Environment = var.environment
   }
 }

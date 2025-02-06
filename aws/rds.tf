@@ -27,7 +27,7 @@ resource "aws_security_group" "rds" {
 # Subnet Group para RDS
 resource "aws_db_subnet_group" "rds" {
   name       = "${var.project_name}-${var.environment}-rds"
-  subnet_ids = aws_subnet.private[*].id  # Usar todas las subnets privadas disponibles
+  subnet_ids = aws_subnet.private[*].id # Usar todas las subnets privadas disponibles
 
   tags = {
     Name        = "${var.project_name}-${var.environment}-rds"
@@ -43,7 +43,7 @@ resource "aws_db_instance" "webui" {
   instance_class    = "db.t3.small"
   allocated_storage = 20
   storage_type      = "gp3"
-  
+
   # Habilitar auto-scaling del almacenamiento
   max_allocated_storage = 100
 
@@ -55,19 +55,19 @@ resource "aws_db_instance" "webui" {
   db_subnet_group_name   = aws_db_subnet_group.rds.name
 
   skip_final_snapshot = true
-  
+
   backup_retention_period = 7
-  backup_window          = "03:00-04:00"
-  maintenance_window     = "Mon:04:00-Mon:05:00"
+  backup_window           = "03:00-04:00"
+  maintenance_window      = "Mon:04:00-Mon:05:00"
 
   # Mejoras de rendimiento
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
-  monitoring_interval                   = 0  # Desactivar monitoreo mejorado por ahora
-  
+  monitoring_interval                   = 0 # Desactivar monitoreo mejorado por ahora
+
   # Configuración de disponibilidad
-  multi_az               = false
-  publicly_accessible    = false
+  multi_az            = false
+  publicly_accessible = false
 
   # Parámetros de la base de datos
   parameter_group_name = aws_db_parameter_group.postgres13.name
@@ -84,14 +84,14 @@ resource "aws_db_parameter_group" "postgres13" {
   name   = "${var.project_name}-${var.environment}-pg13"
 
   parameter {
-    name  = "work_mem"
-    value = "16384"
+    name         = "work_mem"
+    value        = "16384"
     apply_method = "pending-reboot"
   }
 
   parameter {
-    name  = "maintenance_work_mem"
-    value = "128000"
+    name         = "maintenance_work_mem"
+    value        = "128000"
     apply_method = "pending-reboot"
   }
 
