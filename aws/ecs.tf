@@ -208,6 +208,10 @@ resource "aws_ecs_service" "bedrock" {
     weight           = 100
   }
 
+  service_registries {
+    registry_arn = aws_service_discovery_service.bedrock.arn
+  }
+
   enable_execute_command = true
 
   tags = {
