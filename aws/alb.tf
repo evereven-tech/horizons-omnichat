@@ -74,18 +74,18 @@ resource "aws_lb_listener" "https" {
   certificate_arn   = var.certificate_arn
 
   default_action {
-    order = 1
-    type  = "authenticate-cognito"
+    type = "authenticate-cognito"
 
     authenticate_cognito {
       user_pool_arn       = aws_cognito_user_pool.main.arn
       user_pool_client_id = aws_cognito_user_pool_client.main.id
       user_pool_domain    = aws_cognito_user_pool_domain.main.domain
+      scope               = "openid email profile"
+      session_timeout     = 3600
     }
   }
 
   default_action {
-    order            = 2
     type             = "forward"
     target_group_arn = aws_lb_target_group.webui.arn
   }

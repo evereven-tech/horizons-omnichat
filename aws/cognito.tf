@@ -30,19 +30,17 @@ resource "aws_cognito_user_pool_client" "main" {
   # Generar secret key para la autenticación con ALB
   generate_secret = true
 
-  # Configuración de OAuth2
+  # Configuración básica de OAuth2
   allowed_oauth_flows = ["code"]
   allowed_oauth_flows_user_pool_client = true
-  allowed_oauth_scopes = ["email", "openid", "profile"]
+  allowed_oauth_scopes = ["openid", "email", "profile"]
 
   # URLs de callback
   callback_urls = [
-    "https://${var.domain_name}/oauth/callback",
-    "http://localhost:3002/oauth/callback"
+    "https://${aws_lb.main.dns_name}/oauth2/idpresponse"
   ]
   logout_urls = [
-    "https://${var.domain_name}",
-    "http://localhost:3002"
+    "https://${aws_lb.main.dns_name}"
   ]
 
   # Configuración de tokens
