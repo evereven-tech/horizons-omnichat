@@ -28,7 +28,7 @@ resource "aws_cognito_user_pool" "main" {
 
   # Configuración de la UI de inicio de sesión
   admin_create_user_config {
-    allow_admin_create_user_only = false
+    allow_admin_create_user_only = true
   }
 
   # Configuración de recuperación de cuenta
@@ -75,8 +75,7 @@ resource "aws_cognito_user_pool_client" "main" {
   # Flujos de autenticación explícitos
   explicit_auth_flows = [
     "ALLOW_USER_SRP_AUTH",
-    "ALLOW_REFRESH_TOKEN_AUTH",
-    "ALLOW_USER_PASSWORD_AUTH"
+    "ALLOW_REFRESH_TOKEN_AUTH"
   ]
 }
 
