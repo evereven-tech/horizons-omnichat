@@ -1,6 +1,7 @@
-# horizons BedRock
+# Horizons: The OmniChat
 
 A flexible chatbot solution that can be deployed in multiple environments:
+
 - **Local**: Simple setup with Ollama + Open-WebUI
 - **Hybrid**: Ollama + Open-WebUI + AWS Bedrock integration
 - **AWS**: Full cloud deployment on AWS ECS with Cognito authentication
@@ -18,9 +19,7 @@ A flexible chatbot solution that can be deployed in multiple environments:
    - Local: `make local-up`
    - Hybrid: `make hybrid-up`
    - AWS: `make aws-apply`
-   - K8s: `make k8s-apply`
+   - K8s: `make k8s-apply` (WIP)
 
 ## Documentation
 See the `docs/` directory for detailed setup and configuration instructions.
-
-

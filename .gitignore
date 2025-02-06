@@ -1,11 +1,10 @@
+# IDE Environment variables
 .idea
 .vscode
 .aider*
 
-# AWS Environment variables
-.env.aws
-
 # Environment files & examples
+.env.aws
 .env*
 !.env.example
 !*/.env.example
