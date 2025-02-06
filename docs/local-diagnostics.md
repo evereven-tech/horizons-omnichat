@@ -89,8 +89,6 @@ curl $OPENAI_BASE_URL/chat/completions \
       }
     ]
   }'
-
-
 ```
 
 

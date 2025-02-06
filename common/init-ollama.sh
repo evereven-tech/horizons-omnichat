@@ -1,13 +1,13 @@
 #!/bin/bash
 set -e
 
-# Función para verificar si Ollama ya está corriendo
+# Function to check if Ollama is running
 is_ollama_running() {
     curl -s -f "http://localhost:11434/api/tags" > /dev/null 2>&1
     return $?
 }
 
-# Solo iniciar el servidor si no está corriendo ya
+# Only start if not running before
 if ! is_ollama_running; then
     echo "Starting Ollama server..."
     ollama serve &
@@ -21,7 +21,7 @@ else
     echo "Ollama server already running"
 fi
 
-# Leer los modelos desde la variable de entorno y descargarlos
+# Check ENV-level defined models and download
 echo "Checking and downloading specified models..."
 IFS=',' read -ra MODELS <<< "$INSTALLED_MODELS"
 for model in "${MODELS[@]}"; do
