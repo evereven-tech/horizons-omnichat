@@ -20,6 +20,24 @@ resource "aws_cognito_user_pool" "main" {
     email_subject = "Verificación de cuenta Horizons"
     email_message = "Tu código de verificación es {####}"
   }
+
+  # Configuración de UI y seguridad
+  user_pool_add_ons {
+    advanced_security_mode = "OFF"
+  }
+
+  # Configuración de la UI de inicio de sesión
+  admin_create_user_config {
+    allow_admin_create_user_only = false
+  }
+
+  # Configuración de recuperación de cuenta
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "verified_email"
+      priority = 1
+    }
+  }
 }
 
 # User Pool Client
@@ -53,6 +71,13 @@ resource "aws_cognito_user_pool_client" "main" {
     id_token      = "hours"
     refresh_token = "days"
   }
+
+  # Flujos de autenticación explícitos
+  explicit_auth_flows = [
+    "ALLOW_USER_SRP_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
+    "ALLOW_USER_PASSWORD_AUTH"
+  ]
 }
 
 # User Pool Domain
