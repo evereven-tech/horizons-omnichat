@@ -259,7 +259,7 @@ resource "aws_cloudwatch_log_group" "bedrock" {
 
 # Service Discovery Namespace
 resource "aws_service_discovery_private_dns_namespace" "main" {
-  name        = "${var.project_name}-${var.environment}"
+  name        = "${var.project_name}-${var.environment}.local"
   vpc         = aws_vpc.main.id
   description = "Service Discovery namespace for ${var.project_name}-${var.environment}"
 }
