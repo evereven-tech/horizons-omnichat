@@ -115,6 +115,7 @@ resource "aws_iam_role_policy" "bedrock_task" {
         Effect = "Allow"
         Action = [
           "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream",
           "bedrock:ListFoundationModels",
           "bedrock:ListInferenceProfiles"
         ]
