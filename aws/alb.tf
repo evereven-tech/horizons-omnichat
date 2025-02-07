@@ -67,20 +67,19 @@ resource "aws_lb_target_group" "webui" {
 
 # ALB Listener HTTP
 # HTTP to HTTPS redirect
-#resource "aws_lb_listener" "front_end_http" {
-#  load_balancer_arn = aws_lb.main.arn
-#  port              = "80"
-#  protocol          = "HTTP"
-#
-#  default_action {
-#    type = "redirect"
-#    redirect {
-#      port        = "443"
-#      protocol    = "HTTPS"
-#      status_code = "HTTP_301"
-#    }
-#  }
-#}
+resource "aws_lb_listener" "front_end_http" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = "80"
+  protocol          = "HTTP"
+  default_action {
+    type = "redirect"
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
 
 # Listener HTTPS (necesitaremos un certificado SSL)
 resource "aws_lb_listener" "https" {
