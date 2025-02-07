@@ -8,11 +8,5 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket         = "evereven-iac-533267020467"
-    key            = "terraform/horizons/terraform.tfstate"
-    region         = "eu-west-1"
-    dynamodb_table = "terraform-locking"
-    encrypt        = true
-  }
+  backend "s3" {}
 }

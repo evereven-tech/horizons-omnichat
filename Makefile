@@ -66,19 +66,23 @@ hybrid-down:
 # AWS Specific variables
 TF_DIR := aws
 
-aws-plan:
-	@echo "Init Terraform..."
-	@cd $(TF_DIR) && terraform init
+aws-init:
+	@echo "Checking backend configuration..."
+	@test -f $(TF_DIR)/backend.hcl || (echo "Error: backend.hcl not found. Copy backend.hcl.example to backend.hcl and configure it." && exit 1)
+	@echo "Initializing Terraform..."
+	@cd $(TF_DIR) && terraform init -backend-config=backend.hcl
+
+aws-plan: aws-init
 	@echo "Terraform plan..."
 	@cd $(TF_DIR) && terraform plan -out=tfplan
 
 # Aplicar cambios de Terraform
-aws-apply:
+aws-apply: aws-init
 	@echo "Terraform Apply..."
 	@cd $(TF_DIR) && terraform apply tfplan
 
 # Destruir infraestructura
-aws-destroy:
+aws-destroy: aws-init
 	@echo "¡CAUTION! This is going to destroy all AWS infraestructure related with Horizons. Are you really sure? (y/N)"
 	@read -p "Answer: " confirm; \
 	if [ "$$confirm" = "y" ] || [ "$$confirm" = "Y" ]; then \

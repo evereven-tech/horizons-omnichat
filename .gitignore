@@ -14,6 +14,9 @@ hybrid/config.json
 hybrid/old_config.json
 hybrid/tmp
 
+# Terraform backend configuration
+aws/backend.hcl
+
 # Created by https://www.toptal.com/developers/gitignore/api/terraform
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform
 

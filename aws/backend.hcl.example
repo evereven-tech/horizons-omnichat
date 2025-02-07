@@ -1,0 +1,5 @@
+bucket         = "your-terraform-state-bucket"
+key            = "terraform/horizons/terraform.tfstate"
+region         = "eu-west-1"
+dynamodb_table = "terraform-locking"
+encrypt        = true

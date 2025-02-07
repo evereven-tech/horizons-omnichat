@@ -21,5 +21,29 @@ A flexible chatbot solution that can be deployed in multiple environments:
    - AWS: `make aws-apply`
    - K8s: `make k8s-apply` (WIP)
 
+## AWS Deployment
+
+Before deploying to AWS, you need to configure the Terraform backend:
+
+1. Copy the backend configuration template:
+   ```bash
+   cp aws/backend.hcl.example aws/backend.hcl
+   ```
+
+2. Edit `aws/backend.hcl` with your S3 bucket and DynamoDB table details:
+   ```hcl
+   bucket         = "your-terraform-state-bucket"
+   key            = "terraform/horizons/terraform.tfstate"
+   region         = "eu-west-1"
+   dynamodb_table = "terraform-locking"
+   encrypt        = true
+   ```
+
+3. Run the deployment:
+   ```bash
+   make aws-plan
+   make aws-apply
+   ```
+
 ## Documentation
 See the `docs/` directory for detailed setup and configuration instructions.
