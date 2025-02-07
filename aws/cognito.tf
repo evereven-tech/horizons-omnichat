@@ -56,11 +56,11 @@ resource "aws_cognito_user_pool_client" "main" {
   # URLs de callback
   callback_urls = [
     "https://${aws_lb.main.dns_name}/oauth2/idpresponse",
-    "https://${domain_name}/oauth2/idpresponse"
+    "https://${var.domain_name}/oauth2/idpresponse"
   ]
   logout_urls = [
     "https://${aws_lb.main.dns_name}",
-    "https://${domain_name}"
+    "https://${var.domain_name}"
   ]
 
   # Configuración de tokens
