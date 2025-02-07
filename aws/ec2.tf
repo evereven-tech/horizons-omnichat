@@ -1,8 +1,29 @@
+# Buscar la AMI más reciente de Amazon Linux 2 con soporte GPU
+data "aws_ami" "amazon_linux_2_gpu" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-graphics-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+}
+
 # Launch Template para instancias GPU
 resource "aws_launch_template" "ollama" {
   name = "${var.project_name}-${var.environment}-ollama"
   
-  image_id = "ami-0989fb15ce71ba39e"  # Amazon Linux 2 with GPU support
+  image_id = data.aws_ami.amazon_linux_2_gpu.id
   instance_type = "g4dn.xlarge"       # Instancia con GPU NVIDIA T4
 
   # Metadata options recomendadas
