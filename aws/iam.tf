@@ -166,3 +166,63 @@ resource "aws_iam_role_policy" "webui_task" {
     ]
   })
 }
+
+# IAM Role para las instancias EC2 de Ollama
+resource "aws_iam_role" "ollama_instance" {
+  name = "${var.project_name}-${var.environment}-ollama-instance"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ollama-instance"
+    Environment = var.environment
+  }
+}
+
+# Instance Profile para las instancias EC2 de Ollama
+resource "aws_iam_instance_profile" "ollama" {
+  name = "${var.project_name}-${var.environment}-ollama"
+  role = aws_iam_role.ollama_instance.name
+}
+
+# Política básica para las instancias EC2 de Ollama
+resource "aws_iam_role_policy" "ollama_instance" {
+  name = "${var.project_name}-${var.environment}-ollama-instance-policy"
+  role = aws_iam_role.ollama_instance.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:CreateLogGroup"
+        ]
+        Resource = "arn:aws:logs:*:*:*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
