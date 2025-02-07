@@ -5,7 +5,7 @@ data "aws_ami" "amazon_linux_2_gpu" {
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-graphics-*"]
+    values = ["amzn2-ami-kernel-*-hvm-*-x86_64-gp2"]
   }
 
   filter {
@@ -18,10 +18,14 @@ data "aws_ami" "amazon_linux_2_gpu" {
     values = ["x86_64"]
   }
 
-  # Filtro específico para AMD
   filter {
-    name   = "description"
-    values = ["*AMD*"]
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "state"
+    values = ["available"]
   }
 }
 
@@ -38,7 +42,7 @@ resource "aws_launch_template" "ollama" {
     http_tokens   = "required"
   }
 
-  # User data para instalar drivers AMD y Docker
+  # User data para instalar drivers y Docker
   user_data = base64encode(<<-EOF
               #!/bin/bash
               yum update -y
@@ -46,20 +50,26 @@ resource "aws_launch_template" "ollama" {
               systemctl start docker
               systemctl enable docker
 
-              # Instalar drivers AMD
-              dnf install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
+              # Instalar dependencias necesarias
+              yum groupinstall -y "Development Tools"
+              yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
+
+              # Configurar repositorio EPEL
+      	      amazon-linux-extras install -y epel
       
-              # Instalar AMDGPU driver
-              dnf install -y amdgpu
-              
-              # Configurar Docker para usar AMD GPU
+              # Instalar ROCm (AMD GPU drivers)
+              yum install -y https://repo.radeon.com/rocm/centos/rpm/rocm-repo-5.7.1-44.el8.noarch.rpm
+              yum install -y rocm-hip-runtime rocm-hip-sdk
+
+              # Configurar Docker para usar ROCm
               cat > /etc/docker/daemon.json <<'EOL'
               {
                   "runtimes": {
                       "rocr-runtime": {
-                          "path": "/usr/bin/rocr-runtime"
+                          "path": "/opt/rocm/bin/rocr-runtime"
                       }
-                  }
+                  },
+                  "default-runtime": "rocr-runtime"
               }
               EOL
 
