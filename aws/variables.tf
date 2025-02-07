@@ -6,6 +6,12 @@ variable "aws_region" {
   default     = "eu-west-1"
 }
 
+variable "aws_region_bedrock" {
+  description = "AWS region for Bedrock"
+  type        = string
+  default     = "us-east-1"
+}
+
 variable "project_name" {
   description = "Name of the project"
   type        = string

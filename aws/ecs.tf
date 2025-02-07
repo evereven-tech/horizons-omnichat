@@ -170,7 +170,7 @@ resource "aws_ecs_task_definition" "bedrock" {
         },
         {
           name  = "AWS_REGION"
-          value = var.aws_region
+          value = var.aws_region_bedrock
         }
       ]
       logConfiguration = {
