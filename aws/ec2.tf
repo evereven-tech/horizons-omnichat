@@ -42,15 +42,6 @@ resource "aws_launch_template" "ollama" {
     http_tokens   = "required"
   }
 
-  instance_market_options {
-    market_type = "spot"
-    spot_options {
-      max_price = "0.25" # Precio máximo por hora, ajústalo según tus necesidades
-      spot_instance_type = "persistent"
-      instance_interruption_behavior = "terminate"
-    }
-  }
-
   # User data para instalar drivers y Docker
   user_data = base64encode(<<-EOF
               #!/bin/bash
@@ -148,6 +139,7 @@ resource "aws_autoscaling_group" "ollama" {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
       spot_allocation_strategy                 = "capacity-optimized"
+      spot_max_price                          = "0.25"
     }
 
     launch_template {
