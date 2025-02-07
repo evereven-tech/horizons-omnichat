@@ -65,7 +65,6 @@ hybrid-down:
 
 # AWS Specific variables
 TF_DIR := aws
--include .env.aws
 
 aws-plan:
 	@echo "Init Terraform..."
