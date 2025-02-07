@@ -128,7 +128,7 @@ variable "bedrock_desired_count" {
 variable "ollama_instance_type" {
   description = "Instance type for Ollama"
   type        = string
-  default     = "g4dn.xlarge"
+  default     = "g4ad.xlarge"  # AMD GPU instance, más económica que g4dn.xlarge
 }
 
 variable "ollama_ami_id" {

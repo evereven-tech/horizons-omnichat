@@ -17,6 +17,12 @@ data "aws_ami" "amazon_linux_2_gpu" {
     name   = "architecture"
     values = ["x86_64"]
   }
+
+  # Filtro específico para AMD
+  filter {
+    name   = "description"
+    values = ["*AMD*"]
+  }
 }
 
 # Launch Template para instancias GPU
@@ -32,7 +38,7 @@ resource "aws_launch_template" "ollama" {
     http_tokens   = "required"
   }
 
-  # User data para instalar drivers NVIDIA y Docker
+  # User data para instalar drivers AMD y Docker
   user_data = base64encode(<<-EOF
               #!/bin/bash
               yum update -y
@@ -40,16 +46,23 @@ resource "aws_launch_template" "ollama" {
               systemctl start docker
               systemctl enable docker
 
-              # Instalar drivers NVIDIA
-              DRIVER_VERSION="470.57.02"
-              wget https://us.download.nvidia.com/tesla/$DRIVER_VERSION/NVIDIA-Linux-x86_64-$DRIVER_VERSION.run
-              sudo sh NVIDIA-Linux-x86_64-$DRIVER_VERSION.run -s --no-nvidia-modprobe
+              # Instalar drivers AMD
+              dnf install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
+      
+              # Instalar AMDGPU driver
+              dnf install -y amdgpu
               
-              # Instalar nvidia-container-toolkit
-              distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-              curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
-              curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.repo | sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
-              yum install -y nvidia-container-toolkit
+              # Configurar Docker para usar AMD GPU
+              cat > /etc/docker/daemon.json <<'EOL'
+              {
+                  "runtimes": {
+                      "rocr-runtime": {
+                          "path": "/usr/bin/rocr-runtime"
+                      }
+                  }
+              }
+              EOL
+
               systemctl restart docker
               EOF
   )
