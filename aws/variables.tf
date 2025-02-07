@@ -124,3 +124,15 @@ variable "bedrock_desired_count" {
   type        = number
   default     = 1
 }
+
+variable "ollama_instance_type" {
+  description = "Instance type for Ollama"
+  type        = string
+  default     = "g4dn.xlarge"
+}
+
+variable "ollama_ami_id" {
+  description = "AMI ID for Ollama instances"
+  type        = string
+  default     = "ami-0989fb15ce71ba39e"  # Amazon Linux 2 with GPU support
+}
