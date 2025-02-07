@@ -80,3 +80,69 @@ resource "aws_security_group" "ollama" {
     Environment = var.environment
   }
 }
+
+# Auto Scaling Group para Ollama
+resource "aws_autoscaling_group" "ollama" {
+  name                = "${var.project_name}-${var.environment}-ollama"
+  desired_capacity    = var.ollama_desired_count
+  max_size           = var.ollama_max_count
+  min_size           = var.ollama_min_count
+  target_group_arns  = [aws_lb_target_group.ollama.arn]
+  vpc_zone_identifier = aws_subnet.private[*].id
+
+  launch_template {
+    id      = aws_launch_template.ollama.id
+    version = "$Latest"
+  }
+
+  tag {
+    key                 = "Name"
+    value              = "${var.project_name}-${var.environment}-ollama"
+    propagate_at_launch = true
+  }
+
+  tag {
+    key                 = "Environment"
+    value              = var.environment
+    propagate_at_launch = true
+  }
+
+  # Importante para la integración con ECS
+  tag {
+    key                 = "AmazonECSManaged"
+    value              = true
+    propagate_at_launch = true
+  }
+
+  # Proteger contra scale-in para mantener la instancia
+  protect_from_scale_in = true
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+# Target Group para Ollama
+resource "aws_lb_target_group" "ollama" {
+  name        = "${var.project_name}-${var.environment}-ollama"
+  port        = 11434
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.main.id
+  target_type = "instance"
+
+  health_check {
+    enabled             = true
+    healthy_threshold   = 2
+    interval            = 30
+    matcher            = "200"
+    path               = "/api/tags"
+    port               = "traffic-port"
+    timeout            = 5
+    unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ollama"
+    Environment = var.environment
+  }
+}

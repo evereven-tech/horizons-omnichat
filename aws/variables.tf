@@ -136,3 +136,21 @@ variable "ollama_ami_id" {
   type        = string
   default     = "ami-0989fb15ce71ba39e"  # Amazon Linux 2 with GPU support
 }
+
+variable "ollama_desired_count" {
+  description = "Desired number of Ollama instances"
+  type        = number
+  default     = 1
+}
+
+variable "ollama_max_count" {
+  description = "Maximum number of Ollama instances"
+  type        = number
+  default     = 1
+}
+
+variable "ollama_min_count" {
+  description = "Minimum number of Ollama instances"
+  type        = number
+  default     = 1
+}
