@@ -16,14 +16,3 @@ terraform {
     encrypt        = true
   }
 }
-
-# Data source para la tabla DynamoDB existente
-data "aws_dynamodb_table" "terraform_lock" {
-  name = "terraform-locking"
-}
-
-# Output para verificar la tabla de locking
-output "dynamodb_table_arn" {
-  description = "ARN of the DynamoDB table used for Terraform state locking"
-  value       = data.aws_dynamodb_table.terraform_lock.arn
-}
