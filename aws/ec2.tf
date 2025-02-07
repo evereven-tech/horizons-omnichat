@@ -42,6 +42,15 @@ resource "aws_launch_template" "ollama" {
     http_tokens   = "required"
   }
 
+  instance_market_options {
+    market_type = "spot"
+    spot_options {
+      max_price = "0.25" # Precio máximo por hora, ajústalo según tus necesidades
+      spot_instance_type = "persistent"
+      instance_interruption_behavior = "terminate"
+    }
+  }
+
   # User data para instalar drivers y Docker
   user_data = base64encode(<<-EOF
               #!/bin/bash
@@ -134,9 +143,31 @@ resource "aws_autoscaling_group" "ollama" {
   target_group_arns  = [aws_lb_target_group.ollama.arn]
   vpc_zone_identifier = aws_subnet.private[*].id
 
-  launch_template {
-    id      = aws_launch_template.ollama.id
-    version = "$Latest"
+  mixed_instances_policy {
+    instances_distribution {
+      on_demand_base_capacity                  = 0
+      on_demand_percentage_above_base_capacity = 0
+      spot_allocation_strategy                 = "capacity-optimized"
+    }
+
+    launch_template {
+      launch_template_specification {
+        launch_template_id = aws_launch_template.ollama.id
+        version           = "$Latest"
+      }
+
+      override {
+        instance_type = var.ollama_instance_type
+      }
+      
+      # Tipos de instancia alternativos si el principal no está disponible
+      override {
+        instance_type = "g4ad.2xlarge"
+      }
+      override {
+        instance_type = "g4ad.4xlarge"
+      }
+    }
   }
 
   tag {
