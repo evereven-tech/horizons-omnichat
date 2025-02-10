@@ -249,6 +249,12 @@ resource "aws_iam_instance_profile" "ollama" {
   role = aws_iam_role.ollama_instance.name
 }
 
+# Añadir política administrada de SSM al rol de la instancia
+resource "aws_iam_role_policy_attachment" "ollama_instance_ssm" {
+  role       = aws_iam_role.ollama_instance.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 # Política básica para las instancias EC2 de Ollama
 resource "aws_iam_role_policy" "ollama_instance" {
   name = "${var.project_name}-${var.environment}-ollama-instance-policy"
@@ -286,6 +292,17 @@ resource "aws_iam_role_policy" "ollama_instance" {
           "ecs:Submit*",
           "ecs:Poll",
           "ecs:StartTelemetrySession"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:UpdateInstanceInformation",
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
         ]
         Resource = "*"
       }
