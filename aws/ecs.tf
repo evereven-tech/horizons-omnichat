@@ -92,6 +92,32 @@ resource "aws_ecs_service" "ollama" {
   }
 }
 
+# Security Group para las tareas de Ollama
+resource "aws_security_group" "ollama_tasks" {
+  name        = "${var.project_name}-${var.environment}-ollama-tasks"
+  description = "Allow inbound traffic to Ollama tasks"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port       = 11434
+    to_port         = 11434
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ecs_tasks.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ollama-tasks"
+    Environment = var.environment
+  }
+}
+
 # Service Discovery para Ollama
 resource "aws_service_discovery_service" "ollama" {
   name = "ollama"
