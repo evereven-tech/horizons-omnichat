@@ -167,6 +167,59 @@ resource "aws_iam_role_policy" "webui_task" {
   })
 }
 
+# ECS Task Role para Ollama
+resource "aws_iam_role" "ollama_task" {
+  name = "${var.project_name}-${var.environment}-ollama-task"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ollama-task"
+    Environment = var.environment
+  }
+}
+
+# Policy para el rol de Ollama task
+resource "aws_iam_role_policy" "ollama_task" {
+  name = "${var.project_name}-${var.environment}-ollama-task-policy"
+  role = aws_iam_role.ollama_task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "${aws_cloudwatch_log_group.ollama.arn}:*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # IAM Role para las instancias EC2 de Ollama
 resource "aws_iam_role" "ollama_instance" {
   name = "${var.project_name}-${var.environment}-ollama-instance"
