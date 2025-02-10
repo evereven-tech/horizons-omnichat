@@ -1,39 +1,9 @@
-# Buscar la AMI más reciente de Amazon Linux 2 con soporte GPU
-data "aws_ami" "amazon_linux_2_gpu" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-kernel-*-hvm-*-x86_64-gp2"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  filter {
-    name   = "architecture"
-    values = ["x86_64"]
-  }
-
-  filter {
-    name   = "root-device-type"
-    values = ["ebs"]
-  }
-
-  filter {
-    name   = "state"
-    values = ["available"]
-  }
-}
 
 # Launch Template para instancias GPU
 resource "aws_launch_template" "ollama" {
   name = "${var.project_name}-${var.environment}-ollama"
   
-  image_id = data.aws_ami.amazon_linux_2_gpu.id
+  image_id = "ami-0dc6fd3fcf713ce9d"  # AMI con drivers y software preinstalado
   instance_type = "g4dn.xlarge"       # Instancia con GPU NVIDIA T4
 
   # Metadata options recomendadas
@@ -42,38 +12,11 @@ resource "aws_launch_template" "ollama" {
     http_tokens   = "required"
   }
 
-  # User data para instalar drivers y Docker
+  # User data simplificado ya que la AMI ya tiene los drivers instalados
   user_data = base64encode(<<-EOF
               #!/bin/bash
-              yum update -y
-              yum install -y docker
               systemctl start docker
               systemctl enable docker
-
-              # Instalar dependencias necesarias
-              yum groupinstall -y "Development Tools"
-              yum install -y kernel-devel-$(uname -r) kernel-headers-$(uname -r)
-
-              # Configurar repositorio EPEL
-      	      amazon-linux-extras install -y epel
-      
-              # Instalar ROCm (AMD GPU drivers)
-              yum install -y https://repo.radeon.com/rocm/centos/rpm/rocm-repo-5.7.1-44.el8.noarch.rpm
-              yum install -y rocm-hip-runtime rocm-hip-sdk
-
-              # Configurar Docker para usar ROCm
-              cat > /etc/docker/daemon.json <<'EOL'
-              {
-                  "runtimes": {
-                      "rocr-runtime": {
-                          "path": "/opt/rocm/bin/rocr-runtime"
-                      }
-                  },
-                  "default-runtime": "rocr-runtime"
-              }
-              EOL
-
-              systemctl restart docker
               EOF
   )
 

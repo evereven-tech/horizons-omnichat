@@ -134,7 +134,7 @@ variable "ollama_instance_type" {
 variable "ollama_ami_id" {
   description = "AMI ID for Ollama instances"
   type        = string
-  default     = "ami-0e23c576dacf2e3df"  # Amazon Linux 2 with GPU support en eu-west-1
+  default     = "ami-0dc6fd3fcf713ce9d"  # AMI con drivers y software preinstalado
 }
 
 variable "ollama_desired_count" {
