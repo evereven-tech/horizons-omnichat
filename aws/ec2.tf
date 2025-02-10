@@ -62,8 +62,9 @@ resource "aws_launch_template" "ollama" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name        = "${var.project_name}-${var.environment}-ollama"
-      Environment = var.environment
+      Name              = "${var.project_name}-${var.environment}-ollama"
+      Environment       = var.environment
+      AmazonECSManaged = "true"
     }
   }
 }
