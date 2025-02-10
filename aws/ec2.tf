@@ -12,11 +12,27 @@ resource "aws_launch_template" "ollama" {
     http_tokens   = "required"
   }
 
-  # User data simplificado ya que la AMI ya tiene los drivers instalados
+  # User data para instalar el agente ECS y configurar Docker
   user_data = base64encode(<<-EOF
               #!/bin/bash
+              # Iniciar Docker
               systemctl start docker
               systemctl enable docker
+
+              # Instalar agente ECS
+              yum install -y ecs-init
+              systemctl enable ecs
+              systemctl start ecs
+
+              # Configurar el agente ECS
+              cat <<'EOT' > /etc/ecs/ecs.config
+              ECS_CLUSTER=${aws_ecs_cluster.ec2.name}
+              ECS_ENABLE_GPU_SUPPORT=true
+              ECS_ENABLE_TASK_IAM_ROLE=true
+              ECS_ENABLE_SPOT_INSTANCE_DRAINING=true
+              EOT
+
+              systemctl restart ecs
               EOF
   )
 

@@ -20,3 +20,14 @@ resource "aws_cloudwatch_log_group" "webui" {
   }
 }
 
+# CloudWatch Log Group para Ollama
+resource "aws_cloudwatch_log_group" "ollama" {
+  name              = "/ecs/${var.project_name}-${var.environment}/ollama"
+  retention_in_days = 30
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ollama-logs"
+    Environment = var.environment
+  }
+}
+

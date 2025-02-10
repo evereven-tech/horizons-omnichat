@@ -1,3 +1,117 @@
+# Cluster ECS para Ollama (EC2)
+resource "aws_ecs_cluster" "ec2" {
+  name = "${var.project_name}-${var.environment}-ec2"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ec2"
+    Environment = var.environment
+  }
+}
+
+# Task Definition para Ollama
+resource "aws_ecs_task_definition" "ollama" {
+  family                   = "${var.project_name}-${var.environment}-ollama"
+  requires_compatibilities = ["EC2"]
+  network_mode             = "awsvpc"
+  cpu                      = 2048
+  memory                   = 4096
+  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
+  task_role_arn            = aws_iam_role.ollama_task.arn
+
+  container_definitions = jsonencode([
+    {
+      name  = "ollama"
+      image = "${aws_ecr_repository.ollama.repository_url}:latest"
+      portMappings = [
+        {
+          containerPort = 11434
+          protocol      = "tcp"
+        }
+      ]
+      environment = [
+        {
+          name  = "OLLAMA_HOST"
+          value = "0.0.0.0"
+        },
+        {
+          name  = "INSTALLED_MODELS"
+          value = "tinyllama"
+        }
+      ]
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = aws_cloudwatch_log_group.ollama.name
+          "awslogs-region"        = var.aws_region
+          "awslogs-stream-prefix" = "ollama"
+        }
+      }
+      resourceRequirements = [
+        {
+          type  = "GPU"
+          value = "1"
+        }
+      ]
+    }
+  ])
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ollama"
+    Environment = var.environment
+  }
+}
+
+# Servicio ECS para Ollama
+resource "aws_ecs_service" "ollama" {
+  name            = "${var.project_name}-${var.environment}-ollama"
+  cluster         = aws_ecs_cluster.ec2.id
+  task_definition = aws_ecs_task_definition.ollama.arn
+  desired_count   = 1
+  launch_type     = "EC2"
+
+  network_configuration {
+    subnets          = aws_subnet.private[*].id
+    security_groups  = [aws_security_group.ollama_tasks.id]
+    assign_public_ip = false
+  }
+
+  service_registries {
+    registry_arn = aws_service_discovery_service.ollama.arn
+  }
+
+  enable_execute_command = true
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ollama"
+    Environment = var.environment
+  }
+}
+
+# Service Discovery para Ollama
+resource "aws_service_discovery_service" "ollama" {
+  name = "ollama"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.main.id
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 1
+  }
+}
+
 # Cluster para OpenWebUI con Fargate Spot
 resource "aws_ecs_cluster" "fargate" {
   name = "${var.project_name}-${var.environment}-fargate"
