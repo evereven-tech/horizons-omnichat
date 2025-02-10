@@ -13,6 +13,40 @@ resource "aws_ecs_cluster" "ec2" {
   }
 }
 
+# Añadir la capacidad del cluster EC2
+resource "aws_ecs_cluster_capacity_providers" "ec2" {
+  cluster_name = aws_ecs_cluster.ec2.name
+  
+  capacity_providers = ["EC2"]
+
+  default_capacity_provider_strategy {
+    base              = 1
+    weight            = 100
+    capacity_provider = "EC2"
+  }
+}
+
+# Capacity Provider para EC2
+resource "aws_ecs_capacity_provider" "ec2" {
+  name = "${var.project_name}-${var.environment}-ec2"
+
+  auto_scaling_group_provider {
+    auto_scaling_group_arn = aws_autoscaling_group.ollama.arn
+    
+    managed_scaling {
+      maximum_scaling_step_size = 1
+      minimum_scaling_step_size = 1
+      status                    = "ENABLED"
+      target_capacity           = 100
+    }
+  }
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ec2"
+    Environment = var.environment
+  }
+}
+
 # Task Definition para Ollama
 resource "aws_ecs_task_definition" "ollama" {
   family                   = "${var.project_name}-${var.environment}-ollama"
