@@ -30,8 +30,18 @@ resource "aws_launch_template" "ollama" {
               ECS_ENABLE_GPU_SUPPORT=true
               ECS_ENABLE_TASK_IAM_ROLE=true
               ECS_ENABLE_SPOT_INSTANCE_DRAINING=true
+              ECS_CONTAINER_INSTANCE_TAGS={"Name": "${var.project_name}-${var.environment}-ollama", "Environment": "${var.environment}"}
               EOT
 
+              # Instalar el plugin NVIDIA para Docker
+              distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+      	      curl -s -L https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+      	      curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.repo | sudo tee /etc/yum.repos.d/nvidia-container-toolkit.repo
+              yum install -y nvidia-container-toolkit
+              nvidia-ctk runtime configure --runtime=docker
+              systemctl restart docker
+
+              # Reiniciar el agente ECS para aplicar la configuración
               systemctl restart ecs
               EOF
   )

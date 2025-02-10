@@ -275,6 +275,19 @@ resource "aws_iam_role_policy" "ollama_instance" {
           "ecr:BatchGetImage"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ecs:RegisterContainerInstance",
+          "ecs:DeregisterContainerInstance",
+          "ecs:UpdateContainerInstancesState",
+          "ecs:DiscoverPollEndpoint",
+          "ecs:Submit*",
+          "ecs:Poll",
+          "ecs:StartTelemetrySession"
+        ]
+        Resource = "*"
       }
     ]
   })
