@@ -17,12 +17,12 @@ resource "aws_ecs_cluster" "ec2" {
 resource "aws_ecs_cluster_capacity_providers" "ec2" {
   cluster_name = aws_ecs_cluster.ec2.name
   
-  capacity_providers = ["EC2"]
+  capacity_providers = [aws_ecs_capacity_provider.ec2.name]
 
   default_capacity_provider_strategy {
     base              = 1
     weight            = 100
-    capacity_provider = "EC2"
+    capacity_provider = aws_ecs_capacity_provider.ec2.name
   }
 }
 
