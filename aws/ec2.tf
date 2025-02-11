@@ -125,7 +125,6 @@ resource "aws_autoscaling_group" "ollama" {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
       spot_allocation_strategy                 = "price-capacity-optimized"
-      spot_instance_pools                      = 2
     }
 
     launch_template {
