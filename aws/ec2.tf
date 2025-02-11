@@ -135,10 +135,19 @@ resource "aws_autoscaling_group" "ollama" {
 
       # Solo las instancias más económicas con GPU NVIDIA
       override {
-        instance_type = "g4dn.xlarge"    # La más económica con GPU NVIDIA
+        instance_type = "g4dn.xlarge"    # 4 vCPU, 16 GB RAM, 1 GPU
       }
       override {
-        instance_type = "g5.xlarge"      # Alternativa si no hay spots de g4dn
+        instance_type = "g4dn.2xlarge"   # 8 vCPU, 32 GB RAM, 1 GPU
+      }
+      override {
+        instance_type = "g5.xlarge"      # 4 vCPU, 16 GB RAM, 1 GPU
+      }
+      override {
+        instance_type = "g5.2xlarge"     # 8 vCPU, 32 GB RAM, 1 GPU
+      }
+      override {
+        instance_type = "p3.2xlarge"     # 8 vCPU, 61 GB RAM, 1 GPU
       }
     }
   }
