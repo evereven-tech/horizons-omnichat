@@ -291,7 +291,9 @@ resource "aws_iam_role_policy" "ollama_instance" {
           "ecs:DiscoverPollEndpoint",
           "ecs:Submit*",
           "ecs:Poll",
-          "ecs:StartTelemetrySession"
+          "ecs:StartTelemetrySession",
+          "ecs:TagResource",
+          "ecs:UntagResource"
         ]
         Resource = "*"
       },
