@@ -152,5 +152,5 @@ variable "ollama_max_count" {
 variable "ollama_min_count" {
   description = "Minimum number of Ollama instances"
   type        = number
-  default     = 1
+  default     = 0
 }

@@ -57,6 +57,34 @@ resource "aws_launch_template" "ollama" {
   }
 }
 
+# Política de Auto Scaling para escalar a 0
+resource "aws_autoscaling_policy" "scale_down" {
+  name                   = "${var.project_name}-${var.environment}-ollama-scale-down"
+  autoscaling_group_name = aws_autoscaling_group.ollama.name
+  adjustment_type        = "ChangeInCapacity"
+  scaling_adjustment     = -1
+  cooldown              = 300
+  min_adjustment_magnitude = 1
+}
+
+# CloudWatch Alarm para detectar baja utilización
+resource "aws_cloudwatch_metric_alarm" "low_usage" {
+  alarm_name          = "${var.project_name}-${var.environment}-ollama-low-usage"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "15"
+  metric_name         = "CPUUtilization"
+  namespace          = "AWS/EC2"
+  period             = "300"
+  statistic          = "Average"
+  threshold          = "10"
+  alarm_description  = "Scale down when CPU usage is low"
+  alarm_actions      = [aws_autoscaling_policy.scale_down.arn]
+
+  dimensions = {
+    AutoScalingGroupName = aws_autoscaling_group.ollama.name
+  }
+}
+
 # Security Group para Ollama
 resource "aws_security_group" "ollama" {
   name        = "${var.project_name}-${var.environment}-ollama"
@@ -96,8 +124,8 @@ resource "aws_autoscaling_group" "ollama" {
     instances_distribution {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
-      spot_allocation_strategy                 = "capacity-optimized"
-      spot_max_price                          = "0.25"
+      spot_allocation_strategy                 = "price-capacity-optimized"
+      spot_instance_pools                      = 2
     }
 
     launch_template {
@@ -106,16 +134,12 @@ resource "aws_autoscaling_group" "ollama" {
         version           = "$Latest"
       }
 
+      # Solo las instancias más económicas con GPU NVIDIA
       override {
-        instance_type = var.ollama_instance_type
-      }
-      
-      # Tipos de instancia alternativos si el principal no está disponible
-      override {
-        instance_type = "g4ad.2xlarge"
+        instance_type = "g4dn.xlarge"    # La más económica con GPU NVIDIA
       }
       override {
-        instance_type = "g4ad.4xlarge"
+        instance_type = "g5.xlarge"      # Alternativa si no hay spots de g4dn
       }
     }
   }
