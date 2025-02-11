@@ -124,7 +124,8 @@ resource "aws_autoscaling_group" "ollama" {
     instances_distribution {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
-      spot_allocation_strategy                 = "price-capacity-optimized"
+      spot_allocation_strategy                 = "capacity-optimized"
+      spot_max_price                          = "0.5"
     }
 
     launch_template {
@@ -133,12 +134,18 @@ resource "aws_autoscaling_group" "ollama" {
         version           = "$Latest"
       }
 
-      # Solo las instancias más económicas con GPU NVIDIA
+      # Más opciones de instancias con GPU NVIDIA
       override {
-        instance_type = "g4dn.xlarge"    # La más económica con GPU NVIDIA
+        instance_type = "g4dn.xlarge"     # 4 vCPU, 16 GB RAM
       }
       override {
-        instance_type = "g4dn.2xlarge"   # Segunda opción si no hay spots de xlarge
+        instance_type = "g4dn.large"      # 2 vCPU, 8 GB RAM
+      }
+      override {
+        instance_type = "g3s.xlarge"      # 4 vCPU, 16 GB RAM
+      }
+      override {
+        instance_type = "g3.4xlarge"      # 16 vCPU, 32 GB RAM
       }
     }
   }
