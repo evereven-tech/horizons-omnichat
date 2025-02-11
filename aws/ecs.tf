@@ -64,7 +64,8 @@ resource "aws_ecs_task_definition" "ollama" {
       portMappings = [
         {
           containerPort = 11434
-          protocol      = "tcp"
+          hostPort     = 11434
+          protocol     = "tcp"
         }
       ]
       environment = [
@@ -91,8 +92,17 @@ resource "aws_ecs_task_definition" "ollama" {
           value = "1"
         }
       ]
+      runtimePlatform = {
+        operatingSystemFamily = "LINUX"
+        cpuArchitecture      = "X86_64"
+      }
     }
   ])
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture       = "X86_64"
+  }
 
   tags = {
     Name        = "${var.project_name}-${var.environment}-ollama"
