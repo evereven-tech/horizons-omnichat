@@ -15,14 +15,10 @@ resource "aws_launch_template" "ollama" {
   # User data para instalar el agente ECS y configurar Docker
   user_data = base64encode(<<-EOF
               #!/bin/bash
-              # Iniciar Docker
-              systemctl start docker
-              systemctl enable docker
 
               # Instalar agente ECS
-              yum install -y ecs-init
-              systemctl enable ecs
-              systemctl start ecs
+              curl -O https://s3.us-west-2.amazonaws.com/amazon-ecs-agent-us-west-2/amazon-ecs-init-latest.x86_64.rpm
+              yum localinstall -y amazon-ecs-init-latest.x86_64.rpm
 
               # Configurar el agente ECS
               cat <<'EOT' > /etc/ecs/ecs.config
@@ -34,7 +30,7 @@ resource "aws_launch_template" "ollama" {
               EOT
 
               # Reiniciar el agente ECS para aplicar la configuración
-              systemctl restart ecs
+              service ecs restart
               EOF
   )
 
