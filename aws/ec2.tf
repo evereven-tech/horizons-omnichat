@@ -64,7 +64,6 @@ resource "aws_autoscaling_policy" "scale_down" {
   adjustment_type        = "ChangeInCapacity"
   scaling_adjustment     = -1
   cooldown              = 300
-  min_adjustment_magnitude = 1
 }
 
 # CloudWatch Alarm para detectar baja utilización
