@@ -97,7 +97,7 @@ resource "aws_lb_listener" "https" {
       user_pool_client_id = aws_cognito_user_pool_client.main.id
       user_pool_domain    = aws_cognito_user_pool_domain.main.domain
       #scope               = "openid email profile"
-      session_timeout     = 3600
+      session_timeout     = 28800
     }
   }
 

@@ -44,14 +44,13 @@ resource "aws_cognito_user_pool_client" "main" {
   allowed_oauth_scopes         = ["openid", "email", "profile"]
   supported_identity_providers = ["COGNITO"]
 
-  # TBD Check
-  #refresh_token_validity = 30
-  #access_token_validity  = 1
-  #id_token_validity      = 1
+  refresh_token_validity = 30
+  access_token_validity  = 8
+  id_token_validity     = 8
 
-  #token_validity_units {
-  #  access_token  = "hours"
-  #  id_token      = "hours"
-  #  refresh_token = "days"
-  #}
+  token_validity_units {
+    access_token  = "hours"
+    id_token      = "hours"
+    refresh_token = "days"
+  }
 }
