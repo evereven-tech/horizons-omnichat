@@ -108,14 +108,10 @@ resource "aws_ecs_service" "ollama" {
   desired_count   = 1
   launch_type     = "EC2"
 
-  network_configuration {
-    subnets          = aws_subnet.private[*].id
-    security_groups  = [aws_security_group.ollama_tasks.id]
-    assign_public_ip = false
-  }
-
   service_registries {
-    registry_arn = aws_service_discovery_service.ollama.arn
+    registry_arn   = aws_service_discovery_service.ollama.arn
+    container_name = "ollama"
+    container_port = 11434
   }
 
   enable_execute_command = true
