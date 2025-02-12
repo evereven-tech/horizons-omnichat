@@ -72,8 +72,6 @@ TF_DIR := aws
 aws-init:
 	@echo "Checking backend configuration..."
 	@test -f $(TF_DIR)/backend.hcl || (echo "Error: backend.hcl not found. Copy backend.hcl.example to backend.hcl and configure it." && exit 1)
-	@cat $(TF_DIR)/backend.hcl
-	@aws s3 ls
 	@echo "Initializing Terraform..."
 	@cd $(TF_DIR) && terraform init -backend-config=backend.hcl
 

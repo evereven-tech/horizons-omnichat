@@ -265,6 +265,14 @@ resource "aws_ecs_task_definition" "webui" {
           name  = "DATABASE_URL"
           value = "postgresql://${var.postgres_user}:${var.postgres_password}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
         },
+#        {
+#          name  = "OPENAI_API_BASE"
+#          value = "http://bedrock-gateway.${var.project_name}-${var.environment}.local:80/api/v1"
+#        },
+#        {
+#          name  = "OPENAI_API_KEY"
+#          value = var.bedrock_api_key
+#        },
         {
           name  = "AWS_DEFAULT_REGION"
           value = var.aws_region
