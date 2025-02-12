@@ -4,7 +4,10 @@
 
 - Docker or Podman
 - Make
-- AWS CLI configured
+- AWS CLI configured with appropriate permissions
+- AWS Bedrock models enabled in your AWS account
+  > **IMPORTANT**: You must explicitly enable each model you want to use in the AWS Bedrock console
+  > Go to AWS Console -> Bedrock -> Model access -> Request model access
 - 8GB RAM minimum
 - (Optional) NVIDIA GPU with CUDA support
 

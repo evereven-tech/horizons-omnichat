@@ -3,9 +3,15 @@
 ## Prerequisites
 
 - Terraform >= 1.0
-- AWS CLI configured
+- AWS CLI configured with appropriate permissions
 - S3 bucket for Terraform state
 - Route53 hosted zone (for SSL/domain)
+- AWS Bedrock models enabled in your AWS account
+  > **IMPORTANT**: Before deploying, you must enable the models you plan to use:
+  > 1. Go to AWS Console -> Bedrock -> Model access
+  > 2. Click "Manage model access"
+  > 3. Select and request access for desired models
+  > 4. Wait for approval (usually immediate for most models)
 
 ## Quick Start
 
