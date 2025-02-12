@@ -94,5 +94,5 @@ Built with:
 ---
 
 <div align="center">
-Made with ❤️ by <a href="https://www.evereven.tech">evereven</a>
+Made with 💚 by <a href="https://www.evereven.tech">evereven</a>
 </div>
