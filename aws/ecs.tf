@@ -94,7 +94,7 @@ resource "aws_ecs_task_definition" "ollama" {
         },
         {
           name  = "INSTALLED_MODELS"
-          value = "tinyllama"
+          value = var.ollama_models
         }
       ]
       mountPoints = [

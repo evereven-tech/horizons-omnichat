@@ -21,6 +21,9 @@ bedrock_api_key = 123456
 
 webui_version = "0.5.10"
 
+# Ollama Configuration
+ollama_models = "tinyllama,llama2,mistral"
+
 # WebUI Configuration (optional fields)
 webui_user_permissions = {
   workspace = {

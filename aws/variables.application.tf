@@ -38,6 +38,12 @@ variable "postgres_password" {
   sensitive   = true
 }
 
+variable "ollama_models" {
+  description = "Comma-separated list of Ollama models to install"
+  type        = string
+  default     = "tinyllama"
+}
+
 #
 # Config.json
 # #############################################################################

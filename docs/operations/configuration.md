@@ -17,6 +17,15 @@ cp aws/terraform.tfvars.template aws/terraform.tfvars
 
 ## Configuration Options
 
+### Model Configuration
+The `ollama_models` variable in `terraform.tfvars` controls which models are automatically downloaded and installed when Ollama containers start:
+
+```hcl
+ollama_models = "tinyllama,llama2,mistral"
+```
+
+Models are downloaded from Ollama's model hub and cached in the EFS volume for persistence.
+
 ### Database Settings
 - `POSTGRES_DB`: Database name
 - `POSTGRES_USER`: Database user
