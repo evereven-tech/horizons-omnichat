@@ -57,6 +57,17 @@ resource "aws_ecs_task_definition" "ollama" {
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ollama_task.arn
 
+  volume {
+    name = "models"
+    efs_volume_configuration {
+      file_system_id     = aws_efs_file_system.models.id
+      transit_encryption = "ENABLED"
+      authorization_config {
+        access_point_id = aws_efs_access_point.models.id
+      }
+    }
+  }
+
   container_definitions = jsonencode([
     {
       name  = "ollama"
@@ -76,6 +87,13 @@ resource "aws_ecs_task_definition" "ollama" {
         {
           name  = "INSTALLED_MODELS"
           value = "tinyllama"
+        }
+      ]
+      mountPoints = [
+        {
+          sourceVolume  = "models"
+          containerPath = "/root/.ollama"
+          readOnly      = false
         }
       ]
       logConfiguration = {
@@ -225,6 +243,19 @@ resource "aws_ecs_task_definition" "webui" {
           protocol      = "tcp"
         }
       ]
+      entryPoint = ["/bin/sh", "-c"]
+      command = [
+        <<-EOF
+        aws ssm get-parameter \
+          --name /${var.project_name}/${var.environment}/webui/config.json \
+          --with-decryption \
+          --region ${var.aws_region} \
+          --query Parameter.Value \
+          --output text > /app/backend/data/config.json && \
+        /docker-entrypoint.sh
+        EOF
+      ]
+
       environment = [
         {
           name  = "WEBUI_SECRET_KEY"
@@ -235,12 +266,8 @@ resource "aws_ecs_task_definition" "webui" {
           value = "postgresql://${var.postgres_user}:${var.postgres_password}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
         },
         {
-          name  = "OPENAI_API_BASE"
-          value = "http://bedrock-gateway.${var.project_name}-${var.environment}.local:80/api/v1"
-        },
-        {
-          name  = "OPENAI_API_KEY"
-          value = var.bedrock_api_key
+          name  = "AWS_DEFAULT_REGION"
+          value = var.aws_region
         }
       ]
       logConfiguration = {
