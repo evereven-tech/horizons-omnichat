@@ -1,3 +1,7 @@
+#
+# Naming & global
+# #############################################################################
+
 variable "aws_region" {
   description = "AWS region"
   type        = string
@@ -21,6 +25,10 @@ variable "environment" {
   type        = string
   default     = "dev"
 }
+
+#
+# Network
+# #############################################################################
 
 variable "vpc_cidr" {
   description = "CIDR block for VPC"
@@ -46,13 +54,17 @@ variable "public_subnets" {
   default     = ["10.0.101.0/24", "10.0.102.0/24"]
 }
 
-variable "certificate_arn" {
-  description = "ARN of SSL certificate for ALB"
-  type        = string
-}
+#
+# Delivery & DNS
+# #############################################################################
 
 variable "domain_name" {
   description = "Domain name for the application"
+  type        = string
+}
+
+variable "certificate_arn" {
+  description = "ARN of SSL certificate for ALB"
   type        = string
 }
 
@@ -61,8 +73,68 @@ variable "cognito_domain_prefix" {
   type        = string
 }
 
+#
+# ECS & Containers
+# #############################################################################
+
+variable "webui_desired_count" {
+  description = "Desired number of OpenWebUI tasks"
+  type        = number
+  default     = 1
+}
+
+variable "bedrock_desired_count" {
+  description = "Desired number of Bedrock Gateway tasks"
+  type        = number
+  default     = 1
+}
+
+variable "ollama_desired_count" {
+  description = "Desired number of Ollama instances"
+  type        = number
+  default     = 1
+}
+
+variable "ollama_max_count" {
+  description = "Maximum number of Ollama instances"
+  type        = number
+  default     = 1
+}
+
+variable "ollama_min_count" {
+  description = "Minimum number of Ollama instances"
+  type        = number
+  default     = 0
+}
+
+variable "bedrock_image" {
+  description = "ECR URI to Bedrock Gateway Image"
+  type        = string
+  default     = "533267020467.dkr.ecr.eu-west-1.amazonaws.com/horizons-bedrock-gateway:latest"
+}
+
+#
+# Persistence
+# #############################################################################
+
 variable "efs_models_throughput" {
   description = "Throughput in MiB/s for EFS models volume"
   type        = number
   default     = 100
+}
+
+#
+# GPU EC2 Spot based
+# #############################################################################
+
+variable "ollama_instance_type" {
+  description = "Instance type for Ollama"
+  type        = string
+  default     = "g4ad.xlarge"
+}
+
+variable "ollama_ami_id" {
+  description = "AMI ID for Ollama instances"
+  type        = string
+  default     = "ami-0dc6fd3fcf713ce9d"
 }
