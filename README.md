@@ -83,7 +83,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) f
 Built with:
 - [Ollama](https://github.com/ollama/ollama)
 - [Open WebUI](https://github.com/open-webui/open-webui)
-- [AWS Bedrock](https://aws.amazon.com/bedrock/)
+- [AWS Bedrock Access Gateway](https://github.com/aws-samples/bedrock-access-gateway)
 
 ## 📊 Project Status
 
