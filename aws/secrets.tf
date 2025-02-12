@@ -15,6 +15,7 @@ resource "aws_secretsmanager_secret_version" "app_secrets" {
     webui_secret_key  = var.webui_secret_key
     postgres_password = var.postgres_password
     bedrock_api_key   = var.bedrock_api_key
+    database_url      = "postgresql://${var.postgres_user}:${var.postgres_password}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
   })
 }
 

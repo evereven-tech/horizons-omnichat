@@ -256,12 +256,18 @@ resource "aws_ecs_task_definition" "webui" {
       ]
       environment = [
         {
-          name  = "DATABASE_URL"
-          value = "postgresql://${var.postgres_user}:${data.aws_secretsmanager_secret_version.app_secrets.secret_string}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
-        },
-        {
           name  = "AWS_DEFAULT_REGION"
           value = var.aws_region
+        }
+      ]
+      secrets = [
+        {
+          name      = "WEBUI_SECRET_KEY"
+          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:webui_secret_key::"
+        },
+        {
+          name      = "DATABASE_URL"
+          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:database_url::"
         }
       ]
       logConfiguration = {
