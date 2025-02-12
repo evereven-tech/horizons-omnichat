@@ -1,6 +1,6 @@
 # Secrets Manager para secretos de la aplicación
 resource "aws_secretsmanager_secret" "app_secrets" {
-  name = "${var.project_name}/${var.environment}/app-secrets"
+  name        = "${var.project_name}/${var.environment}/app-secrets"
   description = "Application secrets for ${var.project_name} ${var.environment}"
 
   tags = {
@@ -12,8 +12,8 @@ resource "aws_secretsmanager_secret" "app_secrets" {
 resource "aws_secretsmanager_secret_version" "app_secrets" {
   secret_id = aws_secretsmanager_secret.app_secrets.id
   secret_string = jsonencode({
-    webui_secret_key   = var.webui_secret_key
-    postgres_password  = var.postgres_password
+    webui_secret_key  = var.webui_secret_key
+    postgres_password = var.postgres_password
     bedrock_api_key   = var.bedrock_api_key
   })
 }
@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "secrets_access" {
 
 # Adjuntar política de secretos al rol de ejecución de ECS
 resource "aws_iam_role_policy" "ecs_task_secrets" {
-  name = "${var.project_name}-${var.environment}-secrets-access"
-  role = aws_iam_role.ecs_task_execution.id
+  name   = "${var.project_name}-${var.environment}-secrets-access"
+  role   = aws_iam_role.ecs_task_execution.id
   policy = data.aws_iam_policy_document.secrets_access.json
 }

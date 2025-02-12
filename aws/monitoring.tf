@@ -1,7 +1,7 @@
 # CloudWatch Dashboard para Ollama
 resource "aws_cloudwatch_dashboard" "ollama" {
   dashboard_name = "${var.project_name}-${var.environment}-ollama"
-  
+
   dashboard_body = jsonencode({
     widgets = [
       {
@@ -65,11 +65,11 @@ resource "aws_cloudwatch_metric_alarm" "gpu_utilization_high" {
   evaluation_periods  = "2"
   metric_name         = "GPUUtilization"
   namespace           = "AWS/EC2"
-  period             = "300"
-  statistic          = "Average"
-  threshold          = "85"
-  alarm_description  = "GPU utilization is too high"
-  
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "85"
+  alarm_description   = "GPU utilization is too high"
+
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.ollama.name
   }
@@ -81,11 +81,11 @@ resource "aws_cloudwatch_metric_alarm" "gpu_memory_high" {
   evaluation_periods  = "2"
   metric_name         = "GPUMemoryUtilization"
   namespace           = "AWS/EC2"
-  period             = "300"
-  statistic          = "Average"
-  threshold          = "85"
-  alarm_description  = "GPU memory utilization is too high"
-  
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "85"
+  alarm_description   = "GPU memory utilization is too high"
+
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.ollama.name
   }
@@ -97,7 +97,7 @@ resource "aws_autoscaling_policy" "gpu_scale_up" {
   autoscaling_group_name = aws_autoscaling_group.ollama.name
   adjustment_type        = "ChangeInCapacity"
   scaling_adjustment     = 1
-  cooldown              = 300
+  cooldown               = 300
 }
 
 resource "aws_cloudwatch_metric_alarm" "gpu_scale_up_alarm" {
@@ -106,12 +106,12 @@ resource "aws_cloudwatch_metric_alarm" "gpu_scale_up_alarm" {
   evaluation_periods  = "2"
   metric_name         = "GPUUtilization"
   namespace           = "AWS/EC2"
-  period             = "300"
-  statistic          = "Average"
-  threshold          = "80"
-  alarm_description  = "Scale up when GPU utilization is high"
-  alarm_actions      = [aws_autoscaling_policy.gpu_scale_up.arn]
-  
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "Scale up when GPU utilization is high"
+  alarm_actions       = [aws_autoscaling_policy.gpu_scale_up.arn]
+
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.ollama.name
   }

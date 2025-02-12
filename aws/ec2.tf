@@ -130,7 +130,7 @@ resource "aws_autoscaling_group" "ollama" {
     launch_template {
       launch_template_specification {
         launch_template_id = aws_launch_template.ollama.id
-        version           = "$Latest"
+        version            = "$Latest"
       }
 
       dynamic "override" {

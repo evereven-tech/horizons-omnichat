@@ -1,9 +1,9 @@
 # AWS Region
-aws_region = "eu-west-1"
+aws_region         = "eu-west-1"
 aws_region_bedrock = "us-east-1"
 
 # Networking
-vpc_cidr = "x.x.x.x/16"
+vpc_cidr           = "x.x.x.x/16"
 availability_zones = ["**-**-1a", "**-****-1b"]
 private_subnets    = ["x.x.x.x/24", "x.x.x.x/24"]
 public_subnets     = ["x.x.x.x/24", "x.x.x.x/24"]
@@ -12,14 +12,14 @@ public_subnets     = ["x.x.x.x/24", "x.x.x.x/24"]
 certificate_arn = "arn:aws:acm:*:*****************:certificate/********-****-****-****-************"
 
 # Domain Configuration
-domain_name = "chatbot.your-site.company"
+domain_name           = "chatbot.your-site.company"
 cognito_domain_prefix = "auth-chatbot-company_name"
 
-postgres_password = "changemeinproduction"
-webui_secret_key = "changemeinproduction"
-bedrock_api_key = 123456
-
-webui_version = "0.5.10"
+# Open WebUI
+postgres_password  = "changemeinproduction"
+webui_secret_key   = "changemeinproduction"
+bedrock_api_key    = 123456
+webui_version      = "0.5.10"
 
 # Ollama Configuration
 ollama_models = "tinyllama,llama2,mistral"

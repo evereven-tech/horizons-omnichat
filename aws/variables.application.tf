@@ -38,6 +38,11 @@ variable "postgres_password" {
   sensitive   = true
 }
 
+#
+# Ollama | Model lists
+# Installed on first run by script, and saved to a models volume on EFS
+# #############################################################################
+
 variable "ollama_models" {
   description = "Comma-separated list of Ollama models to install"
   type        = string
@@ -45,7 +50,8 @@ variable "ollama_models" {
 }
 
 #
-# Config.json
+# Open WebUI | Config.json
+# Inserted on first run by command order
 # #############################################################################
 
 variable "webui_user_permissions" {
