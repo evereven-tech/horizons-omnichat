@@ -248,23 +248,17 @@ resource "aws_ecs_task_definition" "webui" {
         EOF
       ]
 
+      secrets = [
+        {
+          name      = "WEBUI_SECRET_KEY"
+          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:webui_secret_key::"
+        }
+      ]
       environment = [
         {
-          name  = "WEBUI_SECRET_KEY"
-          value = var.webui_secret_key
-        },
-        {
           name  = "DATABASE_URL"
-          value = "postgresql://${var.postgres_user}:${var.postgres_password}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
+          value = "postgresql://${var.postgres_user}:${data.aws_secretsmanager_secret_version.app_secrets.secret_string}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
         },
-        #        {
-        #          name  = "OPENAI_API_BASE"
-        #          value = "http://bedrock-gateway.${var.project_name}-${var.environment}.local:80/api/v1"
-        #        },
-        #        {
-        #          name  = "OPENAI_API_KEY"
-        #          value = var.bedrock_api_key
-        #        },
         {
           name  = "AWS_DEFAULT_REGION"
           value = var.aws_region
@@ -374,11 +368,13 @@ resource "aws_ecs_task_definition" "bedrock" {
           protocol      = "tcp"
         }
       ]
-      environment = [
+      secrets = [
         {
-          name  = "API_KEY"
-          value = var.bedrock_api_key
-        },
+          name      = "API_KEY"
+          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:bedrock_api_key::"
+        }
+      ]
+      environment = [
         {
           name  = "AWS_REGION"
           value = var.aws_region_bedrock
