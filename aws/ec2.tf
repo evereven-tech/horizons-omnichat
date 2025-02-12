@@ -123,25 +123,21 @@ resource "aws_autoscaling_group" "ollama" {
     instances_distribution {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
-      spot_allocation_strategy                 = "capacity-optimized"
-      spot_max_price                           = "0.5"
+      spot_allocation_strategy                 = var.spot_config.allocation_strategy
+      spot_max_price                           = "${var.spot_config.max_price_percentage}%"
     }
 
     launch_template {
       launch_template_specification {
         launch_template_id = aws_launch_template.ollama.id
-        version            = "$Latest"
+        version           = "$Latest"
       }
 
-      # Instancias con GPU NVIDIA ordenadas por coste
-      override {
-        instance_type = "g4dn.xlarge" # 4 vCPU, 16 GB RAM, 1 GPU
-      }
-      override {
-        instance_type = "g3s.xlarge" # 4 vCPU, 16 GB RAM, 1 GPU
-      }
-      override {
-        instance_type = "g4dn.2xlarge" # 8 vCPU, 32 GB RAM, 1 GPU
+      dynamic "override" {
+        for_each = var.gpu_config.instance_types
+        content {
+          instance_type = override.value
+        }
       }
     }
   }

@@ -127,10 +127,32 @@ variable "efs_models_throughput" {
 # GPU EC2 Spot based
 # #############################################################################
 
-variable "ollama_instance_type" {
-  description = "Instance type for Ollama"
-  type        = string
-  default     = "g4ad.xlarge"
+variable "gpu_config" {
+  description = "GPU configuration for Ollama instances"
+  type = object({
+    instance_types = list(string)
+    min_gpus      = number
+    max_gpus      = number
+  })
+  default = {
+    instance_types = ["g4dn.xlarge", "g5.xlarge", "p3.2xlarge"]
+    min_gpus      = 1
+    max_gpus      = 4
+  }
+}
+
+variable "spot_config" {
+  description = "Spot configuration for GPU instances"
+  type = object({
+    max_price_percentage = number
+    interruption_behavior = string
+    allocation_strategy = string
+  })
+  default = {
+    max_price_percentage = 70
+    interruption_behavior = "terminate"
+    allocation_strategy = "capacity-optimized"
+  }
 }
 
 variable "ollama_ami_id" {
