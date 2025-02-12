@@ -8,7 +8,7 @@
 
 A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
 
-[Getting Started](#quick-start) •
+[Getting Started](#-quick-start) •
 [Documentation](https://evereven-tech.github.io/horizons/) •
 [Contributing](CONTRIBUTING.md) •
 [Community](https://github.com/evereven-tech/horizons-omnichat/discussions)
