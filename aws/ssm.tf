@@ -4,6 +4,7 @@ resource "aws_ssm_parameter" "webui_config" {
   value = templatefile("${path.module}/templates/webui-config.tftpl", {
     namespace = "${var.project_name}-${var.environment}.local"
     api_key   = var.bedrock_api_key
+    domain_name = var.domain_name
   })
 
   tags = {
