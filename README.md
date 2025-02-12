@@ -5,12 +5,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/evereven/horizons.svg)](https://github.com/evereven-tech/horizons-omnichat/releases/)
 [![CI Status](https://github.com/evereven-tech/horizons-omnichat/workflows/CI/badge.svg)](https://github.com/evereven-tech/horizons-omnichat/actions)
-[![Docker Pulls](https://img.shields.io/docker/pulls/evereven/horizons)](https://hub.docker.com/r/evereven/horizons)
 
 A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
 
 [Getting Started](#getting-started) •
-[Documentation](https://evereven.github.io/horizons/) •
+[Documentation](https://evereven-tech.github.io/horizons/) •
 [Contributing](CONTRIBUTING.md) •
 [Community](https://github.com/evereven-tech/horizons-omnichat/discussions)
 
@@ -35,6 +34,7 @@ Choose the deployment that best fits your needs:
 | **Local** | Simple setup with Ollama + Open-WebUI | [Local Setup Guide](docs/flavors/local.md) |
 | **Hybrid** | Ollama + Open-WebUI + AWS Bedrock | [Hybrid Setup Guide](docs/flavors/hybrid.md) |
 | **AWS** | Full cloud deployment on AWS ECS | [AWS Setup Guide](docs/flavors/aws.md) |
+| **K8s** | Soon! | TBD |
 
 ## 🛠 Quick Start
 
@@ -94,5 +94,5 @@ Built with:
 ---
 
 <div align="center">
-Made with ❤️ by <a href="https://evereven.com">Evereven</a>
+Made with ❤️ by <a href="https://www.evereven.tech">evereven</a>
 </div>
