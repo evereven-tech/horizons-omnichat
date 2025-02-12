@@ -62,47 +62,18 @@
   "ollama": {
     "base_urls": ["http://ollama.${namespace}.local:11434"]
   },
-    "user": {
-      "permissions": {
-        "workspace": {
-          "models": true,
-          "knowledge": true,
-          "prompts": true,
-          "tools": true
-        },
-        "chat": {
-          "controls": true,
-          "file_upload": true,
-          "delete": true,
-          "edit": true,
-          "temporary": true
-        },
-        "features": {
-          "web_search": true,
-          "image_generation": true,
-          "code_interpreter": true
-        }
-      }
-    },
-    "ldap": {
-      "enable": false
-    },
-    "webhook_url": "",
-    "auth": {
-      "admin": {
-        "show": true
-      },
-      "api_key": {
-        "enable": true,
-        "endpoint_restrictions": false,
-        "allowed_endpoints": ""
-      },
-      "jwt_expiry": "1d"
-    },
-    "webui": {
-      "url": "https://${domain_name}/"
-    },
-    "channels": {
-      "enable": false
-    }
+  "user": {
+    "permissions": ${jsonencode(user_permissions)}
+  },
+  "ldap": {
+    "enable": ${ldap_enabled}
+  },
+  "webhook_url": "",
+  "auth": ${jsonencode(auth_config)},
+  "webui": {
+    "url": "https://${domain_name}/"
+  },
+  "channels": {
+    "enable": ${channels_enabled}
+  }
 }
