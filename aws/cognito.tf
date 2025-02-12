@@ -29,7 +29,7 @@ resource "aws_cognito_user_pool_client" "main" {
   user_pool_id = aws_cognito_user_pool.main.id
 
   # Generar secret key para la autenticación con ALB
-  generate_secret = true
+  generate_secret                      = true
   allowed_oauth_flows_user_pool_client = true
 
   # Flujos de autenticación explícitos
@@ -46,7 +46,7 @@ resource "aws_cognito_user_pool_client" "main" {
 
   refresh_token_validity = 30
   access_token_validity  = 8
-  id_token_validity     = 8
+  id_token_validity      = 8
 
   token_validity_units {
     access_token  = "hours"

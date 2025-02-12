@@ -16,7 +16,7 @@ resource "aws_ecs_cluster" "ec2" {
 # Añadir la capacidad del cluster EC2
 resource "aws_ecs_cluster_capacity_providers" "ec2" {
   cluster_name = aws_ecs_cluster.ec2.name
-  
+
   capacity_providers = [aws_ecs_capacity_provider.ec2.name]
 
   default_capacity_provider_strategy {
@@ -32,7 +32,7 @@ resource "aws_ecs_capacity_provider" "ec2" {
 
   auto_scaling_group_provider {
     auto_scaling_group_arn = aws_autoscaling_group.ollama.arn
-    
+
     managed_scaling {
       maximum_scaling_step_size = 1
       minimum_scaling_step_size = 1
@@ -75,8 +75,8 @@ resource "aws_ecs_task_definition" "ollama" {
       portMappings = [
         {
           containerPort = 11434
-          hostPort     = 11434
-          protocol     = "tcp"
+          hostPort      = 11434
+          protocol      = "tcp"
         }
       ]
       environment = [
@@ -112,14 +112,14 @@ resource "aws_ecs_task_definition" "ollama" {
       ]
       runtimePlatform = {
         operatingSystemFamily = "LINUX"
-        cpuArchitecture      = "X86_64"
+        cpuArchitecture       = "X86_64"
       }
     }
   ])
 
   runtime_platform {
     operating_system_family = "LINUX"
-    cpu_architecture       = "X86_64"
+    cpu_architecture        = "X86_64"
   }
 
   tags = {
@@ -265,14 +265,14 @@ resource "aws_ecs_task_definition" "webui" {
           name  = "DATABASE_URL"
           value = "postgresql://${var.postgres_user}:${var.postgres_password}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
         },
-#        {
-#          name  = "OPENAI_API_BASE"
-#          value = "http://bedrock-gateway.${var.project_name}-${var.environment}.local:80/api/v1"
-#        },
-#        {
-#          name  = "OPENAI_API_KEY"
-#          value = var.bedrock_api_key
-#        },
+        #        {
+        #          name  = "OPENAI_API_BASE"
+        #          value = "http://bedrock-gateway.${var.project_name}-${var.environment}.local:80/api/v1"
+        #        },
+        #        {
+        #          name  = "OPENAI_API_KEY"
+        #          value = var.bedrock_api_key
+        #        },
         {
           name  = "AWS_DEFAULT_REGION"
           value = var.aws_region

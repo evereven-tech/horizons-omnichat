@@ -2,9 +2,9 @@
 # Launch Template para instancias GPU
 resource "aws_launch_template" "ollama" {
   name = "${var.project_name}-${var.environment}-ollama"
-  
-  image_id = "ami-0dc6fd3fcf713ce9d"  # AMI con drivers y software preinstalado
-  instance_type = "g4dn.xlarge"       # Instancia con GPU NVIDIA T4
+
+  image_id      = "ami-0dc6fd3fcf713ce9d" # AMI con drivers y software preinstalado
+  instance_type = "g4dn.xlarge"           # Instancia con GPU NVIDIA T4
 
   # Metadata options recomendadas
   metadata_options {
@@ -36,7 +36,7 @@ resource "aws_launch_template" "ollama" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups            = [aws_security_group.ollama.id]
+    security_groups             = [aws_security_group.ollama.id]
   }
 
   iam_instance_profile {
@@ -50,8 +50,8 @@ resource "aws_launch_template" "ollama" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name              = "${var.project_name}-${var.environment}-ollama"
-      Environment       = var.environment
+      Name             = "${var.project_name}-${var.environment}-ollama"
+      Environment      = var.environment
       AmazonECSManaged = "true"
     }
   }
@@ -63,7 +63,7 @@ resource "aws_autoscaling_policy" "scale_down" {
   autoscaling_group_name = aws_autoscaling_group.ollama.name
   adjustment_type        = "ChangeInCapacity"
   scaling_adjustment     = -1
-  cooldown              = 300
+  cooldown               = 300
 }
 
 # CloudWatch Alarm para detectar baja utilización
@@ -72,12 +72,12 @@ resource "aws_cloudwatch_metric_alarm" "low_usage" {
   comparison_operator = "LessThanThreshold"
   evaluation_periods  = "15"
   metric_name         = "CPUUtilization"
-  namespace          = "AWS/EC2"
-  period             = "300"
-  statistic          = "Average"
-  threshold          = "10"
-  alarm_description  = "Scale down when CPU usage is low"
-  alarm_actions      = [aws_autoscaling_policy.scale_down.arn]
+  namespace           = "AWS/EC2"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "10"
+  alarm_description   = "Scale down when CPU usage is low"
+  alarm_actions       = [aws_autoscaling_policy.scale_down.arn]
 
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.ollama.name
@@ -114,9 +114,9 @@ resource "aws_security_group" "ollama" {
 resource "aws_autoscaling_group" "ollama" {
   name                = "${var.project_name}-${var.environment}-ollama"
   desired_capacity    = var.ollama_desired_count
-  max_size           = var.ollama_max_count
-  min_size           = var.ollama_min_count
-  target_group_arns  = [aws_lb_target_group.ollama.arn]
+  max_size            = var.ollama_max_count
+  min_size            = var.ollama_min_count
+  target_group_arns   = [aws_lb_target_group.ollama.arn]
   vpc_zone_identifier = aws_subnet.private[*].id
 
   mixed_instances_policy {
@@ -124,44 +124,44 @@ resource "aws_autoscaling_group" "ollama" {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
       spot_allocation_strategy                 = "capacity-optimized"
-      spot_max_price                          = "0.5"
+      spot_max_price                           = "0.5"
     }
 
     launch_template {
       launch_template_specification {
         launch_template_id = aws_launch_template.ollama.id
-        version           = "$Latest"
+        version            = "$Latest"
       }
 
       # Instancias con GPU NVIDIA ordenadas por coste
       override {
-        instance_type = "g4dn.xlarge"     # 4 vCPU, 16 GB RAM, 1 GPU
+        instance_type = "g4dn.xlarge" # 4 vCPU, 16 GB RAM, 1 GPU
       }
       override {
-        instance_type = "g3s.xlarge"      # 4 vCPU, 16 GB RAM, 1 GPU
+        instance_type = "g3s.xlarge" # 4 vCPU, 16 GB RAM, 1 GPU
       }
       override {
-        instance_type = "g4dn.2xlarge"    # 8 vCPU, 32 GB RAM, 1 GPU
+        instance_type = "g4dn.2xlarge" # 8 vCPU, 32 GB RAM, 1 GPU
       }
     }
   }
 
   tag {
     key                 = "Name"
-    value              = "${var.project_name}-${var.environment}-ollama"
+    value               = "${var.project_name}-${var.environment}-ollama"
     propagate_at_launch = true
   }
 
   tag {
     key                 = "Environment"
-    value              = var.environment
+    value               = var.environment
     propagate_at_launch = true
   }
 
   # Importante para la integración con ECS
   tag {
     key                 = "AmazonECSManaged"
-    value              = true
+    value               = true
     propagate_at_launch = true
   }
 
@@ -185,10 +185,10 @@ resource "aws_lb_target_group" "ollama" {
     enabled             = true
     healthy_threshold   = 2
     interval            = 30
-    matcher            = "200"
-    path               = "/api/tags"
-    port               = "traffic-port"
-    timeout            = 5
+    matcher             = "200"
+    path                = "/api/tags"
+    port                = "traffic-port"
+    timeout             = 5
     unhealthy_threshold = 2
   }
 

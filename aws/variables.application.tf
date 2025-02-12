@@ -8,42 +8,42 @@ variable "webui_user_permissions" {
   description = "User permissions configuration for WebUI"
   type = object({
     workspace = object({
-      models     = bool
-      knowledge  = bool
-      prompts    = bool
-      tools      = bool
+      models    = bool
+      knowledge = bool
+      prompts   = bool
+      tools     = bool
     })
     chat = object({
-      controls     = bool
-      file_upload  = bool
-      delete       = bool
-      edit         = bool
-      temporary    = bool
+      controls    = bool
+      file_upload = bool
+      delete      = bool
+      edit        = bool
+      temporary   = bool
     })
     features = object({
-      web_search        = bool
-      image_generation  = bool
-      code_interpreter  = bool
+      web_search       = bool
+      image_generation = bool
+      code_interpreter = bool
     })
   })
   default = {
     workspace = {
-      models     = true
-      knowledge  = true
-      prompts    = true
-      tools      = true
+      models    = true
+      knowledge = true
+      prompts   = true
+      tools     = true
     }
     chat = {
-      controls     = true
-      file_upload  = true
-      delete       = true
-      edit         = true
-      temporary    = true
+      controls    = true
+      file_upload = true
+      delete      = true
+      edit        = true
+      temporary   = true
     }
     features = {
-      web_search        = true
-      image_generation  = true
-      code_interpreter  = true
+      web_search       = true
+      image_generation = true
+      code_interpreter = true
     }
   }
 }

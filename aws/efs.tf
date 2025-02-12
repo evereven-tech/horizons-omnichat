@@ -22,8 +22,8 @@ resource "aws_efs_file_system" "models" {
   creation_token = "${var.project_name}-${var.environment}-models"
   encrypted      = true
 
-  performance_mode = "maxIO"
-  throughput_mode = "provisioned"
+  performance_mode                = "maxIO"
+  throughput_mode                 = "provisioned"
   provisioned_throughput_in_mibps = var.efs_models_throughput
 
   lifecycle_policy {
