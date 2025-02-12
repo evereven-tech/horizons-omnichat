@@ -1,3 +1,7 @@
+#
+# Global ECS Setup 
+# #############################################################################
+
 # Cluster ECS para Ollama (EC2)
 resource "aws_ecs_cluster" "ec2" {
   name = "${var.project_name}-${var.environment}-ec2"
@@ -46,6 +50,10 @@ resource "aws_ecs_capacity_provider" "ec2" {
     Environment = var.environment
   }
 }
+
+#
+# Ollama
+# #############################################################################
 
 # Task Definition para Ollama
 resource "aws_ecs_task_definition" "ollama" {
@@ -176,25 +184,9 @@ resource "aws_security_group" "ollama_tasks" {
   }
 }
 
-# Service Discovery para Ollama
-resource "aws_service_discovery_service" "ollama" {
-  name = "ollama"
-
-  dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.main.id
-
-    dns_records {
-      ttl  = 10
-      type = "SRV"
-    }
-
-    routing_policy = "MULTIVALUE"
-  }
-
-  health_check_custom_config {
-    failure_threshold = 1
-  }
-}
+#
+# Open WebUI
+# #############################################################################
 
 # Cluster para OpenWebUI con Fargate Spot
 resource "aws_ecs_cluster" "fargate" {
@@ -357,6 +349,10 @@ resource "aws_security_group" "ecs_tasks" {
   }
 }
 
+#
+# Bedrock Gateway
+# #############################################################################
+
 # Task Definition para Bedrock Gateway
 resource "aws_ecs_task_definition" "bedrock" {
   family                   = "${var.project_name}-${var.environment}-bedrock"
@@ -458,52 +454,5 @@ resource "aws_security_group" "bedrock_tasks" {
   tags = {
     Name        = "${var.project_name}-${var.environment}-bedrock-tasks"
     Environment = var.environment
-  }
-}
-
-# Service Discovery Namespace
-resource "aws_service_discovery_private_dns_namespace" "main" {
-  name        = "${var.project_name}-${var.environment}.local"
-  vpc         = aws_vpc.main.id
-  description = "Service Discovery namespace for ${var.project_name}-${var.environment}"
-}
-
-# Service Discovery Service para OpenWebUI
-resource "aws_service_discovery_service" "webui" {
-  name = "webui"
-
-  dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.main.id
-
-    dns_records {
-      ttl  = 10
-      type = "A"
-    }
-
-    routing_policy = "MULTIVALUE"
-  }
-
-  health_check_custom_config {
-    failure_threshold = 1
-  }
-}
-
-# Service Discovery Service para Bedrock Gateway
-resource "aws_service_discovery_service" "bedrock" {
-  name = "bedrock-gateway"
-
-  dns_config {
-    namespace_id = aws_service_discovery_private_dns_namespace.main.id
-
-    dns_records {
-      ttl  = 10
-      type = "A"
-    }
-
-    routing_policy = "MULTIVALUE"
-  }
-
-  health_check_custom_config {
-    failure_threshold = 1
   }
 }
