@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/evereven/horizons/discussions
+    about: Please ask and answer questions here.
+  - name: Security Issues
+    url: https://github.com/evereven/horizons/security/policy
+    about: Please report security vulnerabilities here.

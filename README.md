@@ -1,49 +1,98 @@
-# Horizons: The OmniChat
+<div align="center">
 
-A flexible chatbot solution that can be deployed in multiple environments:
+# 🌅 Horizons: The OmniChat
 
-- **Local**: Simple setup with Ollama + Open-WebUI
-- **Hybrid**: Ollama + Open-WebUI + AWS Bedrock integration
-- **AWS**: Full cloud deployment on AWS ECS with Cognito authentication
-- **K8s**: Kubernetes deployment for cloud-agnostic installations
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub release](https://img.shields.io/github/release/evereven/horizons.svg)](https://GitHub.com/evereven/horizons/releases/)
+[![CI Status](https://github.com/evereven/horizons/workflows/CI/badge.svg)](https://github.com/evereven/horizons/actions)
+[![Docker Pulls](https://img.shields.io/docker/pulls/evereven/horizons)](https://hub.docker.com/r/evereven/horizons)
 
-## Requirements
-- Docker and Docker Compose for local/hybrid modes
-- AWS credentials for hybrid/aws modes
-- Kubernetes cluster for k8s mode
+A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
 
-## Quick Start
-1. Copy `.env.example` to `.env` and configure your environment
-2. Initialize the repository: `make init`
-3. Choose your deployment mode:
-   - Local: `make local-up`
-   - Hybrid: `make hybrid-up`
-   - AWS: `make aws-apply`
-   - K8s: `make k8s-apply` (WIP)
+[Getting Started](#getting-started) •
+[Documentation](https://evereven.github.io/horizons/) •
+[Contributing](CONTRIBUTING.md) •
+[Community](https://github.com/evereven/horizons/discussions)
 
-## AWS Deployment
+</div>
 
-Before deploying to AWS, you need to configure the Terraform backend:
+---
 
-1. Copy the backend configuration template:
+## 🌟 Features
+
+- **Multi-Environment Support**: Deploy anywhere - from local development to full cloud infrastructure
+- **Enterprise Security**: Built-in authentication, authorization, and audit trails
+- **High Availability**: Cloud-native architecture with auto-scaling and fault tolerance
+- **Cost Optimization**: Smart resource management with spot instances and scaling policies
+- **Developer Friendly**: Comprehensive documentation and easy-to-use CLI
+
+## 🚀 Deployment Flavors
+
+Choose the deployment that best fits your needs:
+
+| Flavor | Description | Documentation |
+|--------|-------------|---------------|
+| **Local** | Simple setup with Ollama + Open-WebUI | [Local Setup Guide](docs/flavors/local.md) |
+| **Hybrid** | Ollama + Open-WebUI + AWS Bedrock | [Hybrid Setup Guide](docs/flavors/hybrid.md) |
+| **AWS** | Full cloud deployment on AWS ECS | [AWS Setup Guide](docs/flavors/aws.md) |
+
+## 🛠 Quick Start
+
+1. **Prerequisites**
+   - Docker and Docker Compose for local/hybrid modes
+   - AWS credentials for hybrid/aws modes
+   - Make utility
+
+2. **Installation**
    ```bash
-   cp aws/backend.hcl.example aws/backend.hcl
+   # Clone the repository
+   git clone https://github.com/evereven/horizons.git
+   cd horizons
+
+   # Initialize the environment
+   make init
+
+   # Choose your deployment mode
+   make local-up    # For local deployment
+   make hybrid-up   # For hybrid deployment
+   make aws-apply   # For AWS deployment
    ```
 
-2. Edit `aws/backend.hcl` with your S3 bucket and DynamoDB table details:
-   ```hcl
-   bucket         = "your-terraform-state-bucket"
-   key            = "terraform/horizons/terraform.tfstate"
-   region         = "eu-west-1"
-   dynamodb_table = "terraform-locking"
-   encrypt        = true
-   ```
+## 📚 Documentation
 
-3. Run the deployment:
-   ```bash
-   make aws-plan
-   make aws-apply
-   ```
+- [Architecture Overview](docs/architecture/overview.md)
+- [Configuration Guide](docs/operations/configuration.md)
+- [Security Best Practices](docs/operations/security.md)
+- [Monitoring & Troubleshooting](docs/operations/monitoring.md)
+- [API Reference](docs/development/api.md)
 
-## Documentation
-See the `docs/` directory for detailed setup and configuration instructions.
+## 🤝 Contributing
+
+We love your input! Check out our [Contributing Guide](CONTRIBUTING.md) to get started.
+
+- 🐛 [Report a bug](https://github.com/evereven/horizons/issues/new?template=bug_report.md)
+- 💡 [Request a feature](https://github.com/evereven/horizons/issues/new?template=feature_request.md)
+- 📖 [Improve documentation](https://github.com/evereven/horizons/issues/new?template=documentation.md)
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+
+## 🙏 Acknowledgments
+
+Built with:
+- [Ollama](https://github.com/ollama/ollama)
+- [Open WebUI](https://github.com/open-webui/open-webui)
+- [AWS Bedrock](https://aws.amazon.com/bedrock/)
+
+## 📊 Project Status
+
+![GitHub issues](https://img.shields.io/github/issues/evereven/horizons)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/evereven/horizons)
+![Last commit](https://img.shields.io/github/last-commit/evereven/horizons)
+
+---
+
+<div align="center">
+Made with ❤️ by <a href="https://evereven.com">Evereven</a>
+</div>
