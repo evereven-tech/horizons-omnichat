@@ -10,8 +10,8 @@ By participating in this project, you agree to abide by our Code of Conduct (see
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in our [Issues](https://github.com/evereven/horizons/issues)
-2. If not, create a new issue using our [Bug Report Template](https://github.com/evereven/horizons/issues/new?template=bug_report.md)
+1. Check if the bug has already been reported in our [Issues](https://github.com/evereven-tech/horizons-omnichat/issues)
+2. If not, create a new issue using our [Bug Report Template](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=bug_report.md)
 3. Include as much relevant information as possible:
    - Clear description of the issue
    - Steps to reproduce
@@ -21,8 +21,8 @@ By participating in this project, you agree to abide by our Code of Conduct (see
 
 ### Suggesting Enhancements
 
-1. Review existing [Feature Requests](https://github.com/evereven/horizons/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
-2. If your idea is new, create an issue using our [Feature Request Template](https://github.com/evereven/horizons/issues/new?template=feature_request.md)
+1. Review existing [Feature Requests](https://github.com/evereven-tech/horizons-omnichat/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+2. If your idea is new, create an issue using our [Feature Request Template](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=feature_request.md)
 
 ## Pull Request Process
 
@@ -45,7 +45,7 @@ By participating in this project, you agree to abide by our Code of Conduct (see
    - Ensure all tests pass
 
 4. **Create a Pull Request**
-   - Use our [Pull Request Template](https://github.com/evereven/horizons/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
+   - Use our [Pull Request Template](https://github.com/evereven-tech/horizons-omnichat/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
    - Link any related issues
    - Provide a clear description of your changes
    - Include screenshots if applicable
@@ -89,7 +89,7 @@ By participating in this project, you agree to abide by our Code of Conduct (see
 
 ## Questions?
 
-- Check our [Discussions](https://github.com/evereven/horizons/discussions)
+- Check our [Discussions](https://github.com/evereven-tech/horizons-omnichat/discussions)
 - Join our community chat
 - Contact the maintainers
 
