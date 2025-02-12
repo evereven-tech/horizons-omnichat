@@ -3,8 +3,8 @@
 # 🌅 Horizons: The OmniChat
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub release](https://img.shields.io/github/release/evereven/horizons.svg)](https://GitHub.com/evereven/horizons/releases/)
-[![CI Status](https://github.com/evereven/horizons/workflows/CI/badge.svg)](https://github.com/evereven/horizons/actions)
+[![GitHub release](https://img.shields.io/github/release/evereven/horizons.svg)](https://github.com/evereven-tech/horizons-omnichat/releases/)
+[![CI Status](https://github.com/evereven-tech/horizons-omnichat/workflows/CI/badge.svg)](https://github.com/evereven-tech/horizons-omnichat/actions)
 [![Docker Pulls](https://img.shields.io/docker/pulls/evereven/horizons)](https://hub.docker.com/r/evereven/horizons)
 
 A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
@@ -12,7 +12,7 @@ A flexible and powerful chatbot platform that brings enterprise-grade LLM capabi
 [Getting Started](#getting-started) •
 [Documentation](https://evereven.github.io/horizons/) •
 [Contributing](CONTRIBUTING.md) •
-[Community](https://github.com/evereven/horizons/discussions)
+[Community](https://github.com/evereven-tech/horizons-omnichat/discussions)
 
 </div>
 
@@ -46,7 +46,7 @@ Choose the deployment that best fits your needs:
 2. **Installation**
    ```bash
    # Clone the repository
-   git clone https://github.com/evereven/horizons.git
+   git clone https://github.com/evereven-tech/horizons-omnichat.git
    cd horizons
 
    # Initialize the environment
@@ -70,9 +70,9 @@ Choose the deployment that best fits your needs:
 
 We love your input! Check out our [Contributing Guide](CONTRIBUTING.md) to get started.
 
-- 🐛 [Report a bug](https://github.com/evereven/horizons/issues/new?template=bug_report.md)
-- 💡 [Request a feature](https://github.com/evereven/horizons/issues/new?template=feature_request.md)
-- 📖 [Improve documentation](https://github.com/evereven/horizons/issues/new?template=documentation.md)
+- 🐛 [Report a bug](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=bug_report.md)
+- 💡 [Request a feature](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=feature_request.md)
+- 📖 [Improve documentation](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=documentation.md)
 
 ## 📜 License
 
