@@ -29,12 +29,12 @@ A flexible and powerful chatbot platform that brings enterprise-grade LLM capabi
 
 Choose the deployment that best fits your needs:
 
-| Flavor | Description | Documentation |
-|--------|-------------|---------------|
-| **Local** | Simple setup with Ollama + Open-WebUI | [Local Setup Guide](docs/flavors/local.md) |
-| **Hybrid** | Ollama + Open-WebUI + AWS Bedrock | [Hybrid Setup Guide](docs/flavors/hybrid.md) |
-| **AWS** | Full cloud deployment on AWS ECS | [AWS Setup Guide](docs/flavors/aws.md) |
-| **K8s** | Soon! | TBD |
+| Flavor | Description | Documentation | Troubleshooting |
+|--------|-------------|---------------|-----------------|
+| **Local** | Simple setup with Ollama + Open-WebUI | [Local Setup Guide](docs/flavors/local.md) | [Local Diagnostics](docs/local-diagnostics.md) |
+| **Hybrid** | Ollama + Open-WebUI + AWS Bedrock | [Hybrid Setup Guide](docs/flavors/hybrid.md) | [Hybrid Section](docs/flavors/hybrid.md#troubleshooting) |
+| **AWS** | Full cloud deployment on AWS ECS | [AWS Setup Guide](docs/flavors/aws.md) | [AWS Section](docs/flavors/aws.md#troubleshooting) |
+| **K8s** | Coming soon! | TBD | TBD |
 
 ## 🛠 Quick Start
 
