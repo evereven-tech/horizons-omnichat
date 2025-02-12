@@ -107,12 +107,6 @@ variable "ollama_min_count" {
   default     = 0
 }
 
-variable "bedrock_image" {
-  description = "ECR URI to Bedrock Gateway Image"
-  type        = string
-  default     = "533267020467.dkr.ecr.eu-west-1.amazonaws.com/horizons-bedrock-gateway:latest"
-}
-
 #
 # Persistence
 # #############################################################################

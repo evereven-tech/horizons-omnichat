@@ -360,7 +360,7 @@ resource "aws_ecs_task_definition" "bedrock" {
   container_definitions = jsonencode([
     {
       name                 = "bedrock-gateway"
-      image                = var.bedrock_image
+      image                = "${aws_ecr_repository.bedrock_gateway.repository_url}:latest"
       enableExecuteCommand = true
       portMappings = [
         {
