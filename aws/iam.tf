@@ -215,8 +215,33 @@ resource "aws_iam_role_policy" "ollama_task" {
           "ssmmessages:OpenDataChannel"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "elasticfilesystem:ClientMount",
+          "elasticfilesystem:ClientWrite"
+        ]
+        Resource = aws_efs_file_system.models.arn
       }
     ]
+  })
+}
+
+# Política para acceso a SSM
+resource "aws_iam_role_policy" "webui_ssm_access" {
+  name = "${var.project_name}-${var.environment}-ssm-access"
+  role = aws_iam_role.webui_task.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Action = [
+        "ssm:GetParameter"
+      ]
+      Resource = aws_ssm_parameter.webui_config.arn
+    }]
   })
 }
 

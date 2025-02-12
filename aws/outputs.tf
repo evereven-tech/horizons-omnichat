@@ -18,6 +18,21 @@ output "vpc_cidr_block" {
   value       = aws_vpc.main.cidr_block
 }
 
+output "efs_filesystem_id" {
+  description = "ID of EFS filesystem for models"
+  value       = aws_efs_file_system.models.id
+}
+
+output "efs_access_point_id" {
+  description = "ID of EFS access point"
+  value       = aws_efs_access_point.models.id
+}
+
+output "ssm_parameter_name" {
+  description = "Name of SSM parameter for WebUI config"
+  value       = aws_ssm_parameter.webui_config.name
+}
+
 output "repository_urls" {
   description = "URLs of the ECR repositories"
   value = {

@@ -113,6 +113,12 @@ variable "bedrock_api_key" {
 
 # Containers ##################################################################
 
+variable "efs_models_throughput" {
+  description = "Throughput in MiB/s for EFS models volume"
+  type        = number
+  default     = 100
+}
+
 variable "bedrock_image" {
   description = "ECR URI to Bedrock Gateway Image"
   type        = string
