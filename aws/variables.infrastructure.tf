@@ -138,7 +138,7 @@ variable "gpu_config" {
 variable "spot_config" {
   description = "Spot configuration for GPU instances"
   type = object({
-    spot_price = map(string)
+    spot_price            = map(string)
     interruption_behavior = string
     allocation_strategy   = string
   })

@@ -14,12 +14,6 @@ variable "bedrock_api_key" {
   sensitive   = true
 }
 
-variable "webui_version" {
-  description = "Version of OpenWebUI to deploy"
-  type        = string
-  default     = "0.5.7"
-}
-
 variable "postgres_db" {
   description = "PostgreSQL database name"
   type        = string
@@ -36,6 +30,29 @@ variable "postgres_password" {
   description = "PostgreSQL password"
   type        = string
   sensitive   = true
+}
+
+#
+# Application versions
+# Obtained from AWS ECR custom repositories
+# #############################################################################
+
+variable "webui_version" {
+  description = "Version of OpenWebUI to deploy"
+  type        = string
+  default     = "latest"
+}
+
+variable "bedrock_version" {
+  description = "Version of Bedrock Gateway to deploy"
+  type        = string
+  default     = "latest"
+}
+
+variable "ollama_version" {
+  description = "Version of Ollama to deploy"
+  type        = string
+  default     = "latest"
 }
 
 #

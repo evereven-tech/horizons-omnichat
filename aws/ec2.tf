@@ -124,13 +124,13 @@ resource "aws_autoscaling_group" "ollama" {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
       spot_allocation_strategy                 = var.spot_config.allocation_strategy
-      spot_max_price                          = var.spot_config.spot_price["g4dn.xlarge"]
+      spot_max_price                           = var.spot_config.spot_price["g4dn.xlarge"]
     }
 
     launch_template {
       launch_template_specification {
         launch_template_id = aws_launch_template.ollama.id
-        version           = "$Latest"
+        version            = "$Latest"
       }
 
       dynamic "override" {
@@ -199,7 +199,7 @@ resource "aws_autoscaling_policy" "spot_replacement" {
   name                   = "${var.project_name}-${var.environment}-spot-replacement"
   autoscaling_group_name = aws_autoscaling_group.ollama.name
   adjustment_type        = "ExactCapacity"
-  policy_type           = "SimpleScaling"
+  policy_type            = "SimpleScaling"
   scaling_adjustment     = var.ollama_desired_count
-  cooldown              = 300
+  cooldown               = 300
 }
