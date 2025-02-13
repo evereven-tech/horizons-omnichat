@@ -188,12 +188,68 @@ resource "aws_lb_target_group" "ollama" {
     Environment = var.environment
   }
 }
-# Auto Scaling Policy para reemplazo de instancias spot
+# EventBridge rule para capturar interrupciones de spot
+resource "aws_cloudwatch_event_rule" "spot_interruption" {
+  name        = "${var.project_name}-${var.environment}-spot-interruption"
+  description = "Capture EC2 Spot Instance Interruption Warnings"
+
+  event_pattern = jsonencode({
+    source      = ["aws.ec2"]
+    detail-type = ["EC2 Spot Instance Interruption Warning"]
+  })
+}
+
+# Política de Auto Scaling para reemplazo proactivo
 resource "aws_autoscaling_policy" "spot_replacement" {
   name                   = "${var.project_name}-${var.environment}-spot-replacement"
   autoscaling_group_name = aws_autoscaling_group.ollama.name
-  adjustment_type        = "ExactCapacity"
-  policy_type            = "SimpleScaling"
-  scaling_adjustment     = var.ollama_desired_count
-  cooldown               = 300
+  adjustment_type        = "ChangeInCapacity"
+  scaling_adjustment     = 1
+  cooldown              = 60  # Cooldown corto para respuesta rápida
+}
+
+# Conectar el evento de interrupción con la política de scaling
+resource "aws_cloudwatch_event_target" "spot_replacement" {
+  rule      = aws_cloudwatch_event_rule.spot_interruption.name
+  target_id = "TriggerASG"
+  arn       = aws_autoscaling_policy.spot_replacement.arn
+  
+  role_arn = aws_iam_role.eventbridge_asg.arn
+}
+
+# IAM Role para permitir que EventBridge ejecute la política de ASG
+resource "aws_iam_role" "eventbridge_asg" {
+  name = "${var.project_name}-${var.environment}-eventbridge-asg"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "events.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+# Política para permitir que EventBridge ejecute la política de ASG
+resource "aws_iam_role_policy" "eventbridge_asg" {
+  name = "${var.project_name}-${var.environment}-eventbridge-asg-policy"
+  role = aws_iam_role.eventbridge_asg.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "autoscaling:ExecutePolicy"
+        ]
+        Resource = aws_autoscaling_policy.spot_replacement.arn
+      }
+    ]
+  })
 }
