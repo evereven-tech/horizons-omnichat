@@ -63,8 +63,8 @@ resource "aws_autoscaling_schedule" "scale_up_workday" {
   min_size               = var.ollama_min_count
   max_size               = var.ollama_max_count
   desired_capacity       = var.ollama_desired_count
-  recurrence           = "cron(0 9 ? * MON-FRI *)"  # 9:00 AM, Lunes a Viernes
-  time_zone              = "Europe/Madrid"     # Zona horaria de España
+  recurrence             = "0 9 * * mon-fri"         # 9:00 AM, Lunes a Viernes
+  time_zone              = "Europe/Madrid"           # Zona horaria de España
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
@@ -73,8 +73,8 @@ resource "aws_autoscaling_schedule" "scale_down_workday" {
   min_size               = 0
   max_size               = 0
   desired_capacity       = 0
-  recurrence           = "cron(0 19 ? * MON-FRI *)"  # 19:00 PM, Lunes a Viernes
-  time_zone              = "Europe/Madrid"      # Zona horaria de España
+  recurrence             = "0 19 * * mon-fri"         # 19:00 PM, Lunes a Viernes
+  time_zone              = "Europe/Madrid"            # Zona horaria de España
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
@@ -205,7 +205,7 @@ resource "aws_autoscaling_policy" "spot_replacement" {
   autoscaling_group_name = aws_autoscaling_group.ollama.name
   adjustment_type        = "ChangeInCapacity"
   scaling_adjustment     = 1
-  cooldown              = 60  # Cooldown corto para respuesta rápida
+  cooldown               = 60 # Cooldown corto para respuesta rápida
 }
 
 # Conectar el evento de interrupción con la política de scaling
@@ -213,7 +213,7 @@ resource "aws_cloudwatch_event_target" "spot_replacement" {
   rule      = aws_cloudwatch_event_rule.spot_interruption.name
   target_id = "TriggerASG"
   arn       = aws_autoscaling_policy.spot_replacement.arn
-  
+
   role_arn = aws_iam_role.eventbridge_asg.arn
 }
 
