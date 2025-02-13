@@ -8,44 +8,6 @@ resource "aws_cloudwatch_dashboard" "ollama" {
         type = "metric"
         properties = {
           metrics = [
-            ["AWS/EC2", "GPUUtilization", "AutoScalingGroupName", aws_autoscaling_group.ollama.name],
-            ["AWS/EC2", "GPUMemoryUtilization", "AutoScalingGroupName", aws_autoscaling_group.ollama.name]
-          ]
-          period = 300
-          stat   = "Average"
-          title  = "GPU Utilization"
-          region = var.aws_region
-        }
-      },
-      {
-        type = "metric"
-        properties = {
-          metrics = [
-            ["AWS/EC2", "CPUUtilization", "AutoScalingGroupName", aws_autoscaling_group.ollama.name]
-          ]
-          period = 300
-          stat   = "Average"
-          title  = "CPU Utilization"
-          region = var.aws_region
-        }
-      },
-      {
-        type = "metric"
-        properties = {
-          metrics = [
-            ["AWS/EC2", "NetworkIn", "AutoScalingGroupName", aws_autoscaling_group.ollama.name],
-            ["AWS/EC2", "NetworkOut", "AutoScalingGroupName", aws_autoscaling_group.ollama.name]
-          ]
-          period = 300
-          stat   = "Average"
-          title  = "Network Traffic"
-          region = var.aws_region
-        }
-      },
-      {
-        type = "metric"
-        properties = {
-          metrics = [
             ["AWS/AutoScaling", "GroupInServiceInstances", "AutoScalingGroupName", aws_autoscaling_group.ollama.name]
           ]
           period = 300
@@ -56,37 +18,4 @@ resource "aws_cloudwatch_dashboard" "ollama" {
       }
     ]
   })
-}
-
-# CloudWatch Alarms
-resource "aws_cloudwatch_metric_alarm" "gpu_utilization_high" {
-  alarm_name          = "${var.project_name}-${var.environment}-gpu-utilization-high"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "GPUUtilization"
-  namespace           = "AWS/EC2"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = "85"
-  alarm_description   = "GPU utilization is too high"
-
-  dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.ollama.name
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "gpu_memory_high" {
-  alarm_name          = "${var.project_name}-${var.environment}-gpu-memory-high"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "GPUMemoryUtilization"
-  namespace           = "AWS/EC2"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = "85"
-  alarm_description   = "GPU memory utilization is too high"
-
-  dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.ollama.name
-  }
 }
