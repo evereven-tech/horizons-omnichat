@@ -29,6 +29,11 @@ resource "aws_launch_template" "ollama" {
               ECS_CONTAINER_INSTANCE_TAGS={"Name": "${var.project_name}-${var.environment}-ollama", "Environment": "${var.environment}"}
               EOT
 
+              #Install efs plugin
+              yum update -y
+              yum install amazon-efs-utils -y
+              systemctl enable --now amazon-ecs-volume-plugin
+
               # Reiniciar el agente ECS para aplicar la configuración
               service ecs restart
               EOF
