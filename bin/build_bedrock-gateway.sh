@@ -63,14 +63,6 @@ check_aws_credentials
 log_info "Logging into ECR..."
 aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
 
-# Build and push Ollama
-log_info "Building Ollama image..."
-docker build -t ${ECR_REGISTRY}/${PROJECT_NAME}-ollama:latest \
-    -f common/Dockerfile.ollama .
-
-log_info "Pushing Ollama image..."
-docker push ${ECR_REGISTRY}/${PROJECT_NAME}-ollama:latest
-
 # Build and push Bedrock Gateway
 log_info "Building Bedrock Gateway image..."
 docker build -t ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest \
@@ -79,4 +71,4 @@ docker build -t ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest \
 log_info "Pushing Bedrock Gateway image..."
 docker push ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest
 
-log_info "All images built and pushed successfully!"
+log_info "Bedrock Gateway image built and pushed successfully!"
