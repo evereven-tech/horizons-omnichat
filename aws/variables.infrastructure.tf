@@ -138,14 +138,18 @@ variable "gpu_config" {
 variable "spot_config" {
   description = "Spot configuration for GPU instances"
   type = object({
-    max_price_percentage  = number
+    spot_price = map(string)
     interruption_behavior = string
     allocation_strategy   = string
   })
   default = {
-    max_price_percentage  = 70
+    spot_price = {
+      "g4dn.xlarge" = "0.50"
+      "g5.xlarge"   = "0.60"
+      "p3.2xlarge"  = "1.00"
+    }
     interruption_behavior = "terminate"
-    allocation_strategy   = "capacity-optimized"
+    allocation_strategy   = "capacity-optimized-prioritized"
   }
 }
 

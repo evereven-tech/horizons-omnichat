@@ -124,19 +124,20 @@ resource "aws_autoscaling_group" "ollama" {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
       spot_allocation_strategy                 = var.spot_config.allocation_strategy
-      spot_max_price                           = "${var.spot_config.max_price_percentage}%"
     }
 
     launch_template {
       launch_template_specification {
         launch_template_id = aws_launch_template.ollama.id
-        version            = "$Latest"
+        version           = "$Latest"
       }
 
       dynamic "override" {
         for_each = var.gpu_config.instance_types
         content {
-          instance_type = override.value
+          instance_type     = override.value
+          weighted_capacity = "1"
+          spot_price       = var.spot_config.spot_price[override.value]
         }
       }
     }
@@ -161,8 +162,8 @@ resource "aws_autoscaling_group" "ollama" {
     propagate_at_launch = true
   }
 
-  # Proteger contra scale-in para mantener la instancia
-  protect_from_scale_in = true
+  # No proteger contra scale-in para permitir reemplazo de instancias spot
+  protect_from_scale_in = false
 
   lifecycle {
     create_before_destroy = true
@@ -192,4 +193,13 @@ resource "aws_lb_target_group" "ollama" {
     Name        = "${var.project_name}-${var.environment}-ollama"
     Environment = var.environment
   }
+}
+# Auto Scaling Policy para reemplazo de instancias spot
+resource "aws_autoscaling_policy" "spot_replacement" {
+  name                   = "${var.project_name}-${var.environment}-spot-replacement"
+  autoscaling_group_name = aws_autoscaling_group.ollama.name
+  adjustment_type        = "ExactCapacity"
+  policy_type           = "SimpleScaling"
+  scaling_adjustment     = var.ollama_desired_count
+  cooldown              = 300
 }

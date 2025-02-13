@@ -60,3 +60,18 @@ webui_auth_config = {
 
 webui_ldap_enabled    = false
 webui_channels_enabled = false
+gpu_config = {
+  instance_types = ["g4dn.xlarge", "g5.xlarge", "p3.2xlarge"]
+  min_gpus       = 1
+  max_gpus       = 4
+}
+
+spot_config = {
+  spot_price = {
+    "g4dn.xlarge" = "0.50"
+    "g5.xlarge"   = "0.60"
+    "p3.2xlarge"  = "1.00"
+  }
+  interruption_behavior = "terminate"
+  allocation_strategy   = "capacity-optimized-prioritized"
+}
