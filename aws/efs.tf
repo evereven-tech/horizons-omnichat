@@ -49,15 +49,15 @@ resource "aws_efs_access_point" "models" {
   file_system_id = aws_efs_file_system.models.id
 
   posix_user {
-    gid = 1000
-    uid = 1000
+    gid = 1001
+    uid = 1001
   }
 
   root_directory {
     path = "/models"
     creation_info {
-      owner_gid   = 1000
-      owner_uid   = 1000
+      owner_gid   = 1001
+      owner_uid   = 1001
       permissions = "0755"
     }
   }
