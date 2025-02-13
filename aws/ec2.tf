@@ -63,8 +63,8 @@ resource "aws_autoscaling_schedule" "scale_up_workday" {
   min_size               = var.ollama_min_count
   max_size               = var.ollama_max_count
   desired_capacity       = var.ollama_desired_count
-  recurrence             = "0 9 * * mon-fri"         # 9:00 AM, Lunes a Viernes
-  time_zone              = "Europe/Madrid"           # Zona horaria de España
+  recurrence             = "0 9 * * mon-fri" # 9:00 AM, Lunes a Viernes
+  time_zone              = "Europe/Madrid"   # Zona horaria de España
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
@@ -73,8 +73,8 @@ resource "aws_autoscaling_schedule" "scale_down_workday" {
   min_size               = 0
   max_size               = 0
   desired_capacity       = 0
-  recurrence             = "0 19 * * mon-fri"         # 19:00 PM, Lunes a Viernes
-  time_zone              = "Europe/Madrid"            # Zona horaria de España
+  recurrence             = "0 19 * * mon-fri" # 19:00 PM, Lunes a Viernes
+  time_zone              = "Europe/Madrid"    # Zona horaria de España
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
