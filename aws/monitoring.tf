@@ -90,29 +90,3 @@ resource "aws_cloudwatch_metric_alarm" "gpu_memory_high" {
     AutoScalingGroupName = aws_autoscaling_group.ollama.name
   }
 }
-
-# Auto Scaling Policies basadas en GPU
-resource "aws_autoscaling_policy" "gpu_scale_up" {
-  name                   = "${var.project_name}-${var.environment}-gpu-scale-up"
-  autoscaling_group_name = aws_autoscaling_group.ollama.name
-  adjustment_type        = "ChangeInCapacity"
-  scaling_adjustment     = 1
-  cooldown               = 300
-}
-
-resource "aws_cloudwatch_metric_alarm" "gpu_scale_up_alarm" {
-  alarm_name          = "${var.project_name}-${var.environment}-gpu-scale-up"
-  comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"
-  metric_name         = "GPUUtilization"
-  namespace           = "AWS/EC2"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = "80"
-  alarm_description   = "Scale up when GPU utilization is high"
-  alarm_actions       = [aws_autoscaling_policy.gpu_scale_up.arn]
-
-  dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.ollama.name
-  }
-}
