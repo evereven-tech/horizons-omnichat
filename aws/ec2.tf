@@ -124,6 +124,7 @@ resource "aws_autoscaling_group" "ollama" {
       on_demand_base_capacity                  = 0
       on_demand_percentage_above_base_capacity = 0
       spot_allocation_strategy                 = var.spot_config.allocation_strategy
+      spot_max_price                          = var.spot_config.spot_price["g4dn.xlarge"]
     }
 
     launch_template {
@@ -137,7 +138,6 @@ resource "aws_autoscaling_group" "ollama" {
         content {
           instance_type     = override.value
           weighted_capacity = "1"
-          spot_price       = var.spot_config.spot_price[override.value]
         }
       }
     }
