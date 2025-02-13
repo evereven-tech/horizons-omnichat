@@ -60,21 +60,21 @@ resource "aws_launch_template" "ollama" {
 # Scheduled scaling para horario laboral (L-V, 9-19)
 resource "aws_autoscaling_schedule" "scale_up_workday" {
   scheduled_action_name  = "${var.project_name}-${var.environment}-scale-up-workday"
-  min_size              = var.ollama_min_count
-  max_size              = var.ollama_max_count
-  desired_capacity      = var.ollama_desired_count
-  recurrence           = "0 9 ? * MON-FRI *"  # 9:00 AM UTC, Lunes a Viernes
-  time_zone            = "Europe/Madrid"       # Zona horaria de España
+  min_size               = var.ollama_min_count
+  max_size               = var.ollama_max_count
+  desired_capacity       = var.ollama_desired_count
+  recurrence             = "0 9 ? * MON-FRI *" # 9:00 AM UTC, Lunes a Viernes
+  time_zone              = "Europe/Madrid"     # Zona horaria de España
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
 resource "aws_autoscaling_schedule" "scale_down_workday" {
   scheduled_action_name  = "${var.project_name}-${var.environment}-scale-down-workday"
-  min_size              = 0
-  max_size              = 0
-  desired_capacity      = 0
-  recurrence           = "0 19 ? * MON-FRI *"  # 19:00 PM UTC, Lunes a Viernes
-  time_zone            = "Europe/Madrid"        # Zona horaria de España
+  min_size               = 0
+  max_size               = 0
+  desired_capacity       = 0
+  recurrence             = "0 19 ? * MON-FRI *" # 19:00 PM UTC, Lunes a Viernes
+  time_zone              = "Europe/Madrid"      # Zona horaria de España
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
