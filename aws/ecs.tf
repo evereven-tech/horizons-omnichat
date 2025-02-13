@@ -228,7 +228,7 @@ resource "aws_ecs_task_definition" "webui" {
   container_definitions = jsonencode([
     {
       name  = "webui"
-      image = "${aws_ecr_repository.bedrock_gateway.repository_url}:${var.webui_version}"
+      image = "${aws_ecr_repository.webui.repository_url}:${var.webui_version}"
       portMappings = [
         {
           containerPort = 8080
