@@ -57,31 +57,25 @@ resource "aws_launch_template" "ollama" {
   }
 }
 
-# Política de Auto Scaling para escalar a 0
-resource "aws_autoscaling_policy" "scale_down" {
-  name                   = "${var.project_name}-${var.environment}-ollama-scale-down"
+# Scheduled scaling para horario laboral (L-V, 9-19)
+resource "aws_autoscaling_schedule" "scale_up_workday" {
+  scheduled_action_name  = "${var.project_name}-${var.environment}-scale-up-workday"
+  min_size              = var.ollama_min_count
+  max_size              = var.ollama_max_count
+  desired_capacity      = var.ollama_desired_count
+  recurrence           = "0 9 ? * MON-FRI *"  # 9:00 AM UTC, Lunes a Viernes
+  time_zone            = "Europe/Madrid"       # Zona horaria de España
   autoscaling_group_name = aws_autoscaling_group.ollama.name
-  adjustment_type        = "ChangeInCapacity"
-  scaling_adjustment     = -1
-  cooldown               = 300
 }
 
-# CloudWatch Alarm para detectar baja utilización
-resource "aws_cloudwatch_metric_alarm" "low_usage" {
-  alarm_name          = "${var.project_name}-${var.environment}-ollama-low-usage"
-  comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "15"
-  metric_name         = "CPUUtilization"
-  namespace           = "AWS/EC2"
-  period              = "300"
-  statistic           = "Average"
-  threshold           = "10"
-  alarm_description   = "Scale down when CPU usage is low"
-  alarm_actions       = [aws_autoscaling_policy.scale_down.arn]
-
-  dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.ollama.name
-  }
+resource "aws_autoscaling_schedule" "scale_down_workday" {
+  scheduled_action_name  = "${var.project_name}-${var.environment}-scale-down-workday"
+  min_size              = 0
+  max_size              = 0
+  desired_capacity      = 0
+  recurrence           = "0 19 ? * MON-FRI *"  # 19:00 PM UTC, Lunes a Viernes
+  time_zone            = "Europe/Madrid"        # Zona horaria de España
+  autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
 # Security Group para Ollama
