@@ -220,7 +220,8 @@ resource "aws_iam_role_policy" "ollama_task" {
         Effect = "Allow"
         Action = [
           "elasticfilesystem:ClientMount",
-          "elasticfilesystem:ClientWrite"
+          "elasticfilesystem:ClientWrite",
+          "elasticfilesystem:ClientRootAccess"
         ]
         Resource = aws_efs_file_system.models.arn
       }
