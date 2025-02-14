@@ -80,6 +80,7 @@ resource "aws_ecs_task_definition" "ollama" {
     {
       name  = "ollama"
       image = "${aws_ecr_repository.ollama.repository_url}:${var.ollama_version}"
+      user  = "root"  # Explícitamente usar root
       portMappings = [
         {
           containerPort = 11434
