@@ -1,7 +1,7 @@
 
 # Launch Template para instancias GPU
 resource "aws_launch_template" "ollama" {
-  name = "${var.project_name}-${var.environment}-ollama"
+  name = "${var.project_name}-compute-ollama"
 
   image_id      = "ami-0dc6fd3fcf713ce9d" # AMI con drivers y software preinstalado
   instance_type = "g4dn.xlarge"           # Instancia con GPU NVIDIA T4
@@ -26,7 +26,7 @@ resource "aws_launch_template" "ollama" {
               ECS_ENABLE_GPU_SUPPORT=true
               ECS_ENABLE_TASK_IAM_ROLE=true
               ECS_ENABLE_SPOT_INSTANCE_DRAINING=true
-              ECS_CONTAINER_INSTANCE_TAGS={"Name": "${var.project_name}-${var.environment}-ollama", "Environment": "${var.environment}"}
+              ECS_CONTAINER_INSTANCE_TAGS={"Name": "${var.project_name}-compute-ollama", "Layer": "Compute"}
               EOT
 
               #Install efs plugin
@@ -55,8 +55,8 @@ resource "aws_launch_template" "ollama" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name             = "${var.project_name}-${var.environment}-ollama"
-      Environment      = var.environment
+      Name             = "${var.project_name}-compute-ollama"
+      Layer            = "Compute"
       AmazonECSManaged = "true"
     }
   }
@@ -64,7 +64,7 @@ resource "aws_launch_template" "ollama" {
 
 # Scheduled scaling para horario laboral (L-V, 9-19)
 resource "aws_autoscaling_schedule" "scale_up_workday" {
-  scheduled_action_name  = "${var.project_name}-${var.environment}-scale-up-workday"
+  scheduled_action_name  = "${var.project_name}-compute-scale-up-workday"
   min_size               = var.ollama_min_count
   max_size               = var.ollama_max_count
   desired_capacity       = var.ollama_desired_count
@@ -74,7 +74,7 @@ resource "aws_autoscaling_schedule" "scale_up_workday" {
 }
 
 resource "aws_autoscaling_schedule" "scale_down_workday" {
-  scheduled_action_name  = "${var.project_name}-${var.environment}-scale-down-workday"
+  scheduled_action_name  = "${var.project_name}-compute-scale-down-workday"
   min_size               = 0
   max_size               = 0
   desired_capacity       = 0
@@ -85,7 +85,7 @@ resource "aws_autoscaling_schedule" "scale_down_workday" {
 
 # Security Group para Ollama
 resource "aws_security_group" "ollama" {
-  name        = "${var.project_name}-${var.environment}-ollama"
+  name        = "${var.project_name}-compute-ollama"
   description = "Security group for Ollama instances"
   vpc_id      = aws_vpc.main.id
 
@@ -104,14 +104,14 @@ resource "aws_security_group" "ollama" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ollama"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-ollama"
+    Layer = "Compute"
   }
 }
 
 # Auto Scaling Group para Ollama
 resource "aws_autoscaling_group" "ollama" {
-  name                = "${var.project_name}-${var.environment}-ollama"
+  name                = "${var.project_name}-compute-ollama"
   desired_capacity    = 1
   max_size            = 1
   min_size            = 1
@@ -140,13 +140,13 @@ resource "aws_autoscaling_group" "ollama" {
 
   tag {
     key                 = "Name"
-    value               = "${var.project_name}-${var.environment}-ollama"
+    value               = "${var.project_name}-compute-ollama"
     propagate_at_launch = true
   }
 
   tag {
-    key                 = "Environment"
-    value               = var.environment
+    key                 = "Layer"
+    value               = "Compute"
     propagate_at_launch = true
   }
 
@@ -167,7 +167,7 @@ resource "aws_autoscaling_group" "ollama" {
 
 # Target Group para Ollama
 resource "aws_lb_target_group" "ollama" {
-  name        = "${var.project_name}-${var.environment}-ollama"
+  name        = "${var.project_name}-compute-ollama"
   port        = 11434
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
@@ -185,7 +185,7 @@ resource "aws_lb_target_group" "ollama" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ollama"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-ollama"
+    Layer = "Compute"
   }
 }

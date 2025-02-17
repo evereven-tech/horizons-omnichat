@@ -1,8 +1,13 @@
 # Service Discovery Namespace
 resource "aws_service_discovery_private_dns_namespace" "main" {
-  name        = "${var.project_name}-${var.environment}.local"
+  name        = "${var.project_name}-discovery.local"
   vpc         = aws_vpc.main.id
-  description = "Service Discovery namespace for ${var.project_name}-${var.environment}"
+  description = "Service Discovery namespace for ${var.project_name}"
+
+  tags = {
+    Name  = "${var.project_name}-discovery.local"
+    Layer = "Discovery"
+  }
 }
 
 # Service Discovery Service para OpenWebUI

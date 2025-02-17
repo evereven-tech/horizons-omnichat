@@ -1,6 +1,6 @@
 # CloudWatch Dashboard para Horizons
 resource "aws_cloudwatch_dashboard" "horizons" {
-  dashboard_name = "${var.project_name}-${var.environment}"
+  dashboard_name = "${var.project_name}-monitoring"
 
   dashboard_body = jsonencode({
     widgets = [
@@ -8,8 +8,8 @@ resource "aws_cloudwatch_dashboard" "horizons" {
         type = "metric"
         properties = {
           metrics = [
-            ["AWS/ECS", "CPUUtilization", "ServiceName", "${var.project_name}-${var.environment}-ollama"],
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", "${var.project_name}-${var.environment}-ollama"],
+            ["AWS/ECS", "CPUUtilization", "ServiceName", "${var.project_name}-monitoring-ollama"],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", "${var.project_name}-monitoring-ollama"],
             ["AWS/EC2", "GPUUtilization", "AutoScalingGroupName", aws_autoscaling_group.ollama.name],
             ["AWS/EC2", "GPUMemoryUtilization", "AutoScalingGroupName", aws_autoscaling_group.ollama.name]
           ]
@@ -23,8 +23,8 @@ resource "aws_cloudwatch_dashboard" "horizons" {
         type = "metric"
         properties = {
           metrics = [
-            ["AWS/ECS", "CPUUtilization", "ServiceName", "${var.project_name}-${var.environment}-webui"],
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", "${var.project_name}-${var.environment}-webui"],
+            ["AWS/ECS", "CPUUtilization", "ServiceName", "${var.project_name}-monitoring-webui"],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", "${var.project_name}-monitoring-webui"],
             ["AWS/ApplicationELB", "RequestCount", "TargetGroup", aws_lb_target_group.webui.arn_suffix],
             ["AWS/ApplicationELB", "TargetResponseTime", "TargetGroup", aws_lb_target_group.webui.arn_suffix]
           ]
@@ -38,8 +38,8 @@ resource "aws_cloudwatch_dashboard" "horizons" {
         type = "metric"
         properties = {
           metrics = [
-            ["AWS/ECS", "CPUUtilization", "ServiceName", "${var.project_name}-${var.environment}-bedrock"],
-            ["AWS/ECS", "MemoryUtilization", "ServiceName", "${var.project_name}-${var.environment}-bedrock"],
+            ["AWS/ECS", "CPUUtilization", "ServiceName", "${var.project_name}-monitoring-bedrock"],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", "${var.project_name}-monitoring-bedrock"],
             ["AWS/Logs", "IncomingLogEvents", "LogGroupName", aws_cloudwatch_log_group.bedrock.name]
           ]
           period = 300

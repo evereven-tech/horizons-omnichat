@@ -141,7 +141,7 @@ resource "aws_vpc_endpoint" "ec2messages" {
 
 # Security Group para VPC Endpoints
 resource "aws_security_group" "vpc_endpoints" {
-  name        = "${var.project_name}-${var.environment}-vpc-endpoints"
+  name        = "${var.project_name}-networking-vpc-endpoints"
   description = "Security group for VPC Endpoints"
   vpc_id      = aws_vpc.main.id
 
@@ -153,7 +153,7 @@ resource "aws_security_group" "vpc_endpoints" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-vpc-endpoints"
-    Environment = var.environment
+    Name  = "${var.project_name}-networking-vpc-endpoints"
+    Layer = "Networking"
   }
 }

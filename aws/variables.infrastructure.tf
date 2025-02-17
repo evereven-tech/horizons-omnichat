@@ -20,12 +20,6 @@ variable "project_name" {
   default     = "horizons"
 }
 
-variable "environment" {
-  description = "Environment (dev, staging, prod)"
-  type        = string
-  default     = "dev"
-}
-
 #
 # Network
 # #############################################################################

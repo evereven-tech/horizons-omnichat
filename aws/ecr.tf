@@ -12,8 +12,8 @@ resource "aws_ecr_repository" "webui" {
   }
 
   tags = {
-    Name        = "${var.project_name}-webui"
-    Environment = var.environment
+    Name  = "${var.project_name}-webui"
+    Layer = "Storage"
   }
 }
 
@@ -31,8 +31,8 @@ resource "aws_ecr_repository" "bedrock_gateway" {
   }
 
   tags = {
-    Name        = "${var.project_name}-bedrock-gateway"
-    Environment = var.environment
+    Name  = "${var.project_name}-bedrock-gateway"
+    Layer = "Storage"
   }
 }
 
@@ -50,7 +50,7 @@ resource "aws_ecr_repository" "ollama" {
   }
 
   tags = {
-    Name        = "${var.project_name}-ollama"
-    Environment = var.environment
+    Name  = "${var.project_name}-ollama"
+    Layer = "Storage"
   }
 }

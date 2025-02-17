@@ -1,8 +1,8 @@
 resource "aws_ssm_parameter" "webui_config" {
-  name = "/${var.project_name}/${var.environment}/webui/config.json"
+  name = "/${var.project_name}/configuration/webui/config.json"
   type = "SecureString"
   value = templatefile("${path.module}/templates/webui-config.tftpl", {
-    namespace        = "${var.project_name}-${var.environment}.local"
+    namespace        = "${var.project_name}-configuration.local"
     api_key          = var.bedrock_api_key
     domain_name      = var.domain_name
     user_permissions = var.webui_user_permissions
@@ -12,7 +12,7 @@ resource "aws_ssm_parameter" "webui_config" {
   })
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-webui-config"
-    Environment = var.environment
+    Name  = "${var.project_name}-configuration-webui-config"
+    Layer = "Configuration"
   }
 }

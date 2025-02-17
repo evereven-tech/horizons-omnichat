@@ -1,6 +1,6 @@
 # Security Group para RDS
 resource "aws_security_group" "rds" {
-  name        = "${var.project_name}-${var.environment}-rds"
+  name        = "${var.project_name}-persistence-rds"
   description = "Security group for RDS PostgreSQL"
   vpc_id      = aws_vpc.main.id
 
@@ -19,25 +19,25 @@ resource "aws_security_group" "rds" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-rds"
-    Environment = var.environment
+    Name  = "${var.project_name}-persistence-rds"
+    Layer = "Persistence"
   }
 }
 
 # Subnet Group para RDS
 resource "aws_db_subnet_group" "rds" {
-  name       = "${var.project_name}-${var.environment}-rds"
+  name       = "${var.project_name}-persistence-rds"
   subnet_ids = aws_subnet.private[*].id # Usar todas las subnets privadas disponibles
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-rds"
-    Environment = var.environment
+    Name  = "${var.project_name}-persistence-rds"
+    Layer = "Persistence"
   }
 }
 
 # Instancia RDS PostgreSQL
 resource "aws_db_instance" "webui" {
-  identifier        = "${var.project_name}-${var.environment}-db"
+  identifier        = "${var.project_name}-persistence-db"
   engine            = "postgres"
   engine_version    = "13"
   instance_class    = "db.t3.small"
@@ -73,15 +73,15 @@ resource "aws_db_instance" "webui" {
   parameter_group_name = aws_db_parameter_group.postgres13.name
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-db"
-    Environment = var.environment
+    Name  = "${var.project_name}-persistence-db"
+    Layer = "Persistence"
   }
 }
 
 # Grupo de parámetros personalizado
 resource "aws_db_parameter_group" "postgres13" {
   family = "postgres13"
-  name   = "${var.project_name}-${var.environment}-pg13"
+  name   = "${var.project_name}-persistence-pg13"
 
   parameter {
     name         = "work_mem"
@@ -96,7 +96,7 @@ resource "aws_db_parameter_group" "postgres13" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-pg13"
-    Environment = var.environment
+    Name  = "${var.project_name}-persistence-pg13"
+    Layer = "Persistence"
   }
 }

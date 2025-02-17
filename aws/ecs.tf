@@ -4,7 +4,7 @@
 
 # Cluster ECS para Ollama (EC2)
 resource "aws_ecs_cluster" "ec2" {
-  name = "${var.project_name}-${var.environment}-ec2"
+  name = "${var.project_name}-compute-ec2"
 
   setting {
     name  = "containerInsights"
@@ -12,8 +12,8 @@ resource "aws_ecs_cluster" "ec2" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ec2"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-ec2"
+    Layer = "Compute"
   }
 }
 
@@ -32,7 +32,7 @@ resource "aws_ecs_cluster_capacity_providers" "ec2" {
 
 # Capacity Provider para EC2
 resource "aws_ecs_capacity_provider" "ec2" {
-  name = "${var.project_name}-${var.environment}-ec2"
+  name = "${var.project_name}-compute-ec2"
 
   auto_scaling_group_provider {
     auto_scaling_group_arn = aws_autoscaling_group.ollama.arn
@@ -46,8 +46,8 @@ resource "aws_ecs_capacity_provider" "ec2" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ec2"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-ec2"
+    Layer = "Compute"
   }
 }
 
@@ -57,7 +57,7 @@ resource "aws_ecs_capacity_provider" "ec2" {
 
 # Task Definition para Ollama
 resource "aws_ecs_task_definition" "ollama" {
-  family                   = "${var.project_name}-${var.environment}-ollama"
+  family                   = "${var.project_name}-compute-ollama"
   requires_compatibilities = ["EC2"]
   network_mode             = "bridge"
   cpu                      = 1024
@@ -80,7 +80,7 @@ resource "aws_ecs_task_definition" "ollama" {
     {
       name  = "ollama"
       image = "${aws_ecr_repository.ollama.repository_url}:${var.ollama_version}"
-      user  = "root"  # Explícitamente usar root
+      user  = "root" # Explícitamente usar root
       portMappings = [
         {
           containerPort = 11434
@@ -132,14 +132,14 @@ resource "aws_ecs_task_definition" "ollama" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ollama"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-ollama"
+    Layer = "Compute"
   }
 }
 
 # Servicio ECS para Ollama
 resource "aws_ecs_service" "ollama" {
-  name            = "${var.project_name}-${var.environment}-ollama"
+  name            = "${var.project_name}-compute-ollama"
   cluster         = aws_ecs_cluster.ec2.id
   task_definition = aws_ecs_task_definition.ollama.arn
   desired_count   = 1
@@ -154,14 +154,14 @@ resource "aws_ecs_service" "ollama" {
   enable_execute_command = true
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ollama"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-ollama"
+    Layer = "Compute"
   }
 }
 
 # Security Group para las tareas de Ollama
 resource "aws_security_group" "ollama_tasks" {
-  name        = "${var.project_name}-${var.environment}-ollama-tasks"
+  name        = "${var.project_name}-compute-ollama-tasks"
   description = "Allow inbound traffic to Ollama tasks"
   vpc_id      = aws_vpc.main.id
 
@@ -180,8 +180,8 @@ resource "aws_security_group" "ollama_tasks" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ollama-tasks"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-ollama-tasks"
+    Layer = "Compute"
   }
 }
 
@@ -191,7 +191,7 @@ resource "aws_security_group" "ollama_tasks" {
 
 # Cluster para OpenWebUI con Fargate Spot
 resource "aws_ecs_cluster" "fargate" {
-  name = "${var.project_name}-${var.environment}-fargate"
+  name = "${var.project_name}-compute-fargate"
 
   setting {
     name  = "containerInsights"
@@ -199,8 +199,8 @@ resource "aws_ecs_cluster" "fargate" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-fargate"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-fargate"
+    Layer = "Compute"
   }
 }
 
@@ -218,7 +218,7 @@ resource "aws_ecs_cluster_capacity_providers" "fargate" {
 
 # Task Definition para OpenWebUI
 resource "aws_ecs_task_definition" "webui" {
-  family                   = "${var.project_name}-${var.environment}-webui"
+  family                   = "${var.project_name}-compute-webui"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 2048
@@ -237,10 +237,11 @@ resource "aws_ecs_task_definition" "webui" {
         }
       ]
       entryPoint = ["/bin/sh", "-c"]
+      /*
       command = [
         <<-EOF
         aws ssm get-parameter \
-          --name /${var.project_name}/${var.environment}/webui/config.json \
+          --name /${var.project_name}/webui/config.json \
           --with-decryption \
           --region ${var.aws_region} \
           --query Parameter.Value \
@@ -248,6 +249,7 @@ resource "aws_ecs_task_definition" "webui" {
         /docker-entrypoint.sh
         EOF
       ]
+      */
 
       secrets = [
         {
@@ -283,14 +285,14 @@ resource "aws_ecs_task_definition" "webui" {
   ])
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-webui"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-webui"
+    Layer = "Compute"
   }
 }
 
 # Servicio ECS para OpenWebUI
 resource "aws_ecs_service" "webui" {
-  name            = "${var.project_name}-${var.environment}-webui"
+  name            = "${var.project_name}-compute-webui"
   cluster         = aws_ecs_cluster.fargate.id
   task_definition = aws_ecs_task_definition.webui.arn
   desired_count   = var.webui_desired_count
@@ -319,14 +321,14 @@ resource "aws_ecs_service" "webui" {
   enable_execute_command = true
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-webui"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-webui"
+    Layer = "Compute"
   }
 }
 
 # Security Group para las tareas ECS
 resource "aws_security_group" "ecs_tasks" {
-  name        = "${var.project_name}-${var.environment}-ecs-tasks"
+  name        = "${var.project_name}-compute-ecs-tasks"
   description = "Allow inbound traffic from ALB to ECS tasks"
   vpc_id      = aws_vpc.main.id
 
@@ -345,8 +347,8 @@ resource "aws_security_group" "ecs_tasks" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ecs-tasks"
-    Environment = var.environment
+    Name = "${var.project_name}-compute-ecs-tasks"
+
   }
 }
 
@@ -356,7 +358,7 @@ resource "aws_security_group" "ecs_tasks" {
 
 # Task Definition para Bedrock Gateway
 resource "aws_ecs_task_definition" "bedrock" {
-  family                   = "${var.project_name}-${var.environment}-bedrock"
+  family                   = "${var.project_name}-compute-bedrock"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 512
@@ -399,14 +401,14 @@ resource "aws_ecs_task_definition" "bedrock" {
   ])
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-bedrock"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-bedrock"
+    Layer = "Compute"
   }
 }
 
 # Servicio ECS para Bedrock Gateway
 resource "aws_ecs_service" "bedrock" {
-  name            = "${var.project_name}-${var.environment}-bedrock"
+  name            = "${var.project_name}-compute-bedrock"
   cluster         = aws_ecs_cluster.fargate.id
   task_definition = aws_ecs_task_definition.bedrock.arn
   desired_count   = var.bedrock_desired_count
@@ -429,14 +431,14 @@ resource "aws_ecs_service" "bedrock" {
   enable_execute_command = true
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-bedrock"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-bedrock"
+    Layer = "Compute"
   }
 }
 
 # Security Group para Bedrock Gateway
 resource "aws_security_group" "bedrock_tasks" {
-  name        = "${var.project_name}-${var.environment}-bedrock-tasks"
+  name        = "${var.project_name}-compute-bedrock-tasks"
   description = "Allow inbound traffic from WebUI to Bedrock Gateway"
   vpc_id      = aws_vpc.main.id
 
@@ -455,7 +457,7 @@ resource "aws_security_group" "bedrock_tasks" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-bedrock-tasks"
-    Environment = var.environment
+    Name  = "${var.project_name}-compute-bedrock-tasks"
+    Layer = "Compute"
   }
 }

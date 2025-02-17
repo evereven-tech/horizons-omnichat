@@ -1,6 +1,6 @@
 # ECS Task Execution Role
 resource "aws_iam_role" "ecs_task_execution" {
-  name = "${var.project_name}-${var.environment}-ecs-execution"
+  name = "${var.project_name}-security-ecs-execution"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -16,8 +16,8 @@ resource "aws_iam_role" "ecs_task_execution" {
   })
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ecs-execution"
-    Environment = var.environment
+    Name  = "${var.project_name}-security-ecs-execution"
+    Layer = "Security"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
 
 # ECS Task Role for OpenWebUI
 resource "aws_iam_role" "webui_task" {
-  name = "${var.project_name}-${var.environment}-webui-task"
+  name = "${var.project_name}-security-webui-task"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -45,14 +45,14 @@ resource "aws_iam_role" "webui_task" {
   })
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-webui-task"
-    Environment = var.environment
+    Name  = "${var.project_name}-security-webui-task"
+    Layer = "Security"
   }
 }
 
 # ECS Task Role for Bedrock Gateway
 resource "aws_iam_role" "bedrock_task" {
-  name = "${var.project_name}-${var.environment}-bedrock-task"
+  name = "${var.project_name}-security-bedrock-task"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -68,14 +68,14 @@ resource "aws_iam_role" "bedrock_task" {
   })
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-bedrock-task"
-    Environment = var.environment
+    Name  = "${var.project_name}-security-bedrock-task"
+    Layer = "Security"
   }
 }
 
 # SSM Policy for ECS Exec
 resource "aws_iam_role_policy" "ecs_exec" {
-  name = "${var.project_name}-${var.environment}-ecs-exec"
+  name = "${var.project_name}-security-ecs-exec"
   role = aws_iam_role.bedrock_task.id
 
   policy = jsonencode({
@@ -97,7 +97,7 @@ resource "aws_iam_role_policy" "ecs_exec" {
 
 # Policy for Bedrock Gateway task role
 resource "aws_iam_role_policy" "bedrock_task" {
-  name = "${var.project_name}-${var.environment}-bedrock-task-policy"
+  name = "${var.project_name}-security-bedrock-task-policy"
   role = aws_iam_role.bedrock_task.id
 
   policy = jsonencode({
@@ -127,7 +127,7 @@ resource "aws_iam_role_policy" "bedrock_task" {
 
 # SSM Policy for WebUI ECS Exec
 resource "aws_iam_role_policy" "webui_ecs_exec" {
-  name = "${var.project_name}-${var.environment}-webui-ecs-exec"
+  name = "${var.project_name}-security-webui-ecs-exec"
   role = aws_iam_role.webui_task.id
 
   policy = jsonencode({
@@ -149,7 +149,7 @@ resource "aws_iam_role_policy" "webui_ecs_exec" {
 
 # Policy for OpenWebUI task role
 resource "aws_iam_role_policy" "webui_task" {
-  name = "${var.project_name}-${var.environment}-webui-task-policy"
+  name = "${var.project_name}-security-webui-task-policy"
   role = aws_iam_role.webui_task.id
 
   policy = jsonencode({
@@ -169,7 +169,7 @@ resource "aws_iam_role_policy" "webui_task" {
 
 # ECS Task Role para Ollama
 resource "aws_iam_role" "ollama_task" {
-  name = "${var.project_name}-${var.environment}-ollama-task"
+  name = "${var.project_name}-security-ollama-task"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -185,14 +185,14 @@ resource "aws_iam_role" "ollama_task" {
   })
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ollama-task"
-    Environment = var.environment
+    Name  = "${var.project_name}-security-ollama-task"
+    Layer = "Security"
   }
 }
 
 # Policy para el rol de Ollama task
 resource "aws_iam_role_policy" "ollama_task" {
-  name = "${var.project_name}-${var.environment}-ollama-task-policy"
+  name = "${var.project_name}-security-ollama-task-policy"
   role = aws_iam_role.ollama_task.id
 
   policy = jsonencode({
@@ -231,7 +231,7 @@ resource "aws_iam_role_policy" "ollama_task" {
 
 # Política para acceso a SSM
 resource "aws_iam_role_policy" "webui_ssm_access" {
-  name = "${var.project_name}-${var.environment}-ssm-access"
+  name = "${var.project_name}-security-ssm-access"
   role = aws_iam_role.webui_task.id
 
   policy = jsonencode({
@@ -248,7 +248,7 @@ resource "aws_iam_role_policy" "webui_ssm_access" {
 
 # IAM Role para las instancias EC2 de Ollama
 resource "aws_iam_role" "ollama_instance" {
-  name = "${var.project_name}-${var.environment}-ollama-instance"
+  name = "${var.project_name}-security-ollama-instance"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -264,14 +264,14 @@ resource "aws_iam_role" "ollama_instance" {
   })
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-ollama-instance"
-    Environment = var.environment
+    Name  = "${var.project_name}-security-ollama-instance"
+    Layer = "Security"
   }
 }
 
 # Instance Profile para las instancias EC2 de Ollama
 resource "aws_iam_instance_profile" "ollama" {
-  name = "${var.project_name}-${var.environment}-ollama"
+  name = "${var.project_name}-security-ollama"
   role = aws_iam_role.ollama_instance.name
 }
 
@@ -283,7 +283,7 @@ resource "aws_iam_role_policy_attachment" "ollama_instance_ssm" {
 
 # Política básica para las instancias EC2 de Ollama
 resource "aws_iam_role_policy" "ollama_instance" {
-  name = "${var.project_name}-${var.environment}-ollama-instance-policy"
+  name = "${var.project_name}-security-ollama-instance-policy"
   role = aws_iam_role.ollama_instance.id
 
   policy = jsonencode({

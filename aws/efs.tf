@@ -1,6 +1,6 @@
 # Security Group para EFS
 resource "aws_security_group" "efs" {
-  name        = "${var.project_name}-${var.environment}-efs"
+  name        = "${var.project_name}-storage-efs"
   description = "Security group for EFS mount targets"
   vpc_id      = aws_vpc.main.id
 
@@ -12,14 +12,14 @@ resource "aws_security_group" "efs" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-efs"
-    Environment = var.environment
+    Name  = "${var.project_name}-storage-efs"
+    Layer = "Storage"
   }
 }
 
 # EFS File System
 resource "aws_efs_file_system" "models" {
-  creation_token = "${var.project_name}-${var.environment}-models"
+  creation_token = "${var.project_name}-storage-models"
   encrypted      = true
 
   performance_mode                = "maxIO"
@@ -31,8 +31,8 @@ resource "aws_efs_file_system" "models" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-models"
-    Environment = var.environment
+    Name  = "${var.project_name}-storage-models"
+    Layer = "Storage"
   }
 }
 
@@ -49,8 +49,8 @@ resource "aws_efs_access_point" "models" {
   file_system_id = aws_efs_file_system.models.id
 
   posix_user {
-    gid = 0    # root group
-    uid = 0    # root user
+    gid = 0 # root group
+    uid = 0 # root user
   }
 
   root_directory {
@@ -63,7 +63,7 @@ resource "aws_efs_access_point" "models" {
   }
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-models"
-    Environment = var.environment
+    Name  = "${var.project_name}-storage-models"
+    Layer = "Storage"
   }
 }
