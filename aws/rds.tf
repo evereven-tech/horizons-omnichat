@@ -41,15 +41,15 @@ resource "aws_db_instance" "webui" {
   engine            = "postgres"
   engine_version    = "13"
   instance_class    = "db.t3.small"
-  allocated_storage = 20
   storage_type      = "gp3"
+  allocated_storage = 20
 
   # Habilitar auto-scaling del almacenamiento
   max_allocated_storage = 100
 
   db_name  = var.postgres_db
   username = var.postgres_user
-  password = var.postgres_password
+  password = random_password.postgres.result
 
   vpc_security_group_ids = [aws_security_group.rds.id]
   db_subnet_group_name   = aws_db_subnet_group.rds.name

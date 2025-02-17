@@ -228,16 +228,17 @@ resource "aws_ecs_task_definition" "webui" {
 
   container_definitions = jsonencode([
     {
-      name  = "webui"
-      image = "${aws_ecr_repository.webui.repository_url}:${var.webui_version}"
+      name = "webui"
+      #image = "${aws_ecr_repository.webui.repository_url}:${var.webui_version}"
+      image = "ghcr.io/open-webui/open-webui:main"
       portMappings = [
         {
           containerPort = 8080
           protocol      = "tcp"
         }
       ]
-      entryPoint = ["/bin/sh", "-c"]
       /*
+      entryPoint = ["/bin/sh", "-c"]
       command = [
         <<-EOF
         aws ssm get-parameter \
@@ -251,28 +252,32 @@ resource "aws_ecs_task_definition" "webui" {
       ]
       */
 
-      secrets = [
-        {
-          name      = "WEBUI_SECRET_KEY"
-          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:webui_secret_key::"
-        }
-      ]
       environment = [
         {
           name  = "AWS_DEFAULT_REGION"
           value = var.aws_region
+        },
+        {
+          "name" : "OPENAI_API_BASE",
+          "value" : "http://bedrock-gateway.horizons-dev.local:80/api/v1"
         }
       ]
+
       secrets = [
         {
           name      = "WEBUI_SECRET_KEY"
           valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:webui_secret_key::"
         },
         {
+          name      = "OPENAI_API_KEY"
+          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:bedrock_api_key::"
+        },
+        {
           name      = "DATABASE_URL"
           valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:database_url::"
         }
       ]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {

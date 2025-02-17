@@ -53,33 +53,33 @@ resource "aws_iam_role_policy" "ecs_task_secrets" {
 
 # Generador de contraseña segura para PostgreSQL                                                                                                                                             
 resource "random_password" "postgres" {
-  length           = 16
+  length           = 32
   special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
+  override_special = "-_"
   min_special      = 2
-  min_upper        = 2
-  min_lower        = 2
-  min_numeric      = 2
+  min_upper        = 4
+  min_lower        = 4
+  min_numeric      = 4
 }
 
 # Generador de contraseña segura para Bedrock Gateway                                                                                                                                             
 resource "random_password" "bedrock_api_key" {
-  length           = 16
+  length           = 32
   special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
+  override_special = "-_"
   min_special      = 2
-  min_upper        = 2
-  min_lower        = 2
-  min_numeric      = 2
+  min_upper        = 4
+  min_lower        = 4
+  min_numeric      = 4
 }
 
 # Generador de contraseña segura para Open WebUI                                                                                                                                        
 resource "random_password" "webui_secret_key" {
-  length           = 16
+  length           = 32
   special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
+  override_special = "-_"
   min_special      = 2
-  min_upper        = 2
-  min_lower        = 2
-  min_numeric      = 2
+  min_upper        = 4
+  min_lower        = 4
+  min_numeric      = 4
 }
