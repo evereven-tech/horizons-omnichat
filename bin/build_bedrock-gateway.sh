@@ -29,7 +29,7 @@ log_error() {
 check_dependencies() {
     local missing_deps=0
     
-    for cmd in docker aws jq; do
+    for cmd in podman aws jq; do
         if ! command -v $cmd &> /dev/null; then
             log_error "$cmd is required but not installed."
             missing_deps=1
@@ -61,14 +61,14 @@ check_aws_credentials
 
 # Login to ECR
 log_info "Logging into ECR..."
-aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+aws ecr get-login-password --region ${AWS_REGION} | podman login --username AWS --password-stdin ${ECR_REGISTRY}
 
 # Build and push Bedrock Gateway
 log_info "Building Bedrock Gateway image..."
-docker build -t ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest \
-    -f external/bedrock-gateway/src/Dockerfile_ecs external/bedrock-gateway/src/
+podman build -t ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest \
+    -f ../external/bedrock-gateway/src/Dockerfile_ecs ../external/bedrock-gateway/src/
 
 log_info "Pushing Bedrock Gateway image..."
-docker push ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest
+podman push ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest
 
 log_info "Bedrock Gateway image built and pushed successfully!"

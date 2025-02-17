@@ -17,21 +17,21 @@ echo "ECR URL: ${ECR_URL}"
 VERSIONS=("latest" "0.0.20" "0.0.19" "0.0.18")
 
 # Login en ECR
-aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_URL}
+aws ecr get-login-password --region ${AWS_REGION} | podman login --username AWS --password-stdin ${ECR_URL}
 
 # Construir imagen de Ollama
 echo "Building Ollama image..."
-docker build -t ${REPO_NAME}:latest -f common/Dockerfile.ollama common/
+podman build -t ${REPO_NAME}:latest -f ../common/Dockerfile.ollama ../common/
 
 # Procesar cada versión
 for VERSION in "${VERSIONS[@]}"; do
     echo "Processing version: $VERSION"
     
     # Tag para ECR
-    docker tag ${REPO_NAME}:latest ${ECR_URL}/${REPO_NAME}:${VERSION}
+    podman tag ${REPO_NAME}:latest ${ECR_URL}/${REPO_NAME}:${VERSION}
     
     # Push a ECR
-    docker push ${ECR_URL}/${REPO_NAME}:${VERSION}
+    podman push ${ECR_URL}/${REPO_NAME}:${VERSION}
 done
 
 # Verificar las imágenes
