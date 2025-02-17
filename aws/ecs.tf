@@ -237,6 +237,7 @@ resource "aws_ecs_task_definition" "webui" {
           protocol      = "tcp"
         }
       ]
+      # TODO quitar esto y los json de cfg
       /*
       entryPoint = ["/bin/sh", "-c"]
       command = [
@@ -260,6 +261,10 @@ resource "aws_ecs_task_definition" "webui" {
         {
           "name" : "OPENAI_API_BASE_URL",
           "value" : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1"
+        },
+        {
+          "name": "OLLAMA_BASE_URL",
+          "value" : "http://${aws_service_discovery_service.ollama.name}.${aws_service_discovery_private_dns_namespace.main.name}:11434"
         }
       ]
 
