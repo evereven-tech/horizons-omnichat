@@ -382,16 +382,16 @@ resource "aws_ecs_task_definition" "bedrock" {
           protocol      = "tcp"
         }
       ]
-      secrets = [
-        {
-          name      = "API_KEY"
-          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:bedrock_api_key::"
-        }
-      ]
       environment = [
         {
           name  = "AWS_REGION"
           value = var.aws_region_bedrock
+        }
+      ]
+      secrets = [
+        {
+          name      = "API_KEY"
+          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:bedrock_api_key::"
         }
       ]
       logConfiguration = {
