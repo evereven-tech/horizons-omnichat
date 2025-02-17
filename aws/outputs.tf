@@ -41,3 +41,12 @@ output "repository_urls" {
     ollama          = aws_ecr_repository.ollama.repository_url
   }
 }
+
+output "service_dns" {
+  description = "DNS names for the services"
+  value = {
+    webui   = "${aws_service_discovery_service.webui.name}.${aws_service_discovery_private_dns_namespace.main.name}"
+    bedrock = "${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}"
+    ollama  = "${aws_service_discovery_service.ollama.name}.${aws_service_discovery_private_dns_namespace.main.name}"
+  }
+}
