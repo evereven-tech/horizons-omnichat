@@ -259,7 +259,7 @@ resource "aws_ecs_task_definition" "webui" {
         },
         {
           "name" : "OPENAI_API_BASE",
-          "value" : "http://bedrock-gateway.horizons-dev.local:80/api/v1"
+          "value" : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1"
         }
       ]
 
