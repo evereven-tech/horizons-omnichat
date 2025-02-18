@@ -51,6 +51,26 @@ resource "aws_iam_role_policy" "ecs_task_secrets" {
   policy = data.aws_iam_policy_document.secrets_access.json
 }
 
+# Política adicional para SSM en el rol de ejecución
+resource "aws_iam_role_policy" "ecs_task_execution_ssm" {
+  name = "${var.project_name}-security-ecs-execution-ssm"
+  role = aws_iam_role.ecs_task_execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParameters",
+          "ssm:GetParameter"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Generador de contraseña segura para PostgreSQL                                                                                                                                             
 resource "random_password" "postgres" {
   length           = 32
