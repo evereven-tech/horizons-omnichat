@@ -25,6 +25,10 @@ resource "aws_launch_template" "ollama" {
               ECS_CLUSTER=${aws_ecs_cluster.ec2.name}
               ECS_ENABLE_GPU_SUPPORT=true
               ECS_NVIDIA_RUNTIME=nvidia
+              ECS_ENABLE_CONTAINER_METADATA=true
+              ECS_POLL_METRICS=true
+              ECS_ENABLE_TASK_CPU_MEM_LIMIT=true
+              ECS_ENABLE_AWSLOGS_EXECUTIONROLE_OVERRIDE=true
               ECS_ENABLE_SPOT_INSTANCE_DRAINING=true
               ECS_ENABLE_TASK_IAM_ROLE=true
               ECS_ENABLE_TASK_IAM_ROLE_NETWORK_HOST=true

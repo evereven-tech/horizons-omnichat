@@ -135,6 +135,17 @@ resource "aws_ecs_task_definition" "ollama" {
         }
       ]
 
+      systemControls = [
+        {
+          namespace = "net.ipv4.tcp_keepalive_time",
+          value     = "60"
+        },
+        {
+          namespace = "net.ipv4.tcp_keepalive_intvl",
+          value     = "15"
+        }
+      ]
+
       runtimePlatform = {
         operatingSystemFamily = "LINUX"
         cpuArchitecture       = "X86_64"
@@ -171,12 +182,7 @@ resource "aws_ecs_service" "ollama" {
   
   placement_constraints {
     type       = "memberOf"
-    expression = "attribute:ecs.os-family == linux"
-  }
-
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.instance-type == g4dn.xlarge"
+    expression = "attribute:ecs.os-family == linux && attribute:ecs.instance-type == g4dn.xlarge && attribute:ecs.capability.nvidia.gpu"
   }
 
   service_registries {
