@@ -76,12 +76,14 @@ resource "aws_ecs_task_definition" "ollama" {
     }
   }
 
+  requires_compatibilities = ["EC2"]
   container_definitions = jsonencode([
     {
       name       = "ollama"
       image      = "${aws_ecr_repository.ollama.repository_url}:${var.ollama_version}"
-      user       = "root" # Explícitamente usar root
-      privileged = true   # Añadido para asegurar acceso a GPU
+      user       = "root"
+      privileged = true
+      essential  = true
       portMappings = [
         {
           containerPort = 11434
@@ -166,6 +168,16 @@ resource "aws_ecs_service" "ollama" {
   task_definition = aws_ecs_task_definition.ollama.arn
   desired_count   = 1
   launch_type     = "EC2"
+  
+  placement_constraints {
+    type       = "memberOf"
+    expression = "attribute:ecs.os-family == linux"
+  }
+
+  placement_constraints {
+    type       = "memberOf"
+    expression = "attribute:ecs.instance-type == g4dn.xlarge"
+  }
 
   service_registries {
     registry_arn   = aws_service_discovery_service.ollama.arn
