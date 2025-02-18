@@ -181,7 +181,17 @@ resource "aws_ecs_service" "ollama" {
   
   placement_constraints {
     type       = "memberOf"
-    expression = "attribute:ecs.os-family == linux && attribute:ecs.instance-type == g4dn.xlarge && attribute:ecs.capability.nvidia.gpu"
+    expression = "attribute:ecs.os-family == linux"
+  }
+
+  placement_constraints {
+    type       = "memberOf"
+    expression = "attribute:ecs.instance-type == g4dn.xlarge"
+  }
+
+  placement_constraints {
+    type       = "memberOf"
+    expression = "attribute:ecs.capability.nvidia.gpu exists"
   }
 
   service_registries {
