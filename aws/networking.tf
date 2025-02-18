@@ -151,7 +151,8 @@ resource "aws_security_group" "vpc_endpoints" {
     protocol        = "tcp"
     security_groups = [
       aws_security_group.ollama.id,
-      aws_security_group.ecs_tasks.id
+      aws_security_group.ecs_tasks.id,
+      aws_security_group.bedrock_tasks.id
     ]
   }
 
