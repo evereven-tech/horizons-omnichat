@@ -67,7 +67,7 @@ hybrid-down:
 	@cd hybrid && $(CONTAINER_RUNTIME) compose down
 
 # AWS Targets #################################################################
-.PHONY: validate-hybrid hybrid-up hybrid-down aws-plan aws-apply aws-destroy shell-webui shell-ollama shell-bedrock
+.PHONY: validate-hybrid hybrid-up hybrid-down aws-init aws-lint aws-plan aws-apply aws-destroy shell-webui shell-ollama shell-bedrock
 
 # AWS Specific variables
 TF_DIR := aws
@@ -81,6 +81,10 @@ aws-init:
 aws-plan: aws-init
 	@echo "Terraform plan..."
 	@cd $(TF_DIR) && terraform plan -out=tfplan
+
+aws-lint: aws-init
+	@echo "Terraform lint..."
+	@cd $(TF_DIR) && terraform fmt && terraform validate
 
 # Aplicar cambios de Terraform
 aws-apply: aws-init
