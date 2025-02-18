@@ -181,16 +181,6 @@ resource "aws_ecs_service" "ollama" {
   
   placement_constraints {
     type       = "memberOf"
-    expression = "attribute:ecs.os-family == linux"
-  }
-
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.instance-type == g4dn.xlarge"
-  }
-
-  placement_constraints {
-    type       = "memberOf"
     expression = "attribute:ecs.capability.nvidia.gpu exists"
   }
 
@@ -201,6 +191,8 @@ resource "aws_ecs_service" "ollama" {
   }
 
   enable_execute_command = true
+  enable_ecs_managed_tags = true
+  propagate_tags = "SERVICE"
 
   tags = {
     Name  = "${var.project_name}-compute-ollama"
