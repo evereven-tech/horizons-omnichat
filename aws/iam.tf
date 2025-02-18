@@ -283,12 +283,6 @@ resource "aws_iam_instance_profile" "ollama" {
   role = aws_iam_role.ollama_instance.name
 }
 
-# Añadir política administrada de SSM al rol de la instancia
-resource "aws_iam_role_policy_attachment" "ollama_instance_ssm" {
-  role       = aws_iam_role.ollama_instance.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-}
-
 # Política básica para las instancias EC2 de Ollama
 resource "aws_iam_role_policy" "ollama_instance" {
   name = "${var.project_name}-security-ollama-instance-policy"
@@ -319,6 +313,7 @@ resource "aws_iam_role_policy" "ollama_instance" {
       {
         Effect = "Allow"
         Action = [
+          "ecs:CreateCluster",
           "ecs:RegisterContainerInstance",
           "ecs:DeregisterContainerInstance",
           "ecs:UpdateContainerInstancesState",
@@ -334,6 +329,8 @@ resource "aws_iam_role_policy" "ollama_instance" {
       {
         Effect = "Allow"
         Action = [
+          "ssm:GetParameters",
+          "ssm:GetParameter",
           "ssm:UpdateInstanceInformation",
           "ssmmessages:CreateControlChannel",
           "ssmmessages:CreateDataChannel",
@@ -341,7 +338,43 @@ resource "aws_iam_role_policy" "ollama_instance" {
           "ssmmessages:OpenDataChannel"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "kms:Decrypt"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "sts:AssumeRole"
+        ]
+        Resource = [
+          aws_iam_role.ollama_task.arn,
+          aws_iam_role.ecs_task_execution.arn
+        ]
       }
     ]
   })
 }
+
+# Política administrada de SSM para la instancia                                                                                                                                       
+resource "aws_iam_role_policy_attachment" "ollama_instance_ssm" {
+  role       = aws_iam_role.ollama_instance.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+# Política administrada de CloudWatch para la instancia                                                                                                                                
+resource "aws_iam_role_policy_attachment" "ollama_instance_cloudwatch" {
+  role       = aws_iam_role.ollama_instance.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+# Política para ECS                                                                                                                                                                    
+resource "aws_iam_role_policy_attachment" "ollama_instance_ecs" {
+  role       = aws_iam_role.ollama_instance.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}            

@@ -78,9 +78,10 @@ resource "aws_ecs_task_definition" "ollama" {
 
   container_definitions = jsonencode([
     {
-      name  = "ollama"
-      image = "${aws_ecr_repository.ollama.repository_url}:${var.ollama_version}"
-      user  = "root" # Explícitamente usar root
+      name       = "ollama"
+      image      = "${aws_ecr_repository.ollama.repository_url}:${var.ollama_version}"
+      user       = "root" # Explícitamente usar root
+      privileged = true   # Añadido para asegurar acceso a GPU
       portMappings = [
         {
           containerPort = 11434
@@ -88,6 +89,7 @@ resource "aws_ecs_task_definition" "ollama" {
           protocol      = "tcp"
         }
       ]
+
       environment = [
         {
           name  = "OLLAMA_HOST"
@@ -96,8 +98,17 @@ resource "aws_ecs_task_definition" "ollama" {
         {
           name  = "INSTALLED_MODELS"
           value = var.ollama_models
+        },
+        {
+          name  = "NVIDIA_DRIVER_CAPABILITIES"
+          value = "compute,utility"
         }
       ]
+
+      dockerLabels = {
+        "com.nvidia.volumes.needed" = "nvidia_driver"
+      }
+
       mountPoints = [
         {
           sourceVolume  = "models"
@@ -105,6 +116,7 @@ resource "aws_ecs_task_definition" "ollama" {
           readOnly      = false
         }
       ]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -113,20 +125,25 @@ resource "aws_ecs_task_definition" "ollama" {
           "awslogs-stream-prefix" = "ollama"
         }
       }
+
       resourceRequirements = [
         {
           type  = "GPU"
           value = "1"
         }
       ]
+
       runtimePlatform = {
         operatingSystemFamily = "LINUX"
         cpuArchitecture       = "X86_64"
       }
-      
+
       # Habilitar proceso init
       linuxParameters = {
         initProcessEnabled = true
+        capabilities = {
+          add = ["SYS_ADMIN"]
+        }
       }
     }
   ])

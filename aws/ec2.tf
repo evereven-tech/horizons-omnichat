@@ -24,8 +24,10 @@ resource "aws_launch_template" "ollama" {
               cat <<'EOT' > /etc/ecs/ecs.config
               ECS_CLUSTER=${aws_ecs_cluster.ec2.name}
               ECS_ENABLE_GPU_SUPPORT=true
-              ECS_ENABLE_TASK_IAM_ROLE=true
+              ECS_NVIDIA_RUNTIME=nvidia
               ECS_ENABLE_SPOT_INSTANCE_DRAINING=true
+              ECS_ENABLE_TASK_IAM_ROLE=true
+              ECS_ENABLE_TASK_IAM_ROLE_NETWORK_HOST=true
               ECS_CONTAINER_INSTANCE_TAGS={"Name": "${var.project_name}-compute-ollama", "Layer": "Compute"}
               EOT
 
