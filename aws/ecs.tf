@@ -181,7 +181,7 @@ resource "aws_ecs_service" "ollama" {
   
   placement_constraints {
     type       = "memberOf"
-    expression = "attribute:ecs.capability.nvidia.gpu exists"
+    expression = "attribute:ecs.capability.nvidia-driver-version.560.35.03 exists"
   }
 
   service_registries {
