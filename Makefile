@@ -96,3 +96,28 @@ aws-destroy: aws-init
 	fi
 
 # k8s Targets #################################################################
+.PHONY: shell-webui shell-ollama shell-bedrock
+
+shell-webui: ## Connect to OpenWebUI container shell
+	aws ecs execute-command \
+		--cluster horizons-compute-fargate \
+		--task $$(aws ecs list-tasks --cluster horizons-compute-fargate --service-name horizons-compute-webui --query 'taskArns[0]' --output text) \
+		--container webui \
+		--command "/bin/sh" \
+		--interactive
+
+shell-ollama: ## Connect to Ollama container shell
+	aws ecs execute-command \
+		--cluster horizons-compute-ec2 \
+		--task $$(aws ecs list-tasks --cluster horizons-compute-ec2 --service-name horizons-compute-ollama --query 'taskArns[0]' --output text) \
+		--container ollama \
+		--command "/bin/sh" \
+		--interactive
+
+shell-bedrock: ## Connect to Bedrock Gateway container shell
+	aws ecs execute-command \
+		--cluster horizons-compute-fargate \
+		--task $$(aws ecs list-tasks --cluster horizons-compute-fargate --service-name horizons-compute-bedrock --query 'taskArns[0]' --output text) \
+		--container bedrock-gateway \
+		--command "/bin/sh" \
+		--interactive
