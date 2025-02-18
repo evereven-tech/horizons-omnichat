@@ -27,6 +27,31 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+# Añadir permisos de CloudWatch Logs al rol de ejecución
+resource "aws_iam_role_policy" "ecs_task_execution_logs" {
+  name = "${var.project_name}-security-ecs-execution-logs"
+  role = aws_iam_role.ecs_task_execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:CreateLogGroup"
+        ]
+        Resource = [
+          "${aws_cloudwatch_log_group.bedrock.arn}:*",
+          "${aws_cloudwatch_log_group.webui.arn}:*",
+          "${aws_cloudwatch_log_group.ollama.arn}:*"
+        ]
+      }
+    ]
+  })
+}
+
 # ECS Task Role for OpenWebUI
 resource "aws_iam_role" "webui_task" {
   name = "${var.project_name}-security-webui-task"
