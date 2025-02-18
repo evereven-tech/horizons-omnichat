@@ -1,8 +1,8 @@
-.PHONY: init validate-local validate-hybrid local-up local-down hybrid-up hybrid-down aws-plan aws-apply aws-destroy
-
 CONTAINER_RUNTIME := $(shell which podman 2>/dev/null || which docker 2>/dev/null)
 
 # Common Targets ##############################################################
+.PHONY: init 
+
 init:
 	@if [ ! -d "external/bedrock-gateway" ]; then \
 		git submodule add https://github.com/aws-samples/bedrock-access-gateway.git external/bedrock-gateway; \
@@ -10,6 +10,7 @@ init:
 	git submodule update --init --recursive
 
 # Local Targets ###############################################################
+.PHONY: validate-local local-up local-down
 
 validate-local:
 	@echo "Validating local configuration..."
@@ -30,6 +31,7 @@ local-down:
 	@cd local && $(CONTAINER_RUNTIME) compose down
 
 # Hybrid Targets ##############################################################
+.PHONY: init validate-local local-up local-down
 
 # Hybrid Specific variables
 ENV_FILE := hybrid/.env
@@ -65,6 +67,7 @@ hybrid-down:
 	@cd hybrid && $(CONTAINER_RUNTIME) compose down
 
 # AWS Targets #################################################################
+.PHONY: validate-hybrid hybrid-up hybrid-down aws-plan aws-apply aws-destroy shell-webui shell-ollama shell-bedrock
 
 # AWS Specific variables
 TF_DIR := aws
@@ -95,9 +98,6 @@ aws-destroy: aws-init
 		echo "Operation cancelled"; \
 	fi
 
-# k8s Targets #################################################################
-.PHONY: shell-webui shell-ollama shell-bedrock
-
 shell-webui: ## Connect to OpenWebUI container shell
 	aws ecs execute-command \
 		--cluster horizons-compute-fargate \
@@ -121,3 +121,5 @@ shell-bedrock: ## Connect to Bedrock Gateway container shell
 		--container bedrock-gateway \
 		--command "/bin/sh" \
 		--interactive
+
+# k8s Targets #################################################################

@@ -78,9 +78,10 @@ resource "aws_ecs_task_definition" "ollama" {
 
   container_definitions = jsonencode([
     {
-      name  = "ollama"
-      image = "${aws_ecr_repository.ollama.repository_url}:${var.ollama_version}"
-      user  = "root" # Explícitamente usar root
+      name                 = "ollama"
+      image                = "${aws_ecr_repository.ollama.repository_url}:${var.ollama_version}"
+      enableExecuteCommand = true
+      user                 = "root" # Explícitamente usar root
       portMappings = [
         {
           containerPort = 11434
@@ -230,6 +231,7 @@ resource "aws_ecs_task_definition" "webui" {
     {
       name  = "webui"
       image = "${aws_ecr_repository.webui.repository_url}:${var.webui_version}"
+      #enableExecuteCommand = true
       portMappings = [
         {
           containerPort = 8080
@@ -362,9 +364,9 @@ resource "aws_ecs_task_definition" "bedrock" {
 
   container_definitions = jsonencode([
     {
-      name                 = "bedrock-gateway"
-      image                = "${aws_ecr_repository.bedrock_gateway.repository_url}:${var.bedrock_version}"
-      enableExecuteCommand = true
+      name  = "bedrock-gateway"
+      image = "${aws_ecr_repository.bedrock_gateway.repository_url}:${var.bedrock_version}"
+      #enableExecuteCommand = true
       portMappings = [
         {
           containerPort = 80
