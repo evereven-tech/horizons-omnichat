@@ -60,8 +60,8 @@ resource "aws_ecs_task_definition" "ollama" {
   family                   = "${var.project_name}-compute-ollama"
   requires_compatibilities = ["EC2"]
   network_mode             = "bridge"
-  cpu                      = 1024
-  memory                   = 2048
+  cpu                      = 2048
+  memory                   = 4096
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
   task_role_arn            = aws_iam_role.ollama_task.arn
 
@@ -122,6 +122,11 @@ resource "aws_ecs_task_definition" "ollama" {
       runtimePlatform = {
         operatingSystemFamily = "LINUX"
         cpuArchitecture       = "X86_64"
+      }
+      
+      # Habilitar proceso init
+      linuxParameters = {
+        initProcessEnabled = true
       }
     }
   ])
