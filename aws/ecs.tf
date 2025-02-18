@@ -228,30 +228,14 @@ resource "aws_ecs_task_definition" "webui" {
 
   container_definitions = jsonencode([
     {
-      name = "webui"
-      #image = "${aws_ecr_repository.webui.repository_url}:${var.webui_version}"
-      image = "ghcr.io/open-webui/open-webui:main"
+      name  = "webui"
+      image = "${aws_ecr_repository.webui.repository_url}:${var.webui_version}"
       portMappings = [
         {
           containerPort = 8080
           protocol      = "tcp"
         }
       ]
-      # TODO quitar esto y los json de cfg
-      /*
-      entryPoint = ["/bin/sh", "-c"]
-      command = [
-        <<-EOF
-        aws ssm get-parameter \
-          --name /${var.project_name}/webui/config.json \
-          --with-decryption \
-          --region ${var.aws_region} \
-          --query Parameter.Value \
-          --output text > /app/backend/data/config.json && \
-        /docker-entrypoint.sh
-        EOF
-      ]
-      */
 
       environment = [
         {
@@ -263,7 +247,7 @@ resource "aws_ecs_task_definition" "webui" {
           "value" : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1"
         },
         {
-          "name": "OLLAMA_BASE_URL",
+          "name" : "OLLAMA_BASE_URL",
           "value" : "http://${aws_service_discovery_service.ollama.name}.${aws_service_discovery_private_dns_namespace.main.name}:11434"
         }
       ]

@@ -28,11 +28,6 @@ output "efs_access_point_id" {
   value       = aws_efs_access_point.models.id
 }
 
-output "ssm_parameter_name" {
-  description = "Name of SSM parameter for WebUI config"
-  value       = aws_ssm_parameter.webui_config.name
-}
-
 output "repository_urls" {
   description = "URLs of the ECR repositories"
   value = {

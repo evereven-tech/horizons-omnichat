@@ -229,23 +229,6 @@ resource "aws_iam_role_policy" "ollama_task" {
   })
 }
 
-# Política para acceso a SSM
-resource "aws_iam_role_policy" "webui_ssm_access" {
-  name = "${var.project_name}-security-ssm-access"
-  role = aws_iam_role.webui_task.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Action = [
-        "ssm:GetParameter"
-      ]
-      Resource = aws_ssm_parameter.webui_config.arn
-    }]
-  })
-}
-
 # IAM Role para las instancias EC2 de Ollama
 resource "aws_iam_role" "ollama_instance" {
   name = "${var.project_name}-security-ollama-instance"
