@@ -127,12 +127,12 @@ resource "aws_ecs_task_definition" "ollama" {
         }
       }
 
-      resourceRequirements = [
-        {
-          type  = "GPU"
-          value = "1"
-        }
-      ]
+      #resourceRequirements = [
+      #  {
+      #    type  = "GPU"
+      #    value = "1"
+      #  }
+      #]
 
       systemControls = [
         {
@@ -160,10 +160,10 @@ resource "aws_ecs_task_definition" "ollama" {
     }
   ])
 
-  runtime_platform {
-    operating_system_family = "LINUX"
-    cpu_architecture        = "X86_64"
-  }
+  #runtime_platform {
+  #  operating_system_family = "LINUX"
+  #  cpu_architecture        = "X86_64"
+  #}
 
   tags = {
     Name  = "${var.project_name}-compute-ollama"
@@ -178,11 +178,6 @@ resource "aws_ecs_service" "ollama" {
   task_definition = aws_ecs_task_definition.ollama.arn
   desired_count   = 1
   launch_type     = "EC2"
-  
-  placement_constraints {
-    type       = "memberOf"
-    expression = "attribute:ecs.capability.nvidia-driver-version.560.35.03 exists"
-  }
 
   service_registries {
     registry_arn   = aws_service_discovery_service.ollama.arn
