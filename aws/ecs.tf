@@ -40,7 +40,7 @@ resource "aws_ecs_capacity_provider" "ec2" {
     managed_scaling {
       maximum_scaling_step_size = 1
       minimum_scaling_step_size = 1
-      status                    = "DISABLED"
+      status                    = "ENABLED"
       target_capacity           = 100
     }
   }
@@ -76,7 +76,6 @@ resource "aws_ecs_task_definition" "ollama" {
     }
   }
 
-  requires_compatibilities = ["EC2"]
   container_definitions = jsonencode([
     {
       name       = "ollama"
