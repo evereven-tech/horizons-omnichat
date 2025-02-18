@@ -118,16 +118,16 @@ resource "aws_security_group" "ollama" {
 # Auto Scaling Group para Ollama
 resource "aws_autoscaling_group" "ollama" {
   name                = "${var.project_name}-compute-ollama"
-  desired_capacity    = 1
-  max_size            = 1
-  min_size            = 1
+  desired_capacity    = var.ollama_desired_count
+  max_size            = var.ollama_max_count
+  min_size            = 1  # Garantizamos mínimo 1 instancia
   target_group_arns   = [aws_lb_target_group.ollama.arn]
   vpc_zone_identifier = aws_subnet.private[*].id
 
   mixed_instances_policy {
     instances_distribution {
-      on_demand_base_capacity                  = 0
-      on_demand_percentage_above_base_capacity = 0
+      on_demand_base_capacity                  = 1  # Garantizamos 1 instancia on-demand
+      on_demand_percentage_above_base_capacity = 0  # El resto en spot
       spot_allocation_strategy                 = "capacity-optimized"
       spot_max_price                           = var.spot_config.spot_price["g4dn.xlarge"]
     }
