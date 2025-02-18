@@ -19,6 +19,33 @@ VERSIONS=("latest" "v0.5.14" "v0.5.11" "v0.5.10" "v0.5.7")
 # Login en ECR
 aws ecr get-login-password --region ${AWS_REGION} | podman login --username AWS --password-stdin ${ECR_URL}
 
+# Función para limpiar imágenes huérfanas
+cleanup_untagged_images() {
+    echo "Checking for untagged images..."
+    
+    # Obtener lista de imágenes sin tag (huérfanas)
+    untagged_images=$(aws ecr describe-images \
+        --repository-name ${REPO_NAME} \
+        --region ${AWS_REGION} \
+        --filter tagStatus=UNTAGGED \
+        --query 'imageDetails[*].imageDigest' \
+        --output text)
+    
+    if [ -n "$untagged_images" ]; then
+        echo "Found untagged images. Cleaning up..."
+        for digest in $untagged_images; do
+            echo "Deleting image: $digest"
+            aws ecr batch-delete-image \
+                --repository-name ${REPO_NAME} \
+                --region ${AWS_REGION} \
+                --image-ids imageDigest=$digest
+        done
+        echo "Cleanup complete!"
+    else
+        echo "No untagged images found."
+    fi
+}
+
 # Procesar cada versión
 for VERSION in "${VERSIONS[@]}"; do
     echo "Processing version: $VERSION"
@@ -36,6 +63,9 @@ for VERSION in "${VERSIONS[@]}"; do
     podman tag ghcr.io/open-webui/open-webui:${VERSION} ${ECR_URL}/${REPO_NAME}:${VERSION}
     podman push ${ECR_URL}/${REPO_NAME}:${VERSION}
 done
+
+# Limpiar imágenes huérfanas
+cleanup_untagged_images
 
 # Verificar las imágenes
 echo "Verifying repository contents:"
