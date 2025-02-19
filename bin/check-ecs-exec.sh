@@ -23,7 +23,7 @@ set -euo pipefail
 ##   https://aws.amazon.com/blogs/containers/new-using-amazon-ecs-exec-access-your-containers-fargate-ec2/
 ##
 
-## NOTE: This script at least needs the following permissions. 
+## NOTE: This script at least needs the following permissions.
 ##       1. If you use an IAM user with an assumed role to run the script,
 ##          then you need to allow the "iam:ListRoles" action in addition to the following.
 ##       2. If you configured your ECS cluster to use KMS key for ECS Exec,
@@ -365,7 +365,7 @@ if [[ "${launchType}" = "FARGATE" ]]; then # For FARGATE Launch Type
   printf "${COLOR_GREEN}Fargate\n"
   # Check the PV
   printf "${COLOR_DEFAULT}  Platform Version       | "
-  
+
   # Detect platform family to use correct platform version required
   pf=$(echo "${describedTaskJson}" | jq -r ".tasks[0].platformFamily")
   if [[ ${pf} == *"Windows"* ]]; then
@@ -373,7 +373,7 @@ if [[ "${launchType}" = "FARGATE" ]]; then # For FARGATE Launch Type
   else
     requiredPV="1.4.0"  #1.4.0 for others
   fi
-  
+
   pv=$(echo "${describedTaskJson}" | jq -r ".tasks[0].platformVersion")
   if equalsOrGreaterVersion "${requiredPV}" "${pv}"; then
     printf "${COLOR_GREEN}${pv}"
@@ -670,7 +670,7 @@ else
       fi
     done
 
-    printf "    Found existing endpoints for ${taskVpcId}:\n"  
+    printf "    Found existing endpoints for ${taskVpcId}:\n"
     for vpe in $vpcEndpoints; do
       if [[ "${vpe}" = "${requiredEndpoint}" ]]; then
         printf "      - ${COLOR_GREEN}${vpe}${COLOR_DEFAULT}\n"
@@ -705,7 +705,7 @@ for containerName in $containerNameList; do
   case "${AWS_ACCESS_KEY_ID_FOUND}" in
     *AWS_ACCESS_KEY_ID* ) printf ": ${COLOR_YELLOW}defined${COLOR_DEFAULT}\n";;
     * ) printf ": ${COLOR_GREEN}not defined${COLOR_DEFAULT}\n";;
-  esac  
+  esac
   # find AWS_SECRET_ACCESS_KEY
   printf "       ${COLOR_DEFAULT}- AWS_SECRET_ACCESS_KEY"
   AWS_SECRET_ACCESS_KEY_FOUND=$(echo "${taskDefJson}" | jq -r ".taskDefinition.containerDefinitions[${idx}].environment[] | select(.name==\"AWS_SECRET_ACCESS_KEY\") | .name")

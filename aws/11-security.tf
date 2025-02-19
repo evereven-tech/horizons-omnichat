@@ -130,7 +130,7 @@ resource "aws_iam_role_policy" "ecs_task_execution_ssm" {
 # Password seeds
 # #############################################################################
 
-# Generador de contraseña segura para PostgreSQL                                                                                                                                             
+# Generador de contraseña segura para PostgreSQL
 resource "random_password" "postgres" {
   length           = 32
   special          = true
@@ -141,7 +141,7 @@ resource "random_password" "postgres" {
   min_numeric      = 4
 }
 
-# Generador de contraseña segura para Bedrock Gateway                                                                                                                                             
+# Generador de contraseña segura para Bedrock Gateway
 resource "random_password" "bedrock_api_key" {
   length           = 32
   special          = true
@@ -152,7 +152,7 @@ resource "random_password" "bedrock_api_key" {
   min_numeric      = 4
 }
 
-# Generador de contraseña segura para Open WebUI                                                                                                                                        
+# Generador de contraseña segura para Open WebUI
 resource "random_password" "webui_secret_key" {
   length           = 32
   special          = true

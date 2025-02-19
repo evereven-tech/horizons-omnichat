@@ -320,19 +320,19 @@ resource "aws_iam_role_policy" "ollama_instance" {
   })
 }
 
-# Política administrada de SSM para la instancia                                                                                                                                       
+# Política administrada de SSM para la instancia
 resource "aws_iam_role_policy_attachment" "ollama_instance_ssm" {
   role       = aws_iam_role.ollama_instance.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-# Política administrada de CloudWatch para la instancia                                                                                                                                
+# Política administrada de CloudWatch para la instancia
 resource "aws_iam_role_policy_attachment" "ollama_instance_cloudwatch" {
   role       = aws_iam_role.ollama_instance.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
-# Política para ECS                                                                                                                                                                    
+# Política para ECS
 resource "aws_iam_role_policy_attachment" "ollama_instance_ecs" {
   role       = aws_iam_role.ollama_instance.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"

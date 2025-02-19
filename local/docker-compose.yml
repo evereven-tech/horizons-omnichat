@@ -17,12 +17,12 @@ services:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 3s
       timeout: 5s
-      retries: 5    
+      retries: 5
 
   open-webui:
     container_name: open-webui
     restart: unless-stopped
-    image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}    
+    image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     depends_on:
       webui-db:
         condition: service_healthy

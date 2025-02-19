@@ -28,14 +28,14 @@ log_error() {
 
 check_dependencies() {
     local missing_deps=0
-    
+
     for cmd in podman aws jq; do
         if ! command -v $cmd &> /dev/null; then
             log_error "$cmd is required but not installed."
             missing_deps=1
         fi
     done
-    
+
     if [ $missing_deps -eq 1 ]; then
         exit 1
     fi

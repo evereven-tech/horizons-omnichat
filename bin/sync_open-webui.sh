@@ -22,7 +22,7 @@ aws ecr get-login-password --region ${AWS_REGION} | podman login --username AWS 
 # Función para limpiar imágenes huérfanas
 cleanup_untagged_images() {
     echo "Checking for untagged images..."
-    
+
     # Obtener lista de imágenes sin tag (huérfanas)
     untagged_images=$(aws ecr describe-images \
         --repository-name ${REPO_NAME} \
@@ -30,7 +30,7 @@ cleanup_untagged_images() {
         --filter tagStatus=UNTAGGED \
         --query 'imageDetails[*].imageDigest' \
         --output text)
-    
+
     if [ -n "$untagged_images" ]; then
         echo "Found untagged images. Cleaning up..."
         for digest in $untagged_images; do
@@ -49,16 +49,16 @@ cleanup_untagged_images() {
 # Procesar cada versión
 for VERSION in "${VERSIONS[@]}"; do
     echo "Processing version: $VERSION"
-    
+
     # Pull de la imagen
     podman pull ghcr.io/open-webui/open-webui:${VERSION}
-    
+
     # Tag para ECR (si es 'main', usar 'latest' como tag adicional)
     if [ "$VERSION" == "main" ]; then
         podman tag ghcr.io/open-webui/open-webui:${VERSION} ${ECR_URL}/${REPO_NAME}:latest
         podman push ${ECR_URL}/${REPO_NAME}:latest
     fi
-    
+
     # Tag y push normal
     podman tag ghcr.io/open-webui/open-webui:${VERSION} ${ECR_URL}/${REPO_NAME}:${VERSION}
     podman push ${ECR_URL}/${REPO_NAME}:${VERSION}

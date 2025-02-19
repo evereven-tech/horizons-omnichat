@@ -1,7 +1,7 @@
 CONTAINER_RUNTIME := $(shell which podman 2>/dev/null || which docker 2>/dev/null)
 
 # Common Targets ##############################################################
-.PHONY: init 
+.PHONY: init
 
 init:
 	@if [ ! -d "external/bedrock-gateway" ]; then \

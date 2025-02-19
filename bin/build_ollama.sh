@@ -26,10 +26,10 @@ podman build -t ${REPO_NAME}:latest -f ../common/Dockerfile.ollama ../common/
 # Procesar cada versión
 for VERSION in "${VERSIONS[@]}"; do
     echo "Processing version: $VERSION"
-    
+
     # Tag para ECR
     podman tag ${REPO_NAME}:latest ${ECR_URL}/${REPO_NAME}:${VERSION}
-    
+
     # Push a ECR
     podman push ${ECR_URL}/${REPO_NAME}:${VERSION}
 done
