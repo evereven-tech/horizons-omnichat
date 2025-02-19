@@ -1,13 +1,3 @@
-data "aws_ami" "ecs_ami" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-ecs-gpu-hvm-*-x86_64-ebs"]
-  }
-}
-
 #
 # ECS
 # #############################################################################
@@ -187,6 +177,23 @@ resource "aws_cloudwatch_log_group" "ollama_logs" {
 # IAM
 # #############################################################################
 
+resource "aws_iam_role" "ecs_tasks_role" {
+  name = "ecs-tasks-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com",
+        },
+      },
+    ],
+  })
+}
+
 resource "aws_iam_role" "ecs_tasks_execution_role" {
   name = "ecs-tasks-execution-role"
 
@@ -204,21 +211,29 @@ resource "aws_iam_role" "ecs_tasks_execution_role" {
   })
 }
 
-resource "aws_iam_role" "ecs_tasks_role" {
-  name = "ecs-tasks-role"
+resource "aws_iam_role_policy" "ecs_cloudwatch_logs" {
+  name = "ecs-cloudwatch-logs"
+  role = aws_iam_role.ecs_tasks_execution_role.id
 
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
+  policy = jsonencode({
+    Version = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole",
-        Effect = "Allow",
-        Principal = {
-          Service = "ecs-tasks.amazonaws.com",
-        },
-      },
-    ],
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "${aws_cloudwatch_log_group.ollama_logs.arn}:*"
+      }
+    ]
   })
+}
+
+# Attach the necessary policy to the execution role to allow ECS tasks to pull images and store logs
+resource "aws_iam_role_policy_attachment" "ecs_tasks_execution_role_policy" {
+  role       = aws_iam_role.ecs_tasks_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
 resource "aws_iam_role" "ecs_instance_role" {

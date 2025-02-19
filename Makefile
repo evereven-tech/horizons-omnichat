@@ -84,7 +84,7 @@ aws-plan: aws-init
 
 aws-lint: aws-init
 	@echo "Terraform lint..."
-	@cd $(TF_DIR) && terraform fmt && terraform validate
+	@cd $(TF_DIR) && terraform fmt --recursive && terraform validate
 
 aws-apply: aws-init
 	@echo "Terraform Apply..."
