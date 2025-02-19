@@ -106,6 +106,33 @@ resource "aws_ecs_task_definition" "ollama" {
         }
       ]
 
+      resourceRequirements = [
+        {
+          type  = "GPU"
+          value = "1"
+        }
+      ]
+
+      linuxParameters = {
+        devices = [
+          {
+            hostPath      = "/dev/nvidia0"
+            containerPath = "/dev/nvidia0"
+            permissions   = ["read", "write"]
+          },
+          {
+            hostPath      = "/dev/nvidiactl"
+            containerPath = "/dev/nvidiactl"
+            permissions   = ["read", "write"]
+          },
+          {
+            hostPath      = "/dev/nvidia-uvm"
+            containerPath = "/dev/nvidia-uvm"
+            permissions   = ["read", "write"]
+          }
+        ]
+      }
+
       dockerLabels = {
         "com.nvidia.volumes.needed" = "nvidia_driver"
       }
@@ -127,12 +154,7 @@ resource "aws_ecs_task_definition" "ollama" {
         }
       }
 
-      #resourceRequirements = [
-      #  {
-      #    type  = "GPU"
-      #    value = "1"
-      #  }
-      #]
+
 
       systemControls = [
         {
@@ -185,9 +207,9 @@ resource "aws_ecs_service" "ollama" {
     container_port = 11434
   }
 
-  enable_execute_command = true
+  enable_execute_command  = true
   enable_ecs_managed_tags = true
-  propagate_tags = "SERVICE"
+  propagate_tags          = "SERVICE"
 
   tags = {
     Name  = "${var.project_name}-compute-ollama"

@@ -26,13 +26,18 @@ resource "aws_launch_template" "ollama" {
               ECS_ENABLE_GPU_SUPPORT=true
               ECS_NVIDIA_RUNTIME=nvidia
               ECS_ENABLE_CONTAINER_METADATA=true
+              ECS_ENABLE_TASK_GPU=true
               ECS_POLL_METRICS=true
               ECS_ENABLE_TASK_CPU_MEM_LIMIT=true
               ECS_ENABLE_AWSLOGS_EXECUTIONROLE_OVERRIDE=true
               ECS_ENABLE_SPOT_INSTANCE_DRAINING=true
               ECS_ENABLE_TASK_IAM_ROLE=true
               ECS_ENABLE_TASK_IAM_ROLE_NETWORK_HOST=true
+              ECS_AVAILABLE_LOGGING_DRIVERS=["awslogs","json-file"]
+              ECS_RUNTIME_PLATFORM={"cpuArchitecture": "x86_64", "operatingSystemFamily": "LINUX"}
               ECS_CONTAINER_INSTANCE_TAGS={"Name": "${var.project_name}-compute-ollama", "Layer": "Compute"}
+              ECS_INSTANCE_ATTRIBUTES={"ecs.capability.gpu": "1", "ecs.os-type": "linux"}
+              ECS_LOGLEVEL=debug
               EOT
 
               #Install efs plugin
@@ -120,14 +125,14 @@ resource "aws_autoscaling_group" "ollama" {
   name                = "${var.project_name}-compute-ollama"
   desired_capacity    = var.ollama_desired_count
   max_size            = var.ollama_max_count
-  min_size            = 1  # Garantizamos mínimo 1 instancia
+  min_size            = 1 # Garantizamos mínimo 1 instancia
   target_group_arns   = [aws_lb_target_group.ollama.arn]
   vpc_zone_identifier = aws_subnet.private[*].id
 
   mixed_instances_policy {
     instances_distribution {
-      on_demand_base_capacity                  = 1  # Garantizamos 1 instancia on-demand
-      on_demand_percentage_above_base_capacity = 0  # El resto en spot
+      on_demand_base_capacity                  = 1 # Garantizamos 1 instancia on-demand
+      on_demand_percentage_above_base_capacity = 0 # El resto en spot
       spot_allocation_strategy                 = "capacity-optimized"
       spot_max_price                           = var.spot_config.spot_price["g4dn.xlarge"]
     }
