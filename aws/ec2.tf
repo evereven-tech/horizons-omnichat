@@ -3,7 +3,8 @@
 resource "aws_launch_template" "ollama" {
   name = "${var.project_name}-compute-ollama"
 
-  image_id      = "ami-0dc6fd3fcf713ce9d" # AMI con drivers y software preinstalado
+  #image_id      = "ami-0dc6fd3fcf713ce9d" # AMI con drivers y software preinstalado
+  image_id      = data.aws_ami.ecs_ami.id # Update this with the latest ECS-optimized AMI ID for your region
   instance_type = "g4dn.xlarge"           # Instancia con GPU NVIDIA T4
 
   # Metadata options recomendadas
@@ -15,38 +16,8 @@ resource "aws_launch_template" "ollama" {
   # User data para instalar el agente ECS y configurar Docker
   user_data = base64encode(<<-EOF
               #!/bin/bash
-
-              # Instalar agente ECS
-              curl -O https://s3.us-west-2.amazonaws.com/amazon-ecs-agent-us-west-2/amazon-ecs-init-latest.x86_64.rpm
-              yum localinstall -y amazon-ecs-init-latest.x86_64.rpm
-
-              # Configurar el agente ECS
-              cat <<'EOT' > /etc/ecs/ecs.config
-              ECS_CLUSTER=${aws_ecs_cluster.ec2.name}
-              ECS_ENABLE_GPU_SUPPORT=true
-              ECS_NVIDIA_RUNTIME=nvidia
-              ECS_ENABLE_CONTAINER_METADATA=true
-              ECS_ENABLE_TASK_GPU=true
-              ECS_POLL_METRICS=true
-              ECS_ENABLE_TASK_CPU_MEM_LIMIT=true
-              ECS_ENABLE_AWSLOGS_EXECUTIONROLE_OVERRIDE=true
-              ECS_ENABLE_SPOT_INSTANCE_DRAINING=true
-              ECS_ENABLE_TASK_IAM_ROLE=true
-              ECS_ENABLE_TASK_IAM_ROLE_NETWORK_HOST=true
-              ECS_AVAILABLE_LOGGING_DRIVERS=["awslogs","json-file"]
-              ECS_RUNTIME_PLATFORM={"cpuArchitecture": "x86_64", "operatingSystemFamily": "LINUX"}
-              ECS_CONTAINER_INSTANCE_TAGS={"Name": "${var.project_name}-compute-ollama", "Layer": "Compute"}
-              ECS_INSTANCE_ATTRIBUTES={"ecs.capability.gpu": "1", "ecs.os-type": "linux"}
-              ECS_LOGLEVEL=debug
-              EOT
-
-              #Install efs plugin
-              yum update -y
-              yum install amazon-efs-utils -y
-              systemctl enable --now amazon-ecs-volume-plugin
-
-              # Reiniciar el agente ECS para aplicar la configuración
-              service ecs restart
+              echo ECS_CLUSTER=${aws_ecs_cluster.ec2.name} >> /etc/ecs/ecs.config
+              echo ECS_ENABLE_GPU_SUPPORT=true >> /etc/ecs/ecs.config
               EOF
   )
 
