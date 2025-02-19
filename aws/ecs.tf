@@ -72,7 +72,7 @@ resource "aws_ecs_task_definition" "ollama" {
       transit_encryption = "ENABLED"
       authorization_config {
         access_point_id = aws_efs_access_point.models.id
-        iam            = "ENABLED"
+        iam             = "ENABLED"
       }
     }
   }
