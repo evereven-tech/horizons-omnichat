@@ -377,4 +377,8 @@ resource "aws_iam_role_policy_attachment" "ollama_instance_cloudwatch" {
 resource "aws_iam_role_policy_attachment" "ollama_instance_ecs" {
   role       = aws_iam_role.ollama_instance.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-}            
+}            # Política para manejo de ENIs para Ollama
+resource "aws_iam_role_policy_attachment" "ecs_instance_eni" {
+  role       = aws_iam_role.ollama_instance.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerServiceforEC2Role"
+}

@@ -59,7 +59,7 @@ resource "aws_ecs_capacity_provider" "ec2" {
 resource "aws_ecs_task_definition" "ollama" {
   family                   = "${var.project_name}-compute-ollama"
   requires_compatibilities = ["EC2"]
-  network_mode             = "bridge"
+  network_mode             = "awsvpc"
   cpu                      = 2048
   memory                   = 8192
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
@@ -201,10 +201,14 @@ resource "aws_ecs_service" "ollama" {
   desired_count   = 1
   launch_type     = "EC2"
 
+  network_configuration {
+    subnets          = aws_subnet.private[*].id
+    security_groups  = [aws_security_group.ollama_tasks.id]
+    assign_public_ip = false
+  }
+
   service_registries {
-    registry_arn   = aws_service_discovery_service.ollama.arn
-    container_name = "ollama"
-    container_port = 11434
+    registry_arn = aws_service_discovery_service.ollama.arn
   }
 
   enable_execute_command  = true
@@ -509,6 +513,31 @@ resource "aws_security_group" "bedrock_tasks" {
 
   tags = {
     Name  = "${var.project_name}-compute-bedrock-tasks"
+    Layer = "Compute"
+  }
+}
+# Security Group para las tareas de Ollama
+resource "aws_security_group" "ollama_tasks" {
+  name        = "${var.project_name}-compute-ollama-tasks"
+  description = "Security group for Ollama tasks"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port       = 11434
+    to_port         = 11434
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ecs_tasks.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name  = "${var.project_name}-compute-ollama-tasks"
     Layer = "Compute"
   }
 }
