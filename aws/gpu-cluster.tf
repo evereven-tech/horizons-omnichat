@@ -155,9 +155,12 @@ resource "aws_ecs_task_definition" "ollama_gpu_task" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = "/ecs/ollama-gpu-task"
-          awslogs-region        = var.aws_region
-          awslogs-stream-prefix = "ollama"
+          "awslogs-group"         = aws_cloudwatch_log_group.ollama_logs.name
+          "awslogs-region"        = var.aws_region
+          "awslogs-stream-prefix" = "ollama"
+          "mode"                  = "non-blocking"
+          "max-buffer-size"       = "4m"
+          "awslogs-create-group"  = "true"
         }
       }
     }
@@ -171,6 +174,10 @@ resource "aws_ecs_task_definition" "ollama_gpu_task" {
 resource "aws_cloudwatch_log_group" "ollama_logs" {
   name              = "/ecs/ollama-gpu-task"
   retention_in_days = 30
+
+  tags = {
+    Name = "ollama-gpu-logs"
+  }
 }
 
 #
@@ -221,17 +228,28 @@ resource "aws_iam_role_policy" "ecs_cloudwatch_logs" {
       {
         Effect = "Allow"
         Action = [
+          "logs:CreateLogGroup",
           "logs:CreateLogStream",
-          "logs:PutLogEvents"
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
         ]
-        Resource = "${aws_cloudwatch_log_group.ollama_logs.arn}:*"
+        Resource = [
+          "${aws_cloudwatch_log_group.ollama_logs.arn}",
+          "${aws_cloudwatch_log_group.ollama_logs.arn}:*"
+        ]
       }
     ]
   })
 }
 
-# Attach the necessary policy to the execution role to allow ECS tasks to pull images and store logs
+# Attach the necessary policies to the execution role
 resource "aws_iam_role_policy_attachment" "ecs_tasks_execution_role_policy" {
+  role       = aws_iam_role.ecs_tasks_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+# Ensure the execution role has the ECS Task Execution Role Policy
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy_base" {
   role       = aws_iam_role.ecs_tasks_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
