@@ -2,20 +2,6 @@
 # Container setup
 # #############################################################################
 
-/*
-variable "webui_secret_key" {
-  description = "Secret key for OpenWebUI"
-  type        = string
-  sensitive   = true
-}
-
-variable "bedrock_api_key" {
-  description = "API Key for Bedrock Gateway"
-  type        = string
-  sensitive   = true
-}
-*/
-
 variable "postgres_db" {
   description = "PostgreSQL database name"
   type        = string

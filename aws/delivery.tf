@@ -17,26 +17,6 @@ resource "aws_lb" "main" {
   }
 }
 
-# Target Group (lo usaremos más adelante para el servicio de OpenWebUI)
-resource "aws_lb_target_group" "webui" {
-  name        = "horizons-webui-tg"
-  port        = 8080
-  protocol    = "HTTP"
-  vpc_id      = aws_vpc.main.id
-  target_type = "ip"
-
-  health_check {
-    enabled             = true
-    healthy_threshold   = 2
-    interval            = 30
-    matcher             = "200"
-    path                = "/health"
-    port                = "traffic-port"
-    timeout             = 5
-    unhealthy_threshold = 2
-  }
-}
-
 # ALB Listener HTTP
 # HTTP to HTTPS redirect
 resource "aws_lb_listener" "front_end_http" {
@@ -115,7 +95,27 @@ resource "aws_security_group" "alb" {
 # Target Groups
 # #############################################################################
 
-# Target Group para Ollama
+# Open WebUI Target Group
+resource "aws_lb_target_group" "webui" {
+  name        = "horizons-webui-tg"
+  port        = 8080
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.main.id
+  target_type = "ip"
+
+  health_check {
+    enabled             = true
+    healthy_threshold   = 2
+    interval            = 30
+    matcher             = "200"
+    path                = "/health"
+    port                = "traffic-port"
+    timeout             = 5
+    unhealthy_threshold = 2
+  }
+}
+
+# Ollama Target Group
 resource "aws_lb_target_group" "ollama" {
   name        = "${var.project_name}-compute-ollama"
   port        = 11434
@@ -139,9 +139,3 @@ resource "aws_lb_target_group" "ollama" {
     Layer = "Compute"
   }
 }
-
-
-
-#
-#
-# #############################################################################
