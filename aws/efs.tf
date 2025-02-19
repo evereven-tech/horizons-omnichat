@@ -8,7 +8,7 @@ resource "aws_security_group" "efs" {
     from_port       = 2049
     to_port         = 2049
     protocol        = "tcp"
-    security_groups = [aws_security_group.ollama.id]
+    security_groups = [aws_security_group.ollama_tasks.id]
   }
 
   tags = {
