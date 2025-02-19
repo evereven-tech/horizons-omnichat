@@ -25,42 +25,7 @@ webui_version      = "0.5.10"
 # Ollama Configuration
 ollama_models = "tinyllama,llama2,mistral"
 
-# WebUI Configuration (optional fields)
-webui_user_permissions = {
-  workspace = {
-    models     = true
-    knowledge  = true
-    prompts    = true
-    tools      = true
-  }
-  chat = {
-    controls     = true
-    file_upload  = true
-    delete       = true
-    edit         = true
-    temporary    = true
-  }
-  features = {
-    web_search        = true
-    image_generation  = true
-    code_interpreter  = true
-  }
-}
-
-webui_auth_config = {
-  admin = {
-    show = true
-  }
-  api_key = {
-    enable                = true
-    endpoint_restrictions = false
-    allowed_endpoints     = ""
-  }
-  jwt_expiry = "1d"
-}
-
-webui_ldap_enabled    = false
-webui_channels_enabled = false
+# Ollama Compute Environment
 gpu_config = {
   instance_types = ["g4dn.xlarge", "g5.xlarge", "p3.2xlarge"]
   min_gpus       = 1
