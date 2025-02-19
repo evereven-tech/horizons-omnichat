@@ -7,6 +7,8 @@ resource "aws_launch_template" "ollama" {
   image_id      = data.aws_ami.ecs_ami.id # Update this with the latest ECS-optimized AMI ID for your region
   instance_type = "g4dn.xlarge"           # Instancia con GPU NVIDIA T4
 
+  update_default_version = true
+
   # Metadata options recomendadas
   metadata_options {
     http_endpoint = "enabled"
