@@ -1,14 +1,4 @@
 #
-#
-# #############################################################################
-
-
-#
-#
-# #############################################################################
-
-
-#
 # Application Load Balancer
 # #############################################################################
 
@@ -120,3 +110,38 @@ resource "aws_security_group" "alb" {
     Name = "horizons-alb-sg"
   }
 }
+
+#
+# Target Groups
+# #############################################################################
+
+# Target Group para Ollama
+resource "aws_lb_target_group" "ollama" {
+  name        = "${var.project_name}-compute-ollama"
+  port        = 11434
+  protocol    = "HTTP"
+  vpc_id      = aws_vpc.main.id
+  target_type = "instance"
+
+  health_check {
+    enabled             = true
+    healthy_threshold   = 2
+    interval            = 30
+    matcher             = "200"
+    path                = "/api/tags"
+    port                = "traffic-port"
+    timeout             = 5
+    unhealthy_threshold = 2
+  }
+
+  tags = {
+    Name  = "${var.project_name}-compute-ollama"
+    Layer = "Compute"
+  }
+}
+
+
+
+#
+#
+# #############################################################################
