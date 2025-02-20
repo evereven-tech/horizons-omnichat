@@ -14,7 +14,9 @@ resource "aws_ecs_task_definition" "ollama" {
   task_role_arn            = aws_iam_role.ollama_task.arn
 
   volume {
-    name = "models"
+    name                = "models"
+    configure_at_launch = false
+
     efs_volume_configuration {
       file_system_id     = aws_efs_file_system.models.id
       transit_encryption = "ENABLED"
@@ -86,6 +88,7 @@ resource "aws_ecs_task_definition" "ollama" {
         "com.nvidia.volumes.needed" = "nvidia_driver"
       }
 
+      volumesFrom = []
       mountPoints = [
         {
           sourceVolume  = "models"
@@ -102,8 +105,6 @@ resource "aws_ecs_task_definition" "ollama" {
           "awslogs-stream-prefix" = "ollama"
         }
       }
-
-
 
       systemControls = [
         {
@@ -125,16 +126,12 @@ resource "aws_ecs_task_definition" "ollama" {
       linuxParameters = {
         initProcessEnabled = true
         capabilities = {
-          add = ["SYS_ADMIN"]
+          add  = ["SYS_ADMIN"]
+          drop = []
         }
       }
     }
   ])
-
-  #runtime_platform {
-  #  operating_system_family = "LINUX"
-  #  cpu_architecture        = "X86_64"
-  #}
 
   tags = {
     Name  = "${var.project_name}-compute-ollama"
@@ -147,8 +144,9 @@ resource "aws_ecs_service" "ollama" {
   name            = "${var.project_name}-compute-ollama"
   cluster         = aws_ecs_cluster.ec2.id
   task_definition = aws_ecs_task_definition.ollama.arn
-  desired_count   = 1
-  launch_type     = "EC2"
+
+  desired_count = 1
+  launch_type   = "EC2"
 
   network_configuration {
     subnets          = aws_subnet.private[*].id
