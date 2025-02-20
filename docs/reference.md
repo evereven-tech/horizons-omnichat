@@ -125,4 +125,3 @@ Next steps
 Next blog post, I will talk about how can we run this setup on AWS using ECS Fargate. There are some security considerations to run this on AWS.
 
 Thank you for reading. Hope you found this helpful.
-
