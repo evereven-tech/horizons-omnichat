@@ -16,10 +16,9 @@ domain_name           = "chatbot.your-site.company"
 cognito_domain_prefix = "auth-chatbot-company_name"
 
 # Open WebUI
-postgres_password  = "changemeinproduction"
-webui_secret_key   = "changemeinproduction"
-bedrock_api_key    = 123456
-
+#postgres_password  = "changemeinproduction"
+#bedrock_api_key    = 123456
+#webui_secret_key   = "changemeinproduction"
 webui_version      = "0.5.10"
 
 # Ollama Configuration
