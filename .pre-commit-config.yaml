@@ -1,5 +1,24 @@
 ---
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args:
+          - --maxkb=500
+      - id: detect-private-key
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        args:
+          - --fix=lf
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks
 #  - repo: https://github.com/antonbabenko/pre-commit-terraform
 #    rev: v1.88.0
 #    hooks:
@@ -20,25 +39,7 @@ repos:
 #          - --args=--quiet
 #          - --args=--framework=terraform
 #      - id: terraform_tfsec
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-#      - id: check-yaml
-#      - id: check-json
-#      - id: check-added-large-files
-#        args:
-#          - --maxkb=500
-#      - id: detect-private-key
-#      - id: check-merge-conflict
-#      - id: mixed-line-ending
-#        args:
-#          - --fix=lf
-#  - repo: https://github.com/gitleaks/gitleaks
-#    rev: v8.18.2
-#    hooks:
-#      - id: gitleaks
+
 #  - repo: https://github.com/igorshubovych/markdownlint-cli
 #    rev: v0.39.0
 #    hooks:
