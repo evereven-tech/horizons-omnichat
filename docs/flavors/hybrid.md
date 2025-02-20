@@ -5,7 +5,7 @@
 - Docker or Podman
 - Make
 - AWS CLI configured with appropriate permissions
-- AWS Bedrock models enabled in your AWS account
+- AWS Bedrock models enabled in your AWS account and region
   > **IMPORTANT**: You must explicitly enable each model you want to use in the AWS Bedrock console
   > Go to AWS Console -> Bedrock -> Model access -> Request model access
 - 8GB RAM minimum
@@ -31,6 +31,9 @@ cp hybrid/config.json.template hybrid/config.json
 ```bash
 make hybrid-up
 ```
+
+4. You can access at the following url:
+- http://localhost:3002/
 
 ## Troubleshooting
 
@@ -58,10 +61,10 @@ docker logs bedrock-gateway
 
 1. **Service Dependencies**
 ```bash
-# Check service health
+# Check service health (on hybrid folder)
 docker compose ps
 
-# View startup order issues
+# View startup order issues (on hybrid folder)
 docker compose logs | grep -i error
 ```
 
@@ -71,7 +74,7 @@ docker compose logs | grep -i error
 curl http://localhost:8000/health
 
 # Verify internal DNS resolution
-docker exec open-webui ping bedrock-gateway
+docker exec open-webui curl bedrock-gateway/health
 ```
 
 ### Model Issues
@@ -116,10 +119,10 @@ nvidia-smi -l 1
 3. **Database Issues**
 ```bash
 # Verify database connection
-docker exec webui-db pg_isready
+docker exec open-webui-db pg_isready
 
 # Check database logs
-docker logs webui-db
+docker logs open-webui-db
 ```
 
 ## Maintenance
