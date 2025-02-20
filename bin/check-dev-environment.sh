@@ -17,7 +17,7 @@ check_command() {
     local min_version=$4
 
     printf "Checking ${cmd}... "
-    
+
     if ! command -v "$cmd" &> /dev/null; then
         echo -e "${RED}❌ NOT FOUND${NC}"
         echo -e "${YELLOW}Please install ${package}${NC}"
@@ -45,7 +45,7 @@ check_python_package() {
     local min_version=$2
 
     printf "Checking Python package ${package}... "
-    
+
     if ! pip show "$package" &> /dev/null; then
         echo -e "${RED}❌ NOT FOUND${NC}"
         echo -e "${YELLOW}Please install with: pip install ${package}${NC}"
