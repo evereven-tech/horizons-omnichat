@@ -10,7 +10,7 @@ updates:
       - "dependencies"
 
   # Maintain dependencies for Docker Compose
-  - package-ecosystem: "docker-compose"
+  - package-ecosystem: "docker"
     directory: "/local"
     schedule:
       interval: "weekly"
@@ -19,7 +19,7 @@ updates:
       - "dependencies"
 
   # Additional Docker Compose directory for hybrid mode
-  - package-ecosystem: "docker-compose"
+  - package-ecosystem: "dockercompose"
     directory: "/hybrid"
     schedule:
       interval: "weekly"
