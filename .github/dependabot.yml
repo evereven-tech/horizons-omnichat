@@ -1,21 +1,30 @@
 version: 2
 updates:
-  # Maintain dependencies for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    labels:
-      - "ci"
-      - "dependencies"
-
   # Maintain dependencies for Docker
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/common"
     schedule:
       interval: "weekly"
     labels:
       - "docker"
+      - "dependencies"
+
+  # Maintain dependencies for Docker Compose
+  - package-ecosystem: "docker-compose"
+    directory: "/local"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "docker-compose"
+      - "dependencies"
+
+  # Additional Docker Compose directory for hybrid mode
+  - package-ecosystem: "docker-compose"
+    directory: "/hybrid"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "docker-compose"
       - "dependencies"
 
   # Maintain dependencies for Terraform
