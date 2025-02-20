@@ -26,6 +26,9 @@ cp local/.env.example local/.env
 ```bash
 make local-up
 ```
+4. You can access at the following url:
+- http://localhost:3002/
+
 
 ## Troubleshooting
 
@@ -36,10 +39,10 @@ make local-up
 1. **Database Connection Issues**
 ```bash
 # Check database logs
-docker logs webui-db
+docker logs open-webui-db
 
 # Verify database is running
-docker exec webui-db pg_isready
+docker exec open-webui-db pg_isready
 ```
 
 2. **Ollama Model Download Issues**
@@ -70,7 +73,7 @@ nvidia-smi
 2. **Check Docker GPU Access**
 ```bash
 # Should list GPU devices
-docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
+docker run --rm --gpus all nvidia/cuda:12.8.0-base-oraclelinux9 nvidia-smi
 ```
 
 3. **Enable GPU in Configuration**
@@ -111,10 +114,10 @@ sudo lsof -i :3002
 2. **Container Communication**
 ```bash
 # Verify network creation
-docker network ls | grep chatbot-net
+docker network ls | grep local_chatbot-net
 
 # Check network connectivity
-docker network inspect chatbot-net
+docker network inspect local_chatbot-net
 ```
 
 ## Maintenance
@@ -123,9 +126,9 @@ docker network inspect chatbot-net
 
 ```bash
 # Backup PostgreSQL database
-docker exec webui-db pg_dump -U $POSTGRES_USER $POSTGRES_DB > backup.sql
+docker exec open-webui-db pg_dump -U $POSTGRES_USER $POSTGRES_DB > backup.sql
 
-# Backup Ollama models
+# Backup Ollama models (root permissions)
 tar -czf ollama-models.tar.gz $(docker volume inspect -f '{{.Mountpoint}}' local_ollama-data)
 ```
 
@@ -154,7 +157,7 @@ docker compose logs -f open-webui
 ## Advanced Configuration
 
 ### Custom Model Configuration
-Edit `local/.env`:
+Edit `local/.env` and add/remove models you like: https://ollama.com/library
 ```
 INSTALLED_MODELS=llama2,mistral,tinyllama
 ```
@@ -162,10 +165,11 @@ INSTALLED_MODELS=llama2,mistral,tinyllama
 ### Database Tuning
 Edit PostgreSQL configuration:
 ```bash
-docker exec -it webui-db psql -U $POSTGRES_USER -d $POSTGRES_DB
+docker exec -it open-webui-db psql -U $POSTGRES_USER -d $POSTGRES_DB
 ```
 
 ### Security Hardening
+Remember, it is a local environment but you can:
 1. Change default passwords in `.env`
 2. Enable TLS for database connections
 3. Configure authentication for WebUI

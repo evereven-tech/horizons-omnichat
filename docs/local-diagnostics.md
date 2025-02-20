@@ -10,7 +10,7 @@ cp local/.env.example local/.env
 
 # Verify environment variables
 cat local/.env | grep OLLAMA_USE_GPU
-cat local/.env | grep OLLAMA_MODELS
+cat local/.env | grep INSTALLED_MODELS
 ```
 
 ## Deployment Status
@@ -37,7 +37,10 @@ docker inspect ollama | grep -i nvidia
 # View container's device requests
 docker container inspect ollama | grep -A 10 "DeviceRequests"
 
-# Check GPU status inside container
+# This will show GPU usage if available.
+docker stats ollama
+
+# Check GPU status inside container (if started with GPU)
 docker exec ollama nvidia-smi
 
 # Check host GPU status (Linux/Windows WSL)
@@ -96,20 +99,20 @@ curl $OPENAI_BASE_URL/chat/completions \
 
 ```bash
 # Check PostgreSQL connection
-docker exec webui-db pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
+docker exec open-webui-db pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
 
 # Enter PostgreSQL console
-docker exec -it webui-db psql -U $POSTGRES_USER -d $POSTGRES_DB
+docker exec -it open-webui-db psql -U $POSTGRES_USER -d $POSTGRES_DB
 
 # Check database logs
-docker logs webui-db
+docker logs open-webui-db
 ```
 
 ## Network Diagnostics
 
 ```bash
 # Check network connectivity between containers
-docker network inspect chatbot-net
+docker network inspect local-chatbot-net
 
 # Test Open WebUI endpoint
 curl -s http://localhost:3002/health
