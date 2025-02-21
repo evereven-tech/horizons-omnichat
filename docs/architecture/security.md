@@ -11,7 +11,7 @@ The security architecture of Horizons OmniChat is designed with a defense-in-dep
 
 ## Authentication & Authorization
 
-### Local Mode
+### Local Mode (using WebUI)
 - Basic authentication with configurable credentials
 - Session-based authentication
 - Role-based access control (RBAC)
@@ -26,19 +26,31 @@ All Local Mode features plus:
 ### AWS Mode
 All Hybrid Mode features plus:
 - AWS Cognito user pools
-- Multi-factor authentication (MFA)
-- SAML/OAuth2 integration
 - JWT token validation
+- (EXTRA) Multi-factor authentication (MFA)
+- (EXTRA) SAML/OAuth2 integration
+- (EXTRA) Guardrails Layer
+  - Functional Security Layer (guardrails lv.1)
+    - Input validation specific to LLM prompts
+    - Specific topics for the model/product
+    - Filter and guiding responses
+    - Context management and toxicity
+    - Monitoring systems for model behavior
+    - Data privacy and compliance checks, e.g. secrets..
+  - LLM Product Specific Core Protection (guardrails lv.2)
+    - Prompt engineering for security at input validation.
+    - Output Validation (generate secure and quality output)
 
 ## Network Security
 
 ### Container Security
 ```mermaid
 graph TD
-    A[User Request] --> B[ALB/Ingress]
-    B --> C[Security Groups]
-    C --> D[Container Network]
-    D --> E[Service Mesh]
+    A[User Request] --> B[Cognito] 
+    B --> C[ALB/Ingress]
+    C --> D[Security Groups]
+    D --> E[Private Container Network]
+    E --> F[Services]
 ```
 
 ### Network Controls
@@ -108,6 +120,8 @@ Permissions:
 - Privacy controls
 
 ## Threat Protection
+
+(EXTRA) Add WAF to infrastructure
 
 ### Application Security
 - Input validation

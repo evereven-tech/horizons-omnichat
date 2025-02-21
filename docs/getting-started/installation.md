@@ -48,7 +48,7 @@ make init
 # Configure environment
 cp hybrid/.env.example hybrid/.env
 cp hybrid/config.json.template hybrid/config.json
-# Edit both files with your AWS settings
+# Edit both files with your requirements
 
 # Start services
 make hybrid-up
@@ -104,7 +104,7 @@ aws rds describe-db-instances --db-instance-identifier horizons-persistence-db
 
 1. Access the web interface:
    - Local/Hybrid mode: http://localhost:3002
-   - AWS mode: Check the ALB DNS name in AWS Console
+   - AWS mode: Check the ALB DNS name in AWS Console or Terraform Outputs
 
 2. Configure authentication:
    - Set up admin credentials
@@ -116,32 +116,7 @@ aws rds describe-db-instances --db-instance-identifier horizons-persistence-db
 
 ## Troubleshooting Common Installation Issues
 
-### Docker/Podman Issues
-```bash
-# Check container logs
-docker compose logs
-
-# Verify network connectivity
-docker network inspect local_chatbot-net
-```
-
-### Database Issues
-```bash
-# Check database connection
-docker exec open-webui-db pg_isready
-
-# Verify database initialization
-docker logs open-webui-db
-```
-
-### AWS Deployment Issues
-```bash
-# Check CloudFormation status
-aws cloudformation list-stacks
-
-# View ECS task logs
-aws logs get-log-events --log-group-name /ecs/horizons/webui
-```
+Check documentation for specific deployment section
 
 ## Upgrading
 

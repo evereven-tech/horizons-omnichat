@@ -15,7 +15,7 @@ title: Architecture Components
   - Model selection and configuration
   - Chat history and conversation management
 - **Technologies**:
-  - React.js frontend
+  - Svelte frontend
   - FastAPI backend
   - PostgreSQL for persistence
 
@@ -30,6 +30,9 @@ title: Architecture Components
   - Llama 2
   - Mistral
   - TinyLlama
+  - Deepseek
+  - Qwen
+  - ALIA/Salamandra
   - Custom models
 
 ### 3. Bedrock Gateway
@@ -42,6 +45,7 @@ title: Architecture Components
 - **Supported Models**:
   - Claude (Anthropic)
   - Titan (Amazon)
+  - Nova (Amazon)
   - Jurassic (AI21)
   - Command (Cohere)
 
@@ -69,38 +73,16 @@ graph LR
 ```mermaid
 graph LR
     User --> ALB
-    ALB --> WebUI
-    WebUI --> BedrockGateway
-    BedrockGateway --> AWSBedrock
+    ALB --> WebUI-ECS-Fargate
+    WebUI-ECS-Fargate --> Ollama-ECS-EC2
+    WebUI-ECS-Fargate --> BedrockGateway-ECS-Fargate
+    BedrockGateway-ECS-Fargate --> AWSBedrock
+    Ollama-ECS-EC2 --> InstalledModels
 ```
 
 ## Component Configuration
 
-### Open WebUI Configuration
-```yaml
-# Example configuration
-WEBUI_PORT: 3002
-WEBUI_HOST: "0.0.0.0"
-DATABASE_URL: "postgresql://user:pass@db:5432/chatdb"
-```
-
-### Ollama Configuration
-```yaml
-# Example configuration
-OLLAMA_HOST: "0.0.0.0"
-OLLAMA_PORT: 11434
-OLLAMA_MODELS: "llama2,mistral,tinyllama"
-GPU_ENABLED: true
-```
-
-### Bedrock Gateway Configuration
-```yaml
-# Example configuration
-BEDROCK_REGION: "us-east-1"
-BEDROCK_ENDPOINT: "bedrock.amazonaws.com"
-API_KEY_REQUIRED: true
-ALLOWED_MODELS: ["anthropic.claude-v2","amazon.titan-text-express-v1"]
-```
+Check relevant section on [Deployment Options](../deployment/)
 
 ## Data Flow
 
@@ -158,11 +140,6 @@ ALLOWED_MODELS: ["anthropic.claude-v2","amazon.titan-text-express-v1"]
 - Rate limiting
 - Input validation
 
-### Network Security
-- Container isolation
-- Security groups
-- VPC configuration
-- Private subnets
 
 ## Next Steps
 

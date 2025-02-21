@@ -68,25 +68,28 @@ Additional requirements:
   - Valid AWS credentials configured
 
 ### AWS Mode
-- VPC with:
-  - Public and private subnets
-  - NAT Gateway or Internet Gateway
-  - Route53 Hosted Zone (for domain management)
+- An AWS account to deploy the infrastructure
 
 ## AWS IAM Permissions
 
-When deploying in Hybrid or AWS mode, your AWS credentials need the following permissions:
+When deploying in Hybrid mode you requires:
+```yaml
+- bedrock:*
+```
+
+When deploying in AWS mode, your AWS credentials need the following permissions:
 
 ```yaml
 - bedrock:*
 - ecs:*
 - ec2:*
 - rds:*
-- elasticache:*
 - iam:*
 - s3:*
 - route53:*
+- cognito:*
 - acm:*
+- efs:*
 ```
 
 ## Pre-deployment Checklist
