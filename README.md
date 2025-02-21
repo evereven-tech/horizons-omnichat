@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/v/release/evereven-tech/horizons-omnichat)](https://github.com/evereven-tech/horizons-omnichat/releases/)
 [![Documentation](https://img.shields.io/badge/docs-evereven.tech-blue)](https://evereven-tech.github.io/horizons-omnichat/)
-[![CI Status](https://github.com/evereven-tech/horizons-omnichat/actions/workflows/ci.yml/badge.svg)](https://github.com/evereven-tech/horizons-omnichat/actions)
+[![CI Status](https://github.com/evereven-tech/horizons-omnichat/actions/workflows/pages-build-deployment.yml/badge.svg)](https://github.com/evereven-tech/horizons-omnichat/actions)
 
 A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
 
