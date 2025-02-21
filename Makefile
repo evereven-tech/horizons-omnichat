@@ -8,7 +8,7 @@ JEKYLL_VERSION := 3
 build:
 	$(CONTAINER_CMD) build -t horizons-docs .
 
-serve: docs-build
+serve: build
 	$(CONTAINER_CMD) run --rm -v $(PWD)/docs:/site -p 4200:4200 horizons-docs
 
 clean:
