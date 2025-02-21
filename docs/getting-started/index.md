@@ -31,8 +31,8 @@ make init
 
 | Mode | Best For | Key Features |
 |------|----------|--------------|
-| [Local](../deployment/local.md) | Development & Testing | Complete privacy, Local models |
-| [Hybrid](../deployment/hybrid.md) | Production & Cost-effective | Mixed models, AWS integration |
+| [Local](../deployment/local.md) | Ollama Testing | Complete privacy, Local models |
+| [Hybrid](../deployment/hybrid.md) | Full testing | Mixed models, Bedrock integration |
 | [AWS](../deployment/aws.md) | Enterprise & Scale | Full cloud, Auto-scaling |
 
 ## Deployment Options

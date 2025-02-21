@@ -14,7 +14,7 @@ Horizons OmniChat is an open-source chatbot platform that brings enterprise-grad
 - Complete privacy control with on-premises deployment options
 - Multiple deployment modes (Local/Hybrid/AWS)
 - Enterprise-grade security and compliance features
-- Integration with both local and cloud LLM models
+- Integration with both ollama and cloud LLM models (Bedrock)
 - Open-source with enterprise support options
 
 ### Which deployment mode should I choose?
@@ -70,7 +70,7 @@ make aws-apply
 ## Deployment Questions
 
 ### Can I deploy Horizons in my own datacenter?
-Yes! The Local and Hybrid modes are specifically designed for on-premises deployment. You maintain complete control over your infrastructure and data.
+Yes! The Local and Hybrid modes are specifically designed for on-premises deployment.
 
 ### How do I scale Horizons?
 #### Local/Hybrid Mode
@@ -81,7 +81,7 @@ Yes! The Local and Hybrid modes are specifically designed for on-premises deploy
 #### AWS Mode
 - Auto-scaling groups
 - Load balancing
-- Multi-AZ deployment
+- Multi-AZ deployment (optional)
 - Elastic scaling
 
 ### How do I backup my data?
@@ -100,13 +100,14 @@ aws rds create-db-snapshot --db-instance-identifier horizons-persistence-db
 ### How is data protected?
 - End-to-end encryption
 - Data encryption at rest
-- TLS 1.3 for all communications
+- TLS 1.3 for all communications (AWS mode)
 - Role-based access control
-- Audit logging
+- Audit logging (basic)
 - See our [Security Overview](../security/overview.md)
 
 ### Does Horizons comply with GDPR/HIPAA/SOC2?
 - GDPR compliance features included
+- ENS compliance possible with Enterprise edition
 - HIPAA compliance possible with Enterprise edition
 - SOC 2 controls available in Enterprise edition
 - See our [Compliance Guide](../security/compliance.md)
@@ -126,6 +127,10 @@ aws rds create-db-snapshot --db-instance-identifier horizons-persistence-db
 - Premium support
 - Custom development
 - Compliance assistance
+- Enhanced security and compliance
+- Customised presentation layer
+- Fine-grained customisation
+- Knowledge Database powered by specific user/business data
 - See our [Enterprise Guide](../enterprise/)
 
 ### How do I get enterprise support?
@@ -196,7 +201,5 @@ See our [Contributing Guide](../development/contributing.md) for:
 
 ### Where can I get community support?
 - [GitHub Discussions](https://github.com/evereven-tech/horizons-omnichat/discussions)
-- [Discord Community](https://discord.gg/horizons)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/horizons-omnichat)
 
 {% include footer.html %}

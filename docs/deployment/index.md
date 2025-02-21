@@ -10,7 +10,6 @@ Horizons OmniChat offers flexible deployment options to meet different organizat
 ## Available Deployment Modes
 
 ### 1. Local Mode
-![Local Mode](../assets/images/local-mode.png)
 
 - **Best for**: Development, testing, and privacy-focused deployments
 - **Key Features**:
@@ -21,7 +20,6 @@ Horizons OmniChat offers flexible deployment options to meet different organizat
 - **Learn More**: [Local Deployment Guide](local.md)
 
 ### 2. Hybrid Mode
-![Hybrid Mode](../assets/images/hybrid-mode.png)
 
 - **Best for**: Production environments needing cloud LLM capabilities
 - **Key Features**:
@@ -32,7 +30,6 @@ Horizons OmniChat offers flexible deployment options to meet different organizat
 - **Learn More**: [Hybrid Deployment Guide](hybrid.md)
 
 ### 3. AWS Mode
-![AWS Mode](../assets/images/aws-mode.png)
 
 - **Best for**: Enterprise-scale deployments
 - **Key Features**:
@@ -58,7 +55,7 @@ Horizons OmniChat offers flexible deployment options to meet different organizat
 | Infrastructure | Self-hosted | Self-hosted | AWS Cloud |
 | Model Support | Ollama | Ollama + Bedrock | Ollama + Bedrock |
 | Scaling | Manual | Manual | Auto-scaling |
-| High Availability | No | No | Yes |
+| High Availability | No | No | Optional |
 | Security | Basic | Enhanced | Enterprise |
 | Cost | Low | Medium | Usage-based |
 | Setup Complexity | Simple | Moderate | Advanced |
@@ -93,6 +90,7 @@ graph TD
 
 ### Consider AWS Mode if you:
 - Need enterprise-grade features
+- Need security advanced features
 - Want automated scaling
 - Require high availability
 - Have cloud-first strategy

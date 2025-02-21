@@ -34,8 +34,8 @@ graph TD
     end
     
     subgraph "Persistence Layer"
-    D1[PostgreSQL]
-    D2[File Storage]
+    D1[PostgreSQL/RDS]
+    D2[File Storage/EFS]
     end
 ```
 
