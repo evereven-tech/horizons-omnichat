@@ -7,5 +7,4 @@ title: Enterprise Services
 
 TBD
 
----
-*Horizons OmniChat by [evereven](https://evereven.tech)*
+{% include footer.html %}

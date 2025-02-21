@@ -7,5 +7,4 @@ title: Community
 
 TBD
 
----
-*Horizons OmniChat by [evereven](https://evereven.tech)*
+{% include footer.html %}

@@ -7,5 +7,4 @@ title: Operations Guide
 
 TBD
 
----
-*Horizons OmniChat by [evereven](https://evereven.tech)*
+{% include footer.html %}
