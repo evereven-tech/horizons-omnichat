@@ -2,15 +2,16 @@
 
 include .env
 
-DOCKER_CMD := docker
+# Detect container engine (docker or podman)
+CONTAINER_CMD ?= $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null || echo "docker")
 JEKYLL_VERSION := 3
 
 # Documentation commands
 docs-build:
-	$(DOCKER_CMD) build -t horizons-docs .
+	$(CONTAINER_CMD) build -t horizons-docs .
 
 docs-serve: docs-build
-	$(DOCKER_CMD) run --rm -v $(PWD)/docs:/site -p 4200:4200 horizons-docs
+	$(CONTAINER_CMD) run --rm -v $(PWD)/docs:/site -p 4200:4200 horizons-docs
 
 docs-clean:
 	rm -rf docs/dist
@@ -35,17 +36,17 @@ validate:
 
 # Local deployment
 local-up: validate
-	cd local && docker-compose up -d
+	cd local && $(CONTAINER_CMD)-compose up -d
 
 local-down:
-	cd local && docker-compose down
+	cd local && $(CONTAINER_CMD)-compose down
 
 # Hybrid deployment
 hybrid-up: validate
-	cd hybrid && docker-compose up -d
+	cd hybrid && $(CONTAINER_CMD)-compose up -d
 
 hybrid-down:
-	cd hybrid && docker-compose down
+	cd hybrid && $(CONTAINER_CMD)-compose down
 
 # AWS deployment
 aws-init:
