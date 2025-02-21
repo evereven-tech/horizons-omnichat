@@ -14,7 +14,7 @@ Horizons OmniChat is designed with security-first principles across all deployme
 ### 1. Application Security
 
 #### Authentication & Authorization
-- Multi-factor authentication (AWS Mode)
+- Multi-factor authentication (Optional- AWS Mode)
 - Role-based access control (RBAC)
 - Session management
 - JWT token validation
@@ -31,7 +31,7 @@ Horizons OmniChat is designed with security-first principles across all deployme
 #### Infrastructure Protection
 ```mermaid
 graph TD
-    A[User] --> B[WAF/CloudFront]
+    A[User] --> B[Cognito]
     B --> C[ALB with SSL]
     C --> D[Private Subnet]
     D --> E[Container Services]
@@ -45,6 +45,8 @@ graph TD
 - NACLs
 - Private subnets
 - VPC endpoints
+- WAF (Optional)
+- Guardrails (Optional)
 
 ### 3. Operational Security
 
@@ -77,7 +79,7 @@ All Local Mode features plus:
 
 ### AWS Mode
 All Hybrid Mode features plus:
-- AWS WAF protection
+- AWS WAF protection (optional)
 - AWS Shield (optional)
 - AWS Cognito authentication
 - AWS KMS encryption
@@ -120,8 +122,8 @@ Controls:
 
 ### Supported Frameworks
 - GDPR compliance features
-- HIPAA readiness (Enterprise)
 - SOC 2 controls (Enterprise)
+- ENS (Enterprise)
 - ISO 27001 alignment
 
 ### Security Certifications
@@ -134,8 +136,8 @@ Controls:
 | Feature | Local | Hybrid | AWS |
 |---------|-------|--------|-----|
 | Authentication | Basic | Basic + AWS IAM | Cognito + MFA |
-| Encryption | Local | Local + AWS | Full AWS |
-| Network Security | Basic | Enhanced | Advanced |
+| Encryption | Local | Local | Full AWS |
+| Network Security | Basic | Basic | Advanced |
 | Monitoring | Local | Hybrid | CloudWatch |
 | Compliance | Basic | Enhanced | Full |
 
@@ -144,7 +146,7 @@ Controls:
 ### 1. Initial Setup
 - Change default credentials
 - Configure SSL/TLS
-- Set up authentication
+- Set up authentication (Webui + Cognito)
 - Enable audit logging
 
 ### 2. Ongoing Maintenance

@@ -40,14 +40,12 @@ Horizons OmniChat is designed with privacy-by-design principles, ensuring data p
 #### Local/Hybrid Mode
 ```yaml
 Database:
-  - PostgreSQL encryption
-  - Volume encryption
-  - Secure backup storage
+  - PostgreSQL local
+  - Volume local
 
 File System:
-  - Model file encryption
-  - Configuration encryption
-  - Secure secret storage
+  - Model file local
+  - Configuration local
 ```
 
 #### AWS Mode
@@ -85,7 +83,7 @@ graph TD
 
 ### 1. Collection
 - Explicit user consent required
-- Minimal data collection principle
+- Minimal data collection
 - Purpose specification
 - Legal basis documentation
 
@@ -198,8 +196,6 @@ Initial Settings:
 #### Local/Hybrid Mode
 - Data remains in local infrastructure
 - Optional cloud service usage
-- Configurable data routing
-- Geographic restrictions
 
 #### AWS Mode
 - Regional deployment options

@@ -11,13 +11,7 @@ This guide provides solutions for common issues across all deployment modes of H
 
 ### Local/Hybrid Mode
 ```bash
-# Check all services status
-make local-status   # or make hybrid-status
-
-# View all logs
-make local-logs     # or make hybrid-logs
-
-# Check component health
+# Check component healthchecks
 curl http://localhost:3002/health    # WebUI
 curl http://localhost:11434/api/tags # Ollama
 curl http://localhost:8000/health    # Bedrock Gateway (hybrid only)
@@ -27,6 +21,7 @@ curl http://localhost:8000/health    # Bedrock Gateway (hybrid only)
 ```bash
 # Check ECS services
 aws ecs list-services --cluster horizons-compute-fargate
+aws ecs list-services --cluster horizons-compute-ec2
 
 # View CloudWatch logs
 aws logs get-log-events \
@@ -122,16 +117,6 @@ aws efs describe-file-systems \
     --file-system-id $EFS_ID
 ```
 
-3. Monitor download progress:
-```bash
-# Local/Hybrid mode
-docker logs -f ollama | grep "pulling"
-
-# AWS mode
-aws logs tail /ecs/horizons/ollama \
-    --follow --filter-pattern "pulling"
-```
-
 ### 3. Performance Issues
 
 #### Slow Response Times
@@ -154,7 +139,7 @@ aws cloudwatch get-metric-statistics \
     --namespace AWS/ECS \
     --metric-name CPUUtilization \
     --dimensions Name=ClusterName,Value=horizons-compute-fargate \
-    --start-time $(date -u -v-1H +%Y-%m-%dT%H:%M:%SZ) \
+    --start-time $STARTING_TIME \
     --end-time $(date -u +%Y-%m-%dT%H:%M:%SZ) \
     --period 300 \
     --statistics Average
@@ -199,9 +184,6 @@ aws cloudwatch get-metric-statistics \
 
 1. Verify authentication configuration:
 ```bash
-# Local/Hybrid mode
-grep -i auth local/.env  # or hybrid/.env
-
 # AWS mode
 aws cognito-idp describe-user-pool \
     --user-pool-id $USER_POOL_ID
@@ -209,45 +191,10 @@ aws cognito-idp describe-user-pool \
 
 2. Check authentication logs:
 ```bash
-# Local/Hybrid mode
-docker logs open-webui | grep -i auth
-
 # AWS mode
 aws cognito-idp describe-user-pool-client \
     --user-pool-id $USER_POOL_ID \
     --client-id $CLIENT_ID
-```
-
-## Preventive Measures
-
-### 1. Regular Maintenance
-
-```bash
-# Update components
-make update-all
-
-# Clean up old data
-make cleanup
-
-# Verify backups
-make verify-backup
-```
-
-### 2. Monitoring Setup
-
-```bash
-# Set up basic monitoring
-make monitor-setup
-
-# Configure alerts
-make alert-setup
-```
-
-### 3. Health Checks
-
-```bash
-# Add to crontab
-*/5 * * * * /path/to/health-check.sh
 ```
 
 ## Getting Help

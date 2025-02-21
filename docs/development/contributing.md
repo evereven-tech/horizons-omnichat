@@ -41,9 +41,6 @@ pre-commit install
 ```bash
 # Start local development environment
 make local-up
-
-# Check services
-make local-status
 ```
 
 ## Development Workflow
@@ -65,10 +62,10 @@ git checkout -b feature/your-feature
 # Make your changes
 # ... edit files ...
 
-# Run tests
+# Run tests (feature in roadmap)
 make test
 
-# Run linters
+# Run linters (feature in roadmap)
 make lint
 ```
 
@@ -104,48 +101,15 @@ git rebase upstream/main
 ```
 
 2. **Create Pull Request**
-- Use our PR template
 - Include comprehensive description
 - Link related issues
 - Add appropriate labels
 
 3. **PR Checklist**
-- [ ] Tests added/updated
 - [ ] Documentation updated
-- [ ] Changelog updated
 - [ ] Code follows style guide
 - [ ] CI checks pass
 
-## Testing
-
-### Running Tests
-
-```bash
-# Run all tests
-make test
-
-# Run specific test suite
-make test-unit
-make test-integration
-
-# Run with coverage
-make test-coverage
-```
-
-### Writing Tests
-
-```python
-# Example test
-from unittest import TestCase
-
-class TestYourFeature(TestCase):
-    def setUp(self):
-        self.feature = YourFeature()
-
-    def test_feature_behavior(self):
-        result = self.feature.do_something()
-        self.assertEqual(result, expected_value)
-```
 
 ## Documentation
 
@@ -172,46 +136,6 @@ make docs-build
 - Proper grammar
 - Consistent formatting
 - Updated links
-
-## Code Style Guide
-
-### Python Code
-
-We follow PEP 8 with some modifications:
-
-```python
-# Good
-def process_request(self, request: Request) -> Response:
-    """Process incoming request.
-    
-    Args:
-        request: The incoming request object
-        
-    Returns:
-        Response object
-    """
-    if not request.is_valid():
-        raise ValidationError("Invalid request")
-    
-    return self._handle_request(request)
-```
-
-### JavaScript/TypeScript Code
-
-We follow StandardJS with some modifications:
-
-```javascript
-// Good
-async function handleMessage(message) {
-  try {
-    const response = await processMessage(message)
-    return response
-  } catch (error) {
-    console.error('Message processing failed:', error)
-    throw error
-  }
-}
-```
 
 ## Release Process
 
