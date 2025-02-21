@@ -44,4 +44,4 @@ which are licensed under their respective terms:
 - **Source**: https://github.com/gitleaks/gitleaks
 - **Copyright**: Copyright (c) 2019 Zachary Rice
 
-This notice file is provided for informational purposes only and does not modify the terms of any license agreement you have entered into with the respective copyright holders.
+This notice file is provided for informational purposes only and does not modify the terms of any license agreement you have entered into with the respective copyright holders. In the event that any license is not updated, the existing version in the source repository will take precedence.
