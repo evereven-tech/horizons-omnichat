@@ -1,2 +1,42 @@
-/* a customized stylesheet */
+---
+---
+
+@import "{{ site.theme }}";
+
+/* Override Architect theme colors with corporate green */
+header {
+  background: #198C44;
+  background: -moz-linear-gradient(top, #1FAD53, #198C44);
+  background: -webkit-linear-gradient(top, #1FAD53, #198C44);
+  background: -ms-linear-gradient(top, #1FAD53, #198C44);
+  background: -o-linear-gradient(top, #1FAD53, #198C44);
+  background: linear-gradient(to top, #1FAD53, #198C44);
+}
+
+a {
+  color: #198C44;
+  
+  &:hover {
+    color: #1FAD53;
+  }
+}
+
+.btn {
+  background: #198C44;
+  border-color: #198C44;
+  
+  &:hover {
+    background: #1FAD53;
+    border-color: #1FAD53;
+  }
+}
+
+#main-content h1:before,
+#main-content h2:before,
+#main-content h3:before,
+#main-content h4:before,
+#main-content h5:before,
+#main-content h6:before {
+  color: #198C44;
+}
 
