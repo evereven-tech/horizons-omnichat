@@ -3,15 +3,18 @@
 # 🌅 Horizons: The OmniChat
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub release](https://img.shields.io/github/release/evereven/horizons.svg)](https://github.com/evereven-tech/horizons-omnichat/releases/)
-[![CI Status](https://github.com/evereven-tech/horizons-omnichat/workflows/CI/badge.svg)](https://github.com/evereven-tech/horizons-omnichat/actions)
+[![GitHub release](https://img.shields.io/github/v/release/evereven-tech/horizons-omnichat)](https://github.com/evereven-tech/horizons-omnichat/releases/)
+[![Documentation](https://img.shields.io/badge/docs-evereven.tech-blue)](https://evereven-tech.github.io/horizons-omnichat/)
+[![CI Status](https://github.com/evereven-tech/horizons-omnichat/actions/workflows/ci.yml/badge.svg)](https://github.com/evereven-tech/horizons-omnichat/actions)
 
 A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
 
+![Horizons Demo](assets/intro_horizon.gif)
+
 [Getting Started](#-quick-start) •
-[Documentation](https://evereven-tech.github.io/horizons/) •
+[Documentation](https://evereven-tech.github.io/horizons-omnichat/) •
 [Contributing](CONTRIBUTING.md) •
-[Community](https://github.com/evereven-tech/horizons-omnichat/discussions)
+[Discussions](https://github.com/evereven-tech/horizons-omnichat/discussions)
 
 </div>
 
@@ -19,35 +22,45 @@ A flexible and powerful chatbot platform that brings enterprise-grade LLM capabi
 
 ## 🌟 Features
 
-- **Multi-Environment Support**: Deploy anywhere - from local development to full cloud infrastructure
-- **Enterprise Security**: Built-in authentication, authorization, and audit trails
-- **High Availability**: Cloud-native architecture with auto-scaling and fault tolerance
-- **Cost Optimization**: Smart resource management with spot instances and scaling policies
-- **Developer Friendly**: Comprehensive documentation and easy-to-use CLI
+- **Complete Privacy Control**
+  - Deploy on your infrastructure
+  - Data always under your control
+  - No external service dependencies
+- **Deployment Flexibility**
+  - Local: Perfect for development and testing
+  - Hybrid: Combine local resources with cloud services
+  - Cloud: Full AWS deployment
+  - Kubernetes: Coming soon!
+- **Enterprise Capabilities**
+  - Built-in authentication and authorization
+  - Complete audit trails
+  - High availability
+  - Auto-scaling
 
-## 🚀 Deployment Flavors
+## 🚀 Deployment Options
 
 Choose the deployment that best fits your needs:
 
-| Flavor | Description | Documentation | Troubleshooting |
-|--------|-------------|---------------|-----------------|
-| **Local** | Simple setup with Ollama + Open-WebUI | [Local Setup Guide](docs/flavors/local.md) | [Local Diagnostics](docs/flavors/local.md#troubleshooting) |
-| **Hybrid** | Ollama + Open-WebUI + AWS Bedrock | [Hybrid Setup Guide](docs/flavors/hybrid.md) | [Hybrid Section](docs/flavors/hybrid.md#troubleshooting) |
-| **AWS** | Full cloud deployment on AWS ECS | [AWS Setup Guide](docs/flavors/aws.md) | [AWS Section](docs/flavors/aws.md#troubleshooting) |
-| **K8s** | Coming soon! | TBD | TBD |
+| Mode | Description | Documentation | Status |
+|------|-------------|---------------|--------|
+| **Local** | Simple setup with Ollama + Open-WebUI | [Guide](https://evereven-tech.github.io/horizons-omnichat/deployment/local.html) | ✅ Stable |
+| **Hybrid** | Ollama + Open-WebUI + AWS Bedrock | [Guide](https://evereven-tech.github.io/horizons-omnichat/deployment/hybrid.html) | ✅ Stable |
+| **AWS** | Full cloud deployment on AWS ECS | [Guide](https://evereven-tech.github.io/horizons-omnichat/deployment/aws.html) | ✅ Stable |
+| **K8s** | Kubernetes deployment | [Guide](https://evereven-tech.github.io/horizons-omnichat/deployment/kubernetes.html) | 🚧 Coming Soon |
 
 ## 🛠 Quick Start
 
 1. **Prerequisites**
-   - Docker and Docker Compose for local/hybrid modes
-   - AWS credentials for hybrid/aws modes
-   - Make utility
+   ```bash
+   # Check your environment
+   ./bin/check-dev-environment.sh
+   ```
 
 2. **Installation**
    ```bash
    # Clone the repository
    git clone https://github.com/evereven-tech/horizons-omnichat.git
-   cd horizons
+   cd horizons-omnichat
 
    # Initialize the environment
    make init
@@ -60,36 +73,30 @@ Choose the deployment that best fits your needs:
 
 ## 📚 Documentation
 
-- [Architecture Overview](docs/architecture/overview.md)
-- [Configuration Guide](docs/operations/configuration.md)
-- [Security Best Practices](docs/operations/security.md)
-- [Monitoring & Troubleshooting](docs/operations/monitoring.md)
-- [API Reference](docs/development/api.md)
+Our comprehensive documentation covers everything you need:
+
+- [Getting Started Guide](https://evereven-tech.github.io/horizons-omnichat/getting-started/)
+- [Architecture Overview](https://evereven-tech.github.io/horizons-omnichat/architecture/)
+- [Security Best Practices](https://evereven-tech.github.io/horizons-omnichat/security/)
+- [API Reference](https://evereven-tech.github.io/horizons-omnichat/development/api.html)
+- [Operations Guide](https://evereven-tech.github.io/horizons-omnichat/operations/)
 
 ## 🤝 Contributing
 
-We love your input! Check out our [Contributing Guide](CONTRIBUTING.md) to get started.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
 
-- 🐛 [Report a bug](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=bug_report.md)
-- 💡 [Request a feature](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=feature_request.md)
-- 📖 [Improve documentation](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=documentation.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Development Setup](https://evereven-tech.github.io/horizons-omnichat/development/)
+- [Pull Request Process](CONTRIBUTING.md#pull-request-process)
 
-## 📜 License
+## 📜 License & Acknowledgments
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
-
-## 🙏 Acknowledgments
+This project is licensed under the [MIT License](LICENSE.md). See [NOTICE.md](NOTICE.md) for third-party licenses.
 
 Built with:
 - [Ollama](https://github.com/ollama/ollama)
 - [Open WebUI](https://github.com/open-webui/open-webui)
 - [AWS Bedrock Access Gateway](https://github.com/aws-samples/bedrock-access-gateway)
-
-## 📊 Project Status
-
-![GitHub issues](https://img.shields.io/github/issues/evereven/horizons)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/evereven/horizons)
-![Last commit](https://img.shields.io/github/last-commit/evereven/horizons)
 
 ---
 
