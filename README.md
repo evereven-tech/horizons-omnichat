@@ -3,9 +3,10 @@
 # 🌅 Horizons: The OmniChat
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub release](https://img.shields.io/github/v/release/evereven-tech/horizons-omnichat)](https://github.com/evereven-tech/horizons-omnichat/releases/)
+[![GitHub tag](https://img.shields.io/github/tag/evereven-tech/horizons-omnichat?include_prereleases=&sort=semver&color=green)](https://github.com/evereven-tech/horizons-omnichat/releases/)
 [![Documentation](https://img.shields.io/badge/docs-evereven.tech-blue)](https://evereven-tech.github.io/horizons-omnichat/)
-[![CI Status](https://github.com/evereven-tech/horizons-omnichat/actions/workflows/pages-build-deployment.yml/badge.svg)](https://github.com/evereven-tech/horizons-omnichat/actions)
+[![pages build and deployment](https://github.com/evereven-tech/horizons-omnichat/workflows/pages%20build%20and%20deployment/badge.svg)](https://github.com/evereven-tech/horizons-omnichat/actions?query=workflow:"pages+build+and+deployment")
+[![issues - horizons-omnichat](https://img.shields.io/github/issues/evereven-tech/horizons-omnichat)](https://github.com/evereven-tech/horizons-omnichat/issues)
 
 A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
 
