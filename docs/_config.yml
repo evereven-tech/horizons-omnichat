@@ -14,13 +14,13 @@ plugins:
 
 # Main navigation
 navigation:
-  - title: Inicio
+  - title: Home
     url: /
-  - title: Comenzar
+  - title: Get Started
     url: /getting-started/
-  - title: Documentación
+  - title: Documentation
     url: /deployment/
-  - title: Empresa
+  - title: Enterprise
     url: /enterprise/
-  - title: Comunidad
+  - title: Community
     url: /community/
