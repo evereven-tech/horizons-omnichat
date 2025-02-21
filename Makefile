@@ -1,24 +1,17 @@
-.PHONY: serve clean bundle
+.PHONY: build serve clean
 
 # Detect container engine (docker or podman)
 CONTAINER_CMD ?= $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null || echo "docker")
 
-bundle:
-	$(CONTAINER_CMD) run --rm \
-		-v $(PWD):/site \
-		jekyll/jekyll:4.2.2 \
-		/bin/bash -c "cd /site && bundle install"
+build:
+	$(CONTAINER_CMD) build -t horizons-docs .
 
-serve: bundle
+serve: build
 	$(CONTAINER_CMD) run --rm \
-		-v $(PWD)/docs:/site \
+		-v $(PWD)/docs:/docs \
 		-v $(PWD)/dist:/dist \
-		-v $(PWD)/Gemfile:/site/Gemfile \
-		-v $(PWD)/Gemfile.lock:/site/Gemfile.lock \
 		-p 4200:4200 \
-		jekyll/jekyll:4.2.2 \
-		jekyll serve --host 0.0.0.0 --port 4200 --destination /dist
+		horizons-docs
 
 clean:
 	rm -rf dist
-	rm -f Gemfile.lock
