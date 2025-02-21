@@ -17,6 +17,13 @@ hybrid/tmp
 # Terraform backend configuration
 aws/backend.hcl
 
+# Jekyll
+dist/
+.jekyll-cache/
+.sass-cache/
+vendor/
+.bundle/
+
 # Created by https://www.toptal.com/developers/gitignore/api/terraform
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform
 

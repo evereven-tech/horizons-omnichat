@@ -1,6 +1,28 @@
-.PHONY: init local-up local-down hybrid-up hybrid-down aws-init aws-plan aws-apply aws-destroy k8s-apply k8s-delete k8s-status
+.PHONY: init docs-build docs-serve docs-clean docs-deploy local-up local-down hybrid-up hybrid-down aws-init aws-plan aws-apply aws-destroy k8s-apply k8s-delete k8s-status
 
 include .env
+
+DOCKER_CMD := docker
+JEKYLL_VERSION := 3
+
+# Documentation commands
+docs-build:
+	$(DOCKER_CMD) build -t horizons-docs .
+
+docs-serve: docs-build
+	$(DOCKER_CMD) run --rm -v $(PWD)/docs:/site -p 4200:4200 horizons-docs
+
+docs-clean:
+	rm -rf docs/dist
+	rm -rf docs/.jekyll-cache
+	rm -rf docs/.sass-cache
+	rm -rf docs/vendor
+	rm -rf docs/.bundle
+
+docs-deploy: docs-clean
+	git add docs/
+	git commit -m "docs: Update documentation"
+	git push origin main
 
 # Basic commands
 init:
