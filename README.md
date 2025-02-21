@@ -1,95 +1,87 @@
 <div align="center">
 
-# 🌅 Horizons: The OmniChat
+# 🌅 Horizons: The OmniChat - Documentation
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub release](https://img.shields.io/github/release/evereven/horizons.svg)](https://github.com/evereven-tech/horizons-omnichat/releases/)
-[![CI Status](https://github.com/evereven-tech/horizons-omnichat/workflows/CI/badge.svg)](https://github.com/evereven-tech/horizons-omnichat/actions)
+[![Documentation](https://img.shields.io/badge/docs-github.io-blue)](https://evereven-tech.github.io/horizons-omnichat/)
 
-A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
+Documentation repository for Horizons OmniChat platform.
 
-[Getting Started](#-quick-start) •
-[Documentation](https://evereven-tech.github.io/horizons/) •
-[Contributing](CONTRIBUTING.md) •
-[Community](https://github.com/evereven-tech/horizons-omnichat/discussions)
+[View Documentation](https://evereven-tech.github.io/horizons-omnichat/) •
+[Main Repository](https://github.com/evereven-tech/horizons-omnichat/tree/main)
 
 </div>
 
 ---
 
-## 🌟 Features
+## 📚 About This Repository
 
-- **Multi-Environment Support**: Deploy anywhere - from local development to full cloud infrastructure
-- **Enterprise Security**: Built-in authentication, authorization, and audit trails
-- **High Availability**: Cloud-native architecture with auto-scaling and fault tolerance
-- **Cost Optimization**: Smart resource management with spot instances and scaling policies
-- **Developer Friendly**: Comprehensive documentation and easy-to-use CLI
+This repository contains the documentation for the Horizons OmniChat platform. The actual implementation code can be found in the [main branch](https://github.com/evereven-tech/horizons-omnichat/tree/main).
 
-## 🚀 Deployment Flavors
+## 🛠 Technical Stack
 
-Choose the deployment that best fits your needs:
+### Documentation Build
+- **Jekyll**: Static site generator for documentation
+- **GitHub Pages**: Hosting platform
+- **Architect Theme**: Base theme with customizations
 
-| Flavor | Description | Documentation | Troubleshooting |
-|--------|-------------|---------------|-----------------|
-| **Local** | Simple setup with Ollama + Open-WebUI | [Local Setup Guide](docs/flavors/local.md) | [Local Diagnostics](docs/local-diagnostics.md) |
-| **Hybrid** | Ollama + Open-WebUI + AWS Bedrock | [Hybrid Setup Guide](docs/flavors/hybrid.md) | [Hybrid Section](docs/flavors/hybrid.md#troubleshooting) |
-| **AWS** | Full cloud deployment on AWS ECS | [AWS Setup Guide](docs/flavors/aws.md) | [AWS Section](docs/flavors/aws.md#troubleshooting) |
-| **K8s** | Coming soon! | TBD | TBD |
+### Build Tools
+- **Make**: Build automation using Makefile
+- **Container Support**: 
+  - Podman (preferred) or Docker for container management
+  - Auto-detection of available container runtime
 
-## 🛠 Quick Start
+## 🚀 Local Development
 
-1. **Prerequisites**
-   - Docker and Docker Compose for local/hybrid modes
-   - AWS credentials for hybrid/aws modes
-   - Make utility
+### Prerequisites
+- Make
+- Podman or Docker
+- Ruby (optional, for local Jekyll development)
 
-2. **Installation**
-   ```bash
-   # Clone the repository
-   git clone https://github.com/evereven-tech/horizons-omnichat.git
-   cd horizons
+### Quick Start
 
-   # Initialize the environment
-   make init
+1. Clone the repository:
+```bash
+git clone https://github.com/evereven-tech/horizons-omnichat.git
+cd horizons-omnichat
+```
 
-   # Choose your deployment mode
-   make local-up    # For local deployment
-   make hybrid-up   # For hybrid deployment
-   make aws-apply   # For AWS deployment
-   ```
+2. Build documentation:
+```bash
+make build
+```
 
-## 📚 Documentation
+3. Serve locally:
+```bash
+make serve
+```
 
-- [Architecture Overview](docs/architecture/overview.md)
-- [Configuration Guide](docs/operations/configuration.md)
-- [Security Best Practices](docs/operations/security.md)
-- [Monitoring & Troubleshooting](docs/operations/monitoring.md)
-- [API Reference](docs/development/api.md)
+The documentation will be available at `http://localhost:4200`
+
+## 📖 Documentation Structure
+
+```
+docs/
+├── architecture/    # System architecture documentation
+├── deployment/      # Deployment guides
+├── development/     # Development guides
+├── enterprise/      # Enterprise features
+├── operations/      # Operations guides
+└── security/        # Security documentation
+```
 
 ## 🤝 Contributing
 
-We love your input! Check out our [Contributing Guide](CONTRIBUTING.md) to get started.
+We welcome contributions to improve our documentation:
 
-- 🐛 [Report a bug](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=bug_report.md)
-- 💡 [Request a feature](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=feature_request.md)
-- 📖 [Improve documentation](https://github.com/evereven-tech/horizons-omnichat/issues/new?template=documentation.md)
+1. Fork the repository
+2. Create your feature branch
+3. Make your changes
+4. Submit a pull request
 
 ## 📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
-
-## 🙏 Acknowledgments
-
-Built with:
-- [Ollama](https://github.com/ollama/ollama)
-- [Open WebUI](https://github.com/open-webui/open-webui)
-- [AWS Bedrock Access Gateway](https://github.com/aws-samples/bedrock-access-gateway)
-
-## 📊 Project Status
-
-![GitHub issues](https://img.shields.io/github/issues/evereven/horizons)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/evereven/horizons)
-![Last commit](https://img.shields.io/github/last-commit/evereven/horizons)
 
 ---
 
