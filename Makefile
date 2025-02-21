@@ -4,13 +4,17 @@
 CONTAINER_CMD ?= $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null || echo "docker")
 
 build:
-	$(CONTAINER_CMD) build -t horizons-docs .
-
-serve: build
 	$(CONTAINER_CMD) run --rm \
-		-v $(PWD)/docs:/docs \
-		-p 4200:4200 \
-		horizons-docs
+		--volume="$PWD:/srv/jekyll:rw" \
+		-it jekyll/jekyll:latest \
+		bundle update
+
+serve: 
+	$(CONTAINER_CMD) run --rm \
+		--volume="$$PWD:/srv/jekyll:Z" \
+		--publish 4000:4000 \
+		jekyll/jekyll \
+		jekyll serve -s docs --trace
 
 clean:
 	rm -rf dist
