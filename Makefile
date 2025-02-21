@@ -9,7 +9,6 @@ build:
 serve: build
 	$(CONTAINER_CMD) run --rm \
 		-v $(PWD)/docs:/docs \
-		-v $(PWD)/dist:/dist \
 		-p 4200:4200 \
 		horizons-docs
 
