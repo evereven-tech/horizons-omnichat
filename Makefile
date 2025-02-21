@@ -1,9 +1,16 @@
-.PHONY: serve clean
+.PHONY: serve clean bundle
 
 # Detect container engine (docker or podman)
 CONTAINER_CMD ?= $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null || echo "docker")
 
-serve:
+bundle:
+	$(CONTAINER_CMD) run --rm \
+		-v $(PWD)/Gemfile:/site/Gemfile \
+		-v $(PWD):/site \
+		jekyll/jekyll:4.2.2 \
+		bundle install
+
+serve: bundle
 	$(CONTAINER_CMD) run --rm \
 		-v $(PWD)/docs:/site \
 		-v $(PWD)/dist:/dist \
@@ -15,3 +22,4 @@ serve:
 
 clean:
 	rm -rf dist
+	rm -f Gemfile.lock
