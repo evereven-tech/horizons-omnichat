@@ -5,10 +5,9 @@ CONTAINER_CMD ?= $(shell command -v podman 2>/dev/null || command -v docker 2>/d
 
 bundle:
 	$(CONTAINER_CMD) run --rm \
-		-v $(PWD)/Gemfile:/site/Gemfile \
 		-v $(PWD):/site \
 		jekyll/jekyll:4.2.2 \
-		bundle install
+		/bin/bash -c "cd /site && bundle install"
 
 serve: bundle
 	$(CONTAINER_CMD) run --rm \
