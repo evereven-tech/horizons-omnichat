@@ -31,7 +31,7 @@ Choose the deployment that best fits your needs:
 
 | Flavor | Description | Documentation | Troubleshooting |
 |--------|-------------|---------------|-----------------|
-| **Local** | Simple setup with Ollama + Open-WebUI | [Local Setup Guide](docs/flavors/local.md) | [Local Diagnostics](docs/local-diagnostics.md) |
+| **Local** | Simple setup with Ollama + Open-WebUI | [Local Setup Guide](docs/flavors/local.md) | [Local Diagnostics](docs/flavors/local.md#troubleshooting) |
 | **Hybrid** | Ollama + Open-WebUI + AWS Bedrock | [Hybrid Setup Guide](docs/flavors/hybrid.md) | [Hybrid Section](docs/flavors/hybrid.md#troubleshooting) |
 | **AWS** | Full cloud deployment on AWS ECS | [AWS Setup Guide](docs/flavors/aws.md) | [AWS Section](docs/flavors/aws.md#troubleshooting) |
 | **K8s** | Coming soon! | TBD | TBD |
