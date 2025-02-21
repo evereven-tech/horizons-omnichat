@@ -1,0 +1,25 @@
+# Configuración del sitio
+title: "Horizons: The OmniChat"
+description: "Una plataforma de chatbot flexible y potente con capacidades LLM de nivel empresarial"
+baseurl: "/horizons"
+url: "https://evereven-tech.github.io"
+
+# Tema y plugins
+theme: jekyll-theme-minimal
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+# Navegación principal
+navigation:
+  - title: Inicio
+    url: /
+  - title: Comenzar
+    url: /getting-started/
+  - title: Documentación
+    url: /deployment/
+  - title: Empresa
+    url: /enterprise/
+  - title: Comunidad
+    url: /community/
