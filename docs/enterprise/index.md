@@ -15,13 +15,9 @@ When organizations grow, they need more than just technology – they need a com
 
 Picture having a dedicated team of experts managing your entire Horizons infrastructure while you focus on your core business. That's exactly what our managed services provide.
 
-> 🌟 **Success Story**: A Fortune 500 financial services company reduced their operational overhead by 60% after switching to our managed services.
-
 #### Advanced Premium Support
 
 Gone are the days of waiting for support tickets to be resolved. With our premium support:
-
-"The moment we upgraded to Enterprise, it was like having a dedicated DevOps team instantly available," shares John D., CTO of a leading healthcare provider.
 
 > 💡 **Pro Tip**: Our premium support includes monthly health checks that often identify and resolve issues before they impact your operations.
 
@@ -37,8 +33,6 @@ Imagine never having to worry about system updates, scaling, or performance opti
 
 > ⚠️ **Important**: While we manage your infrastructure, you maintain full control over your data and access policies.
 
-"We used to spend 20 hours per week on infrastructure management. Now it's zero," reports Sarah M., Infrastructure Lead at a global consulting firm.
-
 ### Professional Services
 
 Success with AI isn't just about deployment – it's about optimization, customization, and integration. Our professional services team guides you through this journey.
@@ -48,8 +42,6 @@ Success with AI isn't just about deployment – it's about optimization, customi
 Think of this as having a Formula 1 pit crew for your chatbot deployment. We fine-tune every aspect of your system for maximum performance.
 
 > 🔧 **Technical Note**: Our optimization process includes custom model training on your domain-specific data, significantly improving response accuracy.
-
-A real-world example: We helped a legal firm achieve 40% faster response times and 60% more accurate answers by fine-tuning models with their specific legal documentation.
 
 #### High Availability Infrastructure
 
@@ -100,7 +92,7 @@ Transitioning to Enterprise Edition is a journey we'll take together. Here's how
 
 Let's discuss how Horizons Enterprise Edition can help you achieve your business goals. Our enterprise team is ready to guide you through the possibilities:
 
-📧 Email: enterprise@evereven.tech
+📧 Email: [hello@evereven.tech](mailto:hello@evereven.tech)
 🌐 Website: [Schedule a Consultation](https://evereven.tech/en/connect/)
 
 ## Learn More About Enterprise Features
@@ -108,6 +100,6 @@ Let's discuss how Horizons Enterprise Edition can help you achieve your business
 - [Detailed Support Plans](support.md)
 - [Training Programs](training.md)
 - [Consulting Services](consulting.md)
-- [Security Architecture](../security/overview.md)
+- [Security Architecture](../security/index.md)
 
 {% include footer.html %}

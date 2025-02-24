@@ -19,6 +19,8 @@ navigation:
   - title: Getting Started
     url: /getting-started/
     subitems:
+      - title: Features
+        url: /getting-started/features/
       - title: Requirements
         url: /getting-started/requirements/
       - title: Installation
@@ -63,8 +65,6 @@ navigation:
   - title: Security
     url: /security/
     subitems:
-      - title: Overview
-        url: /security/overview/
       - title: Compliance
         url: /security/compliance/
       - title: Privacy

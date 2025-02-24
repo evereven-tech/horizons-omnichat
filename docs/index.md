@@ -19,7 +19,7 @@ Welcome to Horizons, a flexible and powerful chatbot platform that brings enterp
 
 Imagine deploying an enterprise-grade chatbot with complete data control and unmatched flexibility. That's exactly what Horizons delivers.
 
-> 💡 **Tip**: New to Horizons? Start with our [Getting Started Guide](getting-started/) for a step-by-step introduction.
+> 💡 **Tip**: New to Horizons? Start with our [Getting Started Guide](getting-started/index.md) for a step-by-step introduction.
 
 ### Why Horizons?
 
@@ -44,7 +44,7 @@ We adapt Horizons to your needs, not the other way around:
   > ⚠️ **Note**: Requires AWS account for Bedrock features
 - **AWS Mode**: Full cloud deployment
   > 💫 **Pro-tip**: Best choice for enterprise scalability
-- **Kubernetes Mode**: For scalable infrastructures
+- **Kubernetes Mode**: For scalable infrastructures at any cloud platform
   > 🚧 **In Development**: Coming soon
 
 ## Quick Start
@@ -72,15 +72,15 @@ make aws-apply   # For AWS deployment
 We've organized our documentation with your learning journey in mind:
 
 📚 **Getting Started**
-- [Getting Started Guide](getting-started/): Your starting point
+- [Getting Started Guide](getting-started/index.md): Your starting point
 - [Requirements](getting-started/requirements.md): What you need
-- [Installation](getting-started/installation.md): Step by step guide
+- [Features](getting-started/features.md): Step by step guide
 
 🏗️ **Deployment Options**
 - [Local](deployment/local.md): For development and testing
-- [Hybrid](deployment/hybrid.md): Best of both worlds
-- [AWS](deployment/aws.md): Enterprise scale
-- [Kubernetes](deployment/kubernetes.md): Advanced orchestration
+- [Hybrid](deployment/hybrid.md): Enhance local capabilities adding more aws models
+- [AWS](deployment/aws.md): For business with Enterprise scale
+- [Kubernetes](deployment/kubernetes.md): For business with Enterprise scale at any cloud platform
 
 > 💡 **Tip**: Start with local mode to familiarize yourself with the platform before moving to more complex deployments.
 
@@ -88,12 +88,12 @@ We've organized our documentation with your learning journey in mind:
 
 Horizons is available in three editions to suit different needs:
 
-| Community | Cloud | Enterprise |
-|-----------|-------|------------|
-| Open Source | Cloud Deployment | Premium Support |
-| Local Deployment | AWS Integration | Guaranteed SLA |
-| Community Support | Pay-as-you-go | Consulting |
-| [Get Started](getting-started/) | [Cloud Guide](deployment/aws) | [Enterprise](enterprise/) |
+| Community | Enterprise |
+|-----------------|------------|
+| Open Source | Premium Support |
+| Local or Cloud Deployment | Guaranteed SLA |
+| Community Support | Professional Services |
+| [Get Started](getting-started/index.md) | [Enterprise](enterprise/) |
 
 > 🌟 **Pro-tip**: Community Edition is perfect for starting and evaluating the platform.
 

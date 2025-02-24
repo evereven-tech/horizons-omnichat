@@ -104,7 +104,6 @@ Once deployed, accessing your Horizons instance is simple:
 As you get comfortable with the basics, explore these powerful features:
 - Model management for downloading and configuring different AI models
 - Chat history and conversation management
-- API integration for custom applications
 - Advanced security controls
 
 ### Best Practices for Success
@@ -120,7 +119,7 @@ Here are some tips from our experience:
 We're here to support your journey:
 - Check our comprehensive [Documentation](../index.md)
 - Join our [Community Discussions](https://github.com/evereven-tech/horizons-omnichat/discussions)
-- Review common solutions in our [FAQ](../community/faq.md)
+- Review common questions in our [FAQ](../community/faq.md)
 - For enterprise users, explore our [Enterprise Support](../enterprise/support.md)
 
 ## Next Steps

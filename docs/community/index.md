@@ -49,17 +49,6 @@ Welcome to the Horizons OmniChat community! This section provides information ab
    - Report bugs
    - Suggest improvements
 
-### Development Process
-
-```mermaid
-graph LR
-    A[Issue/Feature] --> B[Discussion]
-    B --> C[Implementation]
-    C --> D[Review]
-    D --> E[Merge]
-    E --> F[Release]
-```
-
 ## Community Guidelines
 
 ### Code of Conduct
@@ -71,75 +60,12 @@ We are committed to providing a welcoming and inclusive environment. All partici
 - Maintain professional discourse
 - Support fellow community members
 
-### Communication Channels
-
-#### GitHub Issues
-- Bug reports
-- Feature requests
-- Implementation discussions
-- Project tracking
-
-#### GitHub Discussions
-- General questions
-- Use case sharing
-- Best practices
-- Community announcements
 
 ## Community Projects
 
 ### Featured Projects
 Check our [Showcase](showcase.md) for highlighted community projects and implementations.
 
-### Project Categories
-1. **Extensions**
-   - Custom integrations
-   - Additional features
-   - Performance improvements
-
-2. **Tools**
-   - Development utilities
-   - Deployment scripts
-   - Monitoring solutions
-
-3. **Documentation**
-   - Tutorials
-   - Guides
-   - Best practices
-
-## Community Events
-
-### Regular Activities
-- Bug fixing sessions
-- Documentation sprints
-- Community calls
-- Release planning
-
-### Contributing Process
-
-```mermaid
-graph TD
-    A[Find Issue] --> B[Discussion]
-    B --> C[Implementation]
-    C --> D[Testing]
-    D --> E[Pull Request]
-    E --> F[Review]
-    F --> G[Merge]
-```
-
-## Recognition Program
-
-### Contributors
-- Code contributors
-- Documentation authors
-- Community supporters
-- Issue reporters
-
-### Recognition Levels
-| Level | Requirements | Benefits |
-|-------|--------------|----------|
-| Contributor | 1-5 contributions | Recognition in docs |
-| Active | 6-20 contributions | Special badge |
-| Core | 20+ contributions | Direct repository access |
 
 ## Getting Help
 

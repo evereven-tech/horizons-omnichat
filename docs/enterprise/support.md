@@ -11,7 +11,7 @@ At Horizons OmniChat, we understand that enterprise deployments require more tha
 
 We believe that proactive support is better than reactive problem-solving. That's why our enterprise support goes beyond just answering tickets - we work to prevent issues before they impact your operations.
 
-> 💡 **Success Story**: "The proactive monitoring from the support team helped us identify and resolve a potential scaling issue before it affected our users." - Technical Director, Global Financial Services
+
 
 ## Comprehensive Support Options
 
@@ -31,7 +31,6 @@ Included with every Enterprise license, our standard support provides the essent
 
 When your chatbot becomes a crucial part of your operations, our Premium Support package provides the enhanced coverage you need. It's like having a dedicated team of Horizons experts as part of your organization:
 
-"Since upgrading to Premium Support, it feels like we have our own Horizons engineering team. The response times are incredible, and the proactive monitoring has prevented several potential issues." - Sarah M., Operations Manager
 
 Premium Support includes:
 - Round-the-clock coverage (24/7/365)

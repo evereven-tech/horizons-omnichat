@@ -52,9 +52,10 @@ Mix and match models to suit your needs:
 | Llama 2 | Claude (Anthropic) |
 | Mistral | Titan (Amazon) |
 | TinyLlama | Jurassic (AI21) |
-| Custom Models | Command (Cohere) |
+| Deepseek | Command (Cohere) |
+| Salamandra (ALIA) | Nova (Amazon) |
 
-> 💫 **Pro-tip**: Combine local models for sensitive data with cloud models for enhanced capabilities.
+> 💫 **Pro-tip**: Combine local models with cloud models for enhanced capabilities.
 
 ### Enterprise-Grade Security
 > 🔒 **Security Note**: Every layer of Horizons is designed with security in mind.
@@ -77,7 +78,7 @@ graph TD
     D --> E[Consistent Performance]
 ```
 
-- Automatic scaling (AWS mode)
+- Automatic scaling (Cloud mode)
 - Load balancing
 - Resource optimization
 - Performance monitoring
@@ -86,35 +87,45 @@ graph TD
 ## 💼 Business Benefits
 
 ### Cost Optimization
-> 💰 **Cost Tip**: Start with Local mode for development, then scale with Hybrid mode for production.
+> 💰 **Cost Tip**: Start with Local mode for development, then scale with Hybrid mode for more models.
 
 - Pay only for what you use
 - Mix local and cloud models
 - Optimize resource usage
 - Control cloud costs
 
-### Integration Capabilities
-Seamlessly connect with your ecosystem:
-
-- REST API support
-- WebSocket connections
-- Custom authentication
-- Enterprise system integration
-- Extensible architecture
-
-### Development Experience
+### Testing Chatbots Experience
 > 🛠️ **Dev Tip**: Our comprehensive API documentation and SDKs make integration a breeze.
 
 - Clear documentation
-- API-first design
-- Developer tools
-- Custom model support
 - Active community
 
 ## 🎯 Use Cases
 
-### Enterprise Support
-> 💡 **Success Story**: A Fortune 500 company reduced support response times by 75% using Horizons for internal knowledge management.
+#### Healthcare Applications
+- **Patient Support**: 24/7 patient information assistance
+- **Clinical Documentation**: Automated medical record analysis
+- **Treatment Guidelines**: Quick access to medical protocols
+- **Compliance**: HIPAA-compliant deployment options
+
+#### Financial Services
+- **Risk Analysis**: Automated risk assessment
+- **Fraud Detection**: Pattern recognition in transactions
+- **Customer Service**: Automated financial advice
+- **Compliance**: SEC and FINRA compliant deployments
+
+#### Government Systems
+- **Citizen Services**: Automated public service support
+- **Document Processing**: Government document analysis
+- **Policy Support**: Legislative and policy guidance
+- **Security**: ENS and FedRAMP compliance features
+
+#### Legal Assistance
+- **Case Research**: Automated legal research assistance
+- **Document Review**: Contract and legal document analysis
+- **Compliance Check**: Regulatory compliance verification
+- **Risk Assessment**: Legal risk evaluation
+
 
 #### Internal Knowledge Base
 - **Document Processing**: Automatically process and index company documentation
@@ -151,56 +162,18 @@ Seamlessly connect with your ecosystem:
 
 #### Prototype Development
 - **Fast MVP**: Quick prototype deployment
-- **API Integration**: Easy integration with existing systems
 - **Feature Testing**: Rapid feature validation
 - **User Feedback**: Quick iteration based on feedback
 
-#### Performance Testing
-- **Load Testing**: Measure system performance under load
-- **Response Time**: Monitor and optimize latency
-- **Resource Usage**: Track CPU, memory, and GPU utilization
-- **Scalability Testing**: Validate scaling capabilities
-
-#### Integration Testing
-- **API Validation**: Verify API functionality
-- **System Integration**: Test multi-system workflows
-- **Error Handling**: Validate error scenarios
-- **Security Testing**: Verify security controls
-
 ### Secure Deployments
 > 🔒 **Security Note**: All deployments include enterprise-grade security features.
-
-#### Healthcare Applications
-- **Patient Support**: 24/7 patient information assistance
-- **Clinical Documentation**: Automated medical record analysis
-- **Treatment Guidelines**: Quick access to medical protocols
-- **Compliance**: HIPAA-compliant deployment options
-
-#### Financial Services
-- **Risk Analysis**: Automated risk assessment
-- **Fraud Detection**: Pattern recognition in transactions
-- **Customer Service**: Automated financial advice
-- **Compliance**: SEC and FINRA compliant deployments
-
-#### Government Systems
-- **Citizen Services**: Automated public service support
-- **Document Processing**: Government document analysis
-- **Policy Support**: Legislative and policy guidance
-- **Security**: ENS and FedRAMP compliance features
-
-#### Legal Assistance
-- **Case Research**: Automated legal research assistance
-- **Document Review**: Contract and legal document analysis
-- **Compliance Check**: Regulatory compliance verification
-- **Risk Assessment**: Legal risk evaluation
 
 ## 🚀 Getting Started
 
 Ready to experience these features? Follow our quick start guides:
 
 1. [Check Requirements](requirements.md)
-2. [Installation Guide](installation.md)
-3. [Deployment Options](../deployment/)
+2. [Installation/Deployment Guide](../deployment/index.md)
 
 > 🌟 **Success Tip**: Our [Community Edition](../community/) is perfect for evaluating all these features in action.
 
@@ -208,20 +181,28 @@ Ready to experience these features? Follow our quick start guides:
 
 For organizations needing additional capabilities, our Enterprise Edition includes:
 
-- Premium support
-- Custom development
-- Advanced security
-- Compliance assistance
-- Training & consulting
-- SLA guarantees
+- evereven managed services: 
+	- Advanced premium support 
+	- Delegated management of your infrastructure
+- Professional fine tuning services
+	- Performance tuning
+	- High Availability infrastructure for business requirements
+- Visual branding customisation layer
+- Advanced security to meet required regulatory compliance
+- Augmentation with business document databases 
+- Integration with business SSO
+- Integration with other third party platforms
+- Product deployment and Chatbot management training
+- Professional consulting services
+- Integration with customer applications
 
-> 🤝 **Enterprise Tip**: Contact our [Enterprise Team](../enterprise/) to discuss your specific needs.
+
+> 🤝 **Enterprise Tip**: Contact our [Enterprise Team](https://evereven.tech/en/connect/) to discuss your specific needs.
 
 ## Next Steps
 
-- [Try Horizons](installation.md)
-- [Explore Deployments](../deployment/)
-- [Join Our Community](../community/)
-- [Contact Enterprise Sales](../enterprise/)
+- [Explore Deployments](../deployment/index.md)
+- [Join Our Community](../community/index.md)
+- [Contact Enterprise Sales](https://evereven.tech/en/connect/)
 
 {% include footer.html %}

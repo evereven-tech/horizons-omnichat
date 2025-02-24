@@ -5,13 +5,11 @@ title: Enterprise Consulting
 
 # Enterprise Consulting Services
 
-Transform your vision into reality with our expert consulting services. At Horizons, we believe that successful AI implementation isn't just about technology—it's about understanding your unique challenges and crafting solutions that deliver real business value.
+Transform your vision into reality with our expert consulting services. At evereven, we believe that successful AI implementation isn't just about technology—it's about understanding your unique challenges and crafting solutions that deliver real business value.
 
 ## Our Consulting Philosophy
 
 Every organization's journey with AI is unique. That's why we take a collaborative approach, working closely with your team to understand your specific needs, challenges, and objectives. Our consultants bring deep expertise in both technology and business strategy to help you maximize the value of your Horizons deployment.
-
-> 💡 **Success Story**: "The consulting team didn't just help us implement Horizons—they helped us reimagine our entire customer service strategy." - CTO, Global Retail Company
 
 ## Strategic Planning & Architecture
 
@@ -24,14 +22,13 @@ We begin by diving deep into your organization's goals and challenges. Our consu
 - Define success metrics
 - Create a roadmap for implementation
 
-> 🎯 **Strategic Insight**: One healthcare provider discovered they could reduce patient wait times by 45% by strategically implementing AI-powered pre-screening.
 
 ### Architecture Design
 
 Your Horizons implementation needs to integrate seamlessly with your existing systems while preparing for future growth. We help you design:
 
 - Scalable infrastructure that grows with your needs
-- Secure integration points with existing systems
+- Secure integration points to meet your regulatory requirements
 - Data flow optimization
 - Performance monitoring frameworks
 
@@ -46,7 +43,6 @@ Our consulting team guides you through every step of implementation, ensuring yo
 - Performance tuning
 - Security hardening
 
-> ⚡ **Performance Impact**: "After working with the consulting team on optimization, our response times improved by 60% and user satisfaction jumped significantly." - Operations Director, Financial Services
 
 ### Knowledge Integration
 
@@ -54,7 +50,7 @@ Transform your organization's knowledge into powerful AI capabilities. Our consu
 
 - Structure your knowledge base for optimal AI utilization
 - Design effective knowledge capture processes
-- Create custom training datasets
+- Enhance with your custom knowledge database
 - Implement continuous learning frameworks
 
 ## Specialized Solutions
@@ -94,8 +90,6 @@ Technology is only effective when people use it properly. Our change management 
 - User adoption monitoring
 - Success measurement frameworks
 
-> 🎓 **Learning Impact**: "The change management program was crucial. It turned initial skepticism into enthusiastic adoption across our organization." - HR Director, Manufacturing Company
-
 ## Ongoing Optimization
 
 ### Continuous Improvement
@@ -124,14 +118,14 @@ Let's begin with understanding where you are and where you want to go. Our initi
 
 Let's discuss how our consulting services can help you maximize the value of your Horizons implementation. Contact our consulting team to begin your journey:
 
-📧 Email: [consulting@evereven.tech](mailto:consulting@evereven.tech)
-🌐 Schedule: [Consulting Consultation](https://evereven.tech/en/consulting/)
+📧 Email: [hello@evereven.tech](mailto:hello@evereven.tech)
+🌐 Tell Us: [Consulting Consultation](https://evereven.tech/en/connect/)
 
 ## Additional Resources
 
 - [Training Programs](training.md)
 - [Support Services](support.md)
 - [Enterprise Features](../getting-started/features.md#enterprise-features)
-- [Security Architecture](../security/)
+- [Security Architecture](../security/index.md)
 
 {% include footer.html %}
