@@ -5,201 +5,65 @@ title: Security Overview
 
 # Security Overview
 
-## Introduction
+When we designed Horizons OmniChat, we knew that security couldn't be an afterthought - it needed to be woven into the very fabric of the platform. Whether you're deploying locally for development or scaling up to enterprise-level AWS deployments, every aspect of Horizons is built with security at its core.
 
-Horizons OmniChat is designed with security-first principles across all deployment modes. This overview provides a comprehensive look at our security architecture and practices.
+## Understanding Our Security Philosophy
 
-## Security Architecture Layers
+Security in Horizons isn't just about checking boxes or meeting compliance requirements. It's about providing you with a platform that protects your data, your users, and your organization at every level. Let's explore how we achieve this.
 
-### 1. Application Security
+## Defense in Depth
 
-#### Authentication & Authorization
-- Multi-factor authentication (Optional- AWS Mode)
-- Role-based access control (RBAC)
-- Session management
-- JWT token validation
-- API key authentication
+Think of Horizons' security like layers of an onion - each layer providing additional protection. At the outermost layer, we have our application security, ensuring that only authorized users can access your chatbot. Dive deeper, and you'll find network security protecting your data in transit, and at the core, you'll discover our data protection mechanisms keeping your information safe at rest.
 
-#### Data Protection
-- End-to-end encryption
-- Data at rest encryption
-- Secure secret management
-- Input/Output validation
+### Securing Your Data
 
-### 2. Network Security
+Your conversations with AI models often contain sensitive information. That's why we've implemented end-to-end encryption across all deployment modes. In Local mode, your data never leaves your infrastructure. In Hybrid mode, we ensure secure communication with AWS Bedrock while maintaining local control. And in AWS mode, we leverage the full power of AWS's security infrastructure.
 
-#### Infrastructure Protection
-```mermaid
-graph TD
-    A[User] --> B[Cognito]
-    B --> C[ALB with SSL]
-    C --> D[Private Subnet]
-    D --> E[Container Services]
-    E --> F[Encrypted Storage]
-```
+### Authentication That Adapts
 
-#### Security Controls
-- TLS 1.3 encryption
-- Network segmentation
-- Security groups
-- NACLs
-- Private subnets
-- VPC endpoints
-- WAF (Optional)
-- Guardrails (Optional)
+We understand that different organizations have different security needs. That's why our authentication system scales with your deployment:
 
-### 3. Operational Security
+In Local mode, you start with robust basic authentication - perfect for development and testing. Move to Hybrid mode, and you gain AWS IAM integration for enhanced security. In AWS mode, you get the full power of Cognito user pools, complete with MFA support and enterprise-grade authentication.
 
-#### Access Management
-- Principle of least privilege
-- Regular access reviews
-- Secure credential rotation
-- Audit logging
+### Network Protection
 
-#### Monitoring & Response
-- Real-time security monitoring
-- Incident response procedures
-- Automated alerts
-- Security event logging
+Network security in Horizons isn't just about firewalls and encryption (though we have those too). We've created isolated network environments for each component, ensuring that even if one part of the system is compromised, the rest remains secure.
 
-## Deployment Mode Security Features
+For AWS deployments, we take this further by placing services in private subnets, using security groups for granular access control, and implementing AWS WAF for additional protection against web threats.
 
-### Local Mode
-- Basic authentication
-- Local network isolation
-- File system encryption
-- Secure configuration storage
+## Real-World Security
 
-### Hybrid Mode
-All Local Mode features plus:
-- AWS IAM integration
-- Bedrock API security
-- Cross-service authentication
-- Secure cloud communication
+Let's look at how this all comes together in practice. When a user makes a request:
 
-### AWS Mode
-All Hybrid Mode features plus:
-- AWS WAF protection (optional)
-- AWS Shield (optional)
-- AWS Cognito authentication
-- AWS KMS encryption
-- VPC security
-- AWS CloudTrail auditing
+1. First, their credentials are verified through our authentication layer
+2. The request is encrypted and transmitted through secure channels
+3. Our authorization system checks if they have permission for the requested action
+4. The action is logged for audit purposes
+5. The response is encrypted and returned through the same secure channel
 
-## Security Best Practices
+This happens automatically for every interaction, ensuring consistent security without impacting performance.
 
-### 1. Access Control
-```yaml
-Principles:
-  - Least privilege access
-  - Role-based permissions
-  - Regular access reviews
-  - Strong password policies
-  - Session management
-```
+## Enterprise-Grade Features
 
-### 2. Data Security
-```yaml
-Measures:
-  - Encryption at rest
-  - Encryption in transit
-  - Secure key management
-  - Data classification
-  - Retention policies
-```
+For organizations requiring additional security measures, our Enterprise edition includes advanced features like:
 
-### 3. Network Security
-```yaml
-Controls:
-  - Network segmentation
-  - Firewall rules
-  - TLS encryption
-  - VPC isolation
-  - Security groups
-```
+- Enhanced audit logging for complete visibility into system usage
+- Custom security policies to match your organization's requirements
+- Advanced threat detection and prevention
+- Integration with enterprise security tools
+- Compliance reporting for regulated industries
 
-## Compliance & Standards
+## Growing with Your Security Needs
 
-### Supported Frameworks
-- GDPR compliance features
-- SOC 2 controls (Enterprise)
-- ENS (Enterprise)
-- ISO 27001 alignment
-
-### Security Certifications
-- AWS Security Best Practices
-- Container Security Standards
-- API Security Guidelines
-
-## Security Features Matrix
-
-| Feature | Local | Hybrid | AWS |
-|---------|-------|--------|-----|
-| Authentication | Basic | Basic + AWS IAM | Cognito + MFA |
-| Encryption | Local | Local | Full AWS |
-| Network Security | Basic | Basic | Advanced |
-| Monitoring | Local | Hybrid | CloudWatch |
-| Compliance | Basic | Enhanced | Full |
-
-## Security Guidelines
-
-### 1. Initial Setup
-- Change default credentials
-- Configure SSL/TLS
-- Set up authentication (Webui + Cognito)
-- Enable audit logging
-
-### 2. Ongoing Maintenance
-- Regular updates
-- Security patches
-- Access reviews
-- Backup verification
-
-### 3. Monitoring
-- System logs
-- Security events
-- Performance metrics
-- User activity
-
-## Incident Response
-
-### 1. Detection
-- Automated monitoring
-- Alert systems
-- User reporting
-- System checks
-
-### 2. Response
-- Incident classification
-- Containment procedures
-- Investigation process
-- Recovery steps
-
-### 3. Prevention
-- Root cause analysis
-- Security improvements
-- Policy updates
-- Team training
-
-## Security Documentation
-
-### Required Documentation
-1. Security Policies
-2. Access Control Procedures
-3. Incident Response Plan
-4. Disaster Recovery Plan
-
-### Security Procedures
-1. User Management
-2. Key Rotation
-3. Backup Verification
-4. Security Audits
+As your organization grows and your security requirements evolve, Horizons grows with you. Start with Local mode's fundamental security features, add AWS security capabilities in Hybrid mode, or deploy the full suite of enterprise security features in AWS mode.
 
 ## Next Steps
 
-1. Review detailed [Security Architecture](../architecture/security.md)
-2. Implement [Security Controls](security/controls.md)
-3. Configure [Security Monitoring](../operations/monitoring.md)
-4. Review [Compliance Requirements](compliance.md)
+Ready to dive deeper into securing your Horizons deployment? Check out our detailed guides:
+
+- [Security Architecture](../architecture/security.md) - Understanding the technical implementation
+- [Compliance Guide](compliance.md) - Meeting regulatory requirements
+- [Privacy Guide](privacy.md) - Protecting user data
+- [Operations Security](../operations/security.md) - Day-to-day security management
 
 {% include footer.html %}
