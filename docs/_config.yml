@@ -16,11 +16,76 @@ plugins:
 navigation:
   - title: Home
     url: /
-  - title: Get Started
+  - title: Getting Started
     url: /getting-started/
-  - title: Documentation
+    subitems:
+      - title: Requirements
+        url: /getting-started/requirements/
+      - title: Installation
+        url: /getting-started/installation/
+
+  - title: Deployment
     url: /deployment/
-  - title: Enterprise
-    url: /enterprise/
+    subitems:
+      - title: Local
+        url: /deployment/local/
+      - title: Hybrid
+        url: /deployment/hybrid/
+      - title: AWS
+        url: /deployment/aws/
+      - title: Kubernetes
+        url: /deployment/kubernetes/
+
+  - title: Architecture
+    url: /architecture/
+    subitems:
+      - title: Overview
+        url: /architecture/
+      - title: Components
+        url: /architecture/components/
+      - title: Security
+        url: /architecture/security/
+
+  - title: Operations
+    url: /operations/
+    subitems:
+      - title: Configuration
+        url: /operations/configuration/
+      - title: Monitoring
+        url: /operations/monitoring/
+      - title: Backup
+        url: /operations/backup/
+      - title: Security
+        url: /operations/security/
+      - title: Troubleshooting
+        url: /operations/troubleshooting/
+
+  - title: Security
+    url: /security/
+    subitems:
+      - title: Overview
+        url: /security/overview/
+      - title: Compliance
+        url: /security/compliance/
+      - title: Privacy
+        url: /security/privacy/
+
   - title: Community
     url: /community/
+    subitems:
+      - title: FAQ
+        url: /community/faq/
+      - title: Roadmap
+        url: /community/roadmap/
+      - title: Showcase
+        url: /community/showcase/
+
+  - title: Enterprise
+    url: /enterprise/
+    subitems:
+      - title: Support
+        url: /enterprise/support/
+      - title: Training
+        url: /enterprise/training/
+      - title: Consulting
+        url: /enterprise/consulting/
