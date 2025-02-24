@@ -93,7 +93,7 @@ Horizons is available in three editions to suit different needs:
 | Open Source | Premium Support |
 | Local or Cloud Deployment | Guaranteed SLA |
 | Community Support | Professional Services |
-| [Get Started](getting-started/index.md) | [Enterprise](enterprise/) |
+| [Get Started](getting-started/index.md) | [Enterprise](enterprise/index.md) |
 
 > 🌟 **Pro-tip**: Community Edition is perfect for starting and evaluating the platform.
 
