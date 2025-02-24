@@ -5,209 +5,161 @@ title: Compliance Guide
 
 # Compliance Guide
 
-## Overview
+When organizations choose Horizons OmniChat, they're not just getting a chatbot platform - they're getting a solution designed with compliance at its core. Let's explore how Horizons helps you meet your regulatory requirements while maintaining operational efficiency.
 
-Horizons OmniChat has been architected from the ground up with compliance and security in mind, adhering to industry-leading standards and best practices. Our platform implements comprehensive controls and safeguards that align with major international compliance frameworks, making it suitable for organizations with strict regulatory requirements.
+## Understanding Our Compliance Approach
 
-## Regulatory Compliance & Industry Standards
+Compliance isn't just about checking boxes - it's about building trust and ensuring your organization can operate confidently in regulated environments. Horizons is built to help you achieve and maintain compliance across multiple regulatory frameworks.
 
-### General Data Protection Regulation (GDPR)
+## GDPR Compliance: Privacy by Design
 
-Our GDPR compliance framework ensures that organizations can maintain full control over their data processing activities and fulfill their obligations as data controllers:
+Privacy isn't an afterthought in Horizons - it's woven into every aspect of the platform. Here's how we help you maintain GDPR compliance:
 
-- **Data Privacy by Design**
-  - Privacy-first architecture ensuring data protection at every layer
-  - Configurable data retention policies with automated enforcement (optional)
-  - Granular consent management system
-  - Built-in data minimization principles
+### Data Protection by Default
 
-- **Data Subject Rights Management**
-  - Automated subject access request handling
-  - Built-in tools for data portability
-  - Streamlined processes for right to erasure
-  - Comprehensive data inventory and mapping
+Your users' privacy is protected through:
+- Complete data sovereignty in Local mode
+- Configurable data retention policies
+- Granular consent management
+- Built-in data minimization
 
-- **Technical Measures**
-  - End-to-end encryption for all personal data
-  - Pseudonymization capabilities
-  - Robust access controls and authentication
-  - Detailed audit trails for all data processing
+### Data Subject Rights Made Simple
 
-### System and Organization Controls (SOC 2)
+When a data subject exercises their rights, Horizons makes it easy to respond:
+- Automated subject access request handling
+- One-click data export for portability
+- Simple process for right to erasure
+- Comprehensive data inventory tools
 
-Our platform implements controls aligned with all five SOC 2 trust service criteria:
+## SOC 2: Trust Through Control
 
-- **Security**
-  - Multi-layered security architecture
-  - Advanced threat detection and prevention (optional)
-  - Comprehensive security monitoring (basic)
-  - Enhanced security monitoring (optional)
-  - Regular security assessments and penetration testing (optional)
+For organizations requiring SOC 2 compliance, Horizons implements controls across all five trust service criteria:
 
-- **Availability**
-  - High-availability architecture (optional)
-  - Automated failover capabilities
-  - Robust backup and recovery procedures (optional)
-  - Performance monitoring and alerting (basic)
+### Security That Scales
 
-- **Processing Integrity**
-  - Input validation and error checking
-  - Process monitoring and quality controls
-  - Data integrity verification (basic)
-  - Audit trails for all processing activities
+Our multi-layered security approach includes:
+- Advanced threat detection
+- Comprehensive monitoring
+- Regular security assessments
+- Penetration testing support
 
-- **Confidentiality**
-  - Data classification and handling controls
-  - Encryption at rest and in transit
-  - Access control based on least privilege
-  - Secure data disposal procedures
+### Availability You Can Count On
 
-- **Privacy**
-  - Privacy impact assessments
-  - Data collection limitations
-  - Purpose specification controls
-  - Privacy notice management
+Keep your services running with:
+- High-availability architecture options
+- Automated failover capabilities
+- Robust backup procedures
+- Real-time performance monitoring
 
-### ISO 27001 Information Security Management
+## ISO 27001: Information Security Excellence
 
-Our security controls framework is mapped to ISO 27001 requirements:
+Align with ISO 27001 requirements through our comprehensive security framework:
 
-- **Information Security Policies**
-  - Comprehensive policy framework
-  - Regular review and updates
-  - Integration with operational procedures
-  - Employee awareness and training
+### Policy Implementation Made Easy
 
-- **Asset Management**
-  - Complete asset inventory
-  - Data classification
-  - Asset handling procedures
-  - Ownership and responsibility assignment
+Implement and maintain security policies with:
+- Ready-to-use policy templates
+- Regular review reminders
+- Operational procedure integration
+- Employee awareness tools
 
-- **Access Control**
-  - Role-based access control (RBAC)
-  - Regular access reviews
-  - Privileged access management
-  - Strong authentication requirements
+### Asset Management Simplified
 
-### Esquema Nacional de Seguridad (ENS)
+Keep track of your information assets with:
+- Automated asset inventory
+- Data classification tools
+- Clear ownership assignment
+- Handling procedures
 
-For organizations operating in Spain, we provide specific controls aligned with ENS requirements:
+## ENS: Spanish National Security Framework
 
-- **Security Categorization**
-  - System categorization framework
-  - Impact assessment tools
-  - Risk analysis methodology
-  - Control selection guidance
+For organizations operating in Spain, Horizons provides specific controls aligned with ENS requirements:
 
-- **Security Measures**
-  - Technical controls implementation
-  - Organizational measures
-  - Procedural controls
-  - Personnel security
+### Security Categorization
 
-### Industry-Specific Compliance
+Easily categorize your systems with:
+- Built-in categorization framework
+- Impact assessment tools
+- Risk analysis methodology
+- Control selection guidance
 
-#### Healthcare (HIPAA)
-Our Enterprise edition includes specific controls for healthcare organizations:
+### Security Measures
 
-- **Privacy Rule Compliance**
-  - PHI handling controls
-  - Minimum necessary access
-  - Patient rights management
-  - Notice of privacy practices
+Implement required controls through:
+- Technical control automation
+- Organizational measure templates
+- Procedural control guidance
+- Personnel security tools
 
-- **Security Rule Implementation**
-  - Administrative safeguards
-  - Physical security controls
-  - Technical security measures
-  - Encryption requirements
+## Industry-Specific Compliance
 
-#### Financial Services
-For financial institutions, we provide controls aligned with:
+### Healthcare (HIPAA)
 
-- **PCI DSS**
-  - Cardholder data protection
-  - Vulnerability management
-  - Access control measures
-  - Security monitoring
+Transform your healthcare chatbot deployment with HIPAA-compliant features:
 
-- **FINRA**
-  - Communications monitoring
-  - Record keeping
-  - Supervisory controls
-  - Data retention
+#### Privacy Rule Compliance
+- PHI handling controls
+- Minimum necessary access enforcement
+- Patient rights management
+- Privacy notices automation
 
-## Implementation Guidelines
+#### Security Rule Implementation
+- Administrative safeguards
+- Physical security controls
+- Technical security measures
+- Encryption requirements
 
-### 1. Data Protection
+### Financial Services
 
-#### Local/Hybrid Mode
-```yaml
-Encryption:
-  - Database encryption
-  - File system encryption
-  - TLS for communications
+Meet financial industry requirements with:
 
-Access Controls:
-  - Role-based access
-  - Authentication required
-  - Session management
-```
+#### PCI DSS Controls
+- Cardholder data protection
+- Vulnerability management
+- Access control measures
+- Security monitoring
 
-#### AWS Mode
-```yaml
-Encryption:
-  - KMS encryption
-  - TLS termination
-  - VPC encryption
+#### FINRA Compliance
+- Communications monitoring
+- Record keeping automation
+- Supervisory controls
+- Data retention management
 
-Access Controls:
-  - Cognito authentication
-  - IAM roles
-  - Security groups
-```
+## Real-World Implementation
 
-### 2. Audit Requirements
+Let's look at how this works in practice. When implementing Horizons in a regulated environment:
 
-#### Audit Logging
-```mermaid
-graph TD
-    A[User Action] --> B[Application Log]
-    B --> C[Audit Log]
-    C --> D[Log Storage]
-    D --> E[Log Analysis]
-    E --> F[Compliance Reports]
-```
+1. **Assessment**: We help you identify applicable compliance requirements
+2. **Configuration**: Controls are enabled and configured to meet your needs
+3. **Documentation**: Comprehensive compliance documentation is generated
+4. **Monitoring**: Continuous compliance monitoring is established
+5. **Reporting**: Regular compliance reports are generated automatically
 
-#### Log Types
-1. Authentication events (basic)
-2. Data access (basic)
-3. Configuration changes (basic)
-4. Security events (basic)
-5. Model usage (basic)
+## Growing with Your Compliance Needs
 
-### 3. Documentation Requirements
+As your compliance requirements evolve, Horizons evolves with you:
 
-#### Required Documentation
-- Security policies
-- Privacy policies
-- Incident response plans
-- Business continuity plans
-- Data flow diagrams
-- Risk assessments
+- Start with basic compliance features in Local mode
+- Add enhanced controls in Hybrid mode
+- Deploy full enterprise compliance features in AWS mode
 
-#### Maintenance Schedule
-- Annual policy review (optional)
-- Quarterly risk assessments (optional)
-- Monthly security reviews (optional)
-- Weekly backup verification (optional)
+## Enterprise-Grade Compliance Features
+
+For organizations with advanced compliance needs, our Enterprise edition includes:
+
+- Advanced audit logging
+- Custom compliance reporting
+- Automated compliance monitoring
+- Integration with GRC tools
+- Regular compliance assessments
 
 ## Next Steps
 
-1. Review [Security Architecture](../architecture/security.md)
-2. Implement [Security Controls](../operations/security.md)
-3. Configure [Monitoring](../operations/monitoring.md)
-4. Set up [Audit Logging](../operations/configuration.md#audit-logging)
+Ready to ensure your chatbot deployment meets your compliance requirements? Explore our detailed guides:
+
+- [Security Architecture](../architecture/security.md) - Understanding the technical implementation
+- [Privacy Guide](privacy.md) - Protecting user data
+- [Operations Security](../operations/security.md) - Day-to-day security management
+- [Enterprise Features](../enterprise/index.md) - Advanced compliance capabilities
 
 {% include footer.html %}
