@@ -19,15 +19,15 @@ Privacy isn't an afterthought in Horizons - it's woven into every aspect of the 
 
 Your users' privacy is protected through:
 - Complete data sovereignty in Local mode
-- Configurable data retention policies
-- Granular consent management
+- Configurable data retention policies (ENTERPRISE)
+- Granular consent management (ENTERPRISE)
 - Built-in data minimization
 
 ### Data Subject Rights Made Simple
 
 When a data subject exercises their rights, Horizons makes it easy to respond:
 - Automated subject access request handling
-- One-click data export for portability
+- One-click data export for portability (ENTERPRISE)
 - Simple process for right to erasure
 - Comprehensive data inventory tools
 
@@ -38,18 +38,18 @@ For organizations requiring SOC 2 compliance, Horizons implements controls acros
 ### Security That Scales
 
 Our multi-layered security approach includes:
-- Advanced threat detection
-- Comprehensive monitoring
-- Regular security assessments
-- Penetration testing support
+- Advanced threat detection (ENTERPRISE)
+- Comprehensive monitoring (ENTERPRISE)
+- Regular security assessments (ENTERPRISE)
+- Penetration testing support (ENTERPRISE)
 
 ### Availability You Can Count On
 
 Keep your services running with:
-- High-availability architecture options
-- Automated failover capabilities
-- Robust backup procedures
-- Real-time performance monitoring
+- High-availability architecture options (ENTERPRISE)
+- Automated failover capabilities (ENTERPRISE)
+- Robust backup procedures (ENTERPRISE)
+- Real-time performance monitoring (ENTERPRISE)
 
 ## ISO 27001: Information Security Excellence
 
@@ -59,17 +59,17 @@ Align with ISO 27001 requirements through our comprehensive security framework:
 
 Implement and maintain security policies with:
 - Ready-to-use policy templates
-- Regular review reminders
-- Operational procedure integration
+- Regular review reminders (ENTERPRISE)
+- Operational procedure integration (ENTERPRISE)
 - Employee awareness tools
 
 ### Asset Management Simplified
 
 Keep track of your information assets with:
-- Automated asset inventory
-- Data classification tools
-- Clear ownership assignment
-- Handling procedures
+- Automated asset inventory (ENTERPRISE)
+- Data classification tools (ENTERPRISE)
+- Clear ownership assignment (ENTERPRISE)
+- Handling procedures (ENTERPRISE)
 
 ## ENS: Spanish National Security Framework
 
@@ -78,18 +78,18 @@ For organizations operating in Spain, Horizons provides specific controls aligne
 ### Security Categorization
 
 Easily categorize your systems with:
-- Built-in categorization framework
-- Impact assessment tools
-- Risk analysis methodology
-- Control selection guidance
+- Built-in categorization framework (ENTERPRISE)
+- Impact assessment tools (ENTERPRISE)
+- Risk analysis methodology (ENTERPRISE)
+- Control selection guidance (ENTERPRISE)
 
 ### Security Measures
 
 Implement required controls through:
-- Technical control automation
-- Organizational measure templates
-- Procedural control guidance
-- Personnel security tools
+- Technical control automation (ENTERPRISE)
+- Organizational measure templates 
+- Procedural control guidance (ENTERPRISE)
+- Personnel security tools 
 
 ## Industry-Specific Compliance
 
@@ -98,32 +98,32 @@ Implement required controls through:
 Transform your healthcare chatbot deployment with HIPAA-compliant features:
 
 #### Privacy Rule Compliance
-- PHI handling controls
+- PHI handling controls (ENTERPRISE)
 - Minimum necessary access enforcement
-- Patient rights management
-- Privacy notices automation
+- Patient rights management (ENTERPRISE)
+- Privacy notices automation (ENTERPRISE)
 
 #### Security Rule Implementation
-- Administrative safeguards
-- Physical security controls
-- Technical security measures
-- Encryption requirements
+- Administrative safeguards (ENTERPRISE)
+- Physical security controls (ENTERPRISE)
+- Technical security measures (ENTERPRISE)
+- Encryption requirements 
 
 ### Financial Services
 
 Meet financial industry requirements with:
 
 #### PCI DSS Controls
-- Cardholder data protection
-- Vulnerability management
-- Access control measures
-- Security monitoring
+- Cardholder data protection (ENTERPRISE)
+- Vulnerability management (ENTERPRISE)
+- Access control measures (ENTERPRISE)
+- Security monitoring (ENTERPRISE)
 
 #### FINRA Compliance
-- Communications monitoring
-- Record keeping automation
-- Supervisory controls
-- Data retention management
+- Communications monitoring (ENTERPRISE)
+- Record keeping automation (ENTERPRISE)
+- Supervisory controls (ENTERPRISE)
+- Data retention management (ENTERPRISE)
 
 ## Real-World Implementation
 
