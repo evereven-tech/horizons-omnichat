@@ -12,6 +12,31 @@ plugins:
   - jekyll-sitemap
   - jekyll-feed
 
+# Mermaid support
+mermaid:
+  version: "10.6.1"
+  initialize:
+    startOnLoad: true
+    theme: default
+    flowchart:
+      useMaxWidth: true
+    sequence:
+      useMaxWidth: true
+
+# Mermaid script inclusion
+mermaid_js: |
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: 'default',
+        flowchart: { useMaxWidth: true },
+        sequence: { useMaxWidth: true }
+      });
+    });
+  </script>
+
 # Main navigation
 navigation:
   - title: Home
