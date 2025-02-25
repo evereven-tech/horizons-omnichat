@@ -192,7 +192,7 @@ aws cloudwatch get-dashboard --dashboard-name horizons-monitoring
 
 1. Check [AWS ECS Documentation](https://docs.aws.amazon.com/ecs)
 2. Check [AWS Bedrock Documentation](https://docs.aws.amazon.com/bedrock)
-2. Review [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
-3. Join our [Community Discussion](https://github.com/evereven-tech/horizons-omnichat/discussions)
+3. Review [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+4. Join our [Community Discussion](https://github.com/evereven-tech/horizons-omnichat/discussions)
 
 {% include footer.html %}

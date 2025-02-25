@@ -172,7 +172,7 @@ docker compose logs -f open-webui
 ## Advanced Configuration
 
 ### Custom Model Configuration
-Edit `local/.env` and add/remove models you like: https://ollama.com/library
+Edit `local/.env` and add/remove models you like: [https://ollama.com/library](https://ollama.com/library)
 ```
 INSTALLED_MODELS=llama2,mistral,tinyllama
 ```

@@ -75,6 +75,7 @@ graph TD
 ## Deployment Architectures
 
 ### 1. Local Mode
+
 ```mermaid
 graph LR
     User --> WebUI
@@ -94,6 +95,7 @@ graph LR
   - Simplified deployment
 
 ### 2. Hybrid Mode
+
 ```mermaid
 graph LR
     User --> WebUI
@@ -141,6 +143,7 @@ graph LR
 ## Data Flow
 
 ### 1. Chat Request Flow
+
 ```mermaid
 sequenceDiagram
     participant User
@@ -157,6 +160,7 @@ sequenceDiagram
 ```
 
 ### 2. Model Management Flow
+
 ```mermaid
 sequenceDiagram
     participant Admin
