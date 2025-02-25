@@ -14,7 +14,7 @@ Horizons OmniChat is engineered with modularity and flexibility at its core, ena
 The system is thoughtfully divided into four interconnected layers, each designed to handle specific aspects of the platform's functionality while working in harmony with the others:
 
 ```mermaid
-graph TD
+graph LR
     A[Client Layer] --> B[Application Layer]
     B --> C[Model Layer]
     B --> D[Persistence Layer]
@@ -126,14 +126,14 @@ graph LR
 - **Components**:
   - Application Load Balancer
   - ECS Fargate for WebUI
-  - ECS EC2 for Ollama
+  - ECS EC2 for Ollama with GPU Optimisation
   - RDS for PostgreSQL
   - EFS for model storage
 - **Features**:
-  - Auto-scaling
-  - High availability
-  - Managed services
-  - Enterprise security
+  - Auto-scaling **(ENTERPRISE)**
+  - High availability **(ENTERPRISE)**
+  - Managed services 
+  - Enterprise security **(ENTERPRISE)**
 
 ## Data Flow
 
@@ -170,28 +170,6 @@ sequenceDiagram
     Ollama->>WebUI: Installation complete
     WebUI->>Admin: Show success
 ```
-
-## Security Architecture
-
-- **Authentication**: Role-based access control
-- **Encryption**: TLS for all communications
-- **Data Protection**: Encrypted storage
-- **Network Security**: Private subnets and security groups
-- **Audit**: Comprehensive logging
-
-## Performance Considerations
-
-### 1. Resource Requirements
-- **CPU**: Model inference, request handling
-- **Memory**: Model loading, session management
-- **Storage**: Model files, chat history
-- **Network**: API communications, model downloads
-
-### 2. Optimization Strategies
-- Model quantization
-- Response caching
-- Connection pooling
-- Load balancing
 
 ## Next Steps
 

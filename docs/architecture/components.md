@@ -9,9 +9,9 @@ Understanding the components that make up Horizons OmniChat is crucial for succe
 
 ## Core Components: The Building Blocks of Horizons
 
-At its heart, Horizons consists of three primary components, each carefully designed to handle specific aspects of the platform's functionality. Let's dive into each one:
+Horizons consists of three primary components, each carefully designed to handle specific aspects of the platform's functionality.
 
-### Open WebUI: Your Gateway to AI Interaction
+### Open WebUI: Gateway to AI Interaction
 
 Open WebUI serves as more than just an interface - it's the command center of your Horizons deployment. Built with modern technologies, it provides a seamless experience for both users and administrators.
 
@@ -27,9 +27,9 @@ This powerful combination enables:
 - Flexible model selection and configuration options
 - Detailed chat history and conversation management
 
-### Ollama: The Local Intelligence Engine
+### Ollama: Local Intelligence Engine
 
-Ollama represents our commitment to providing powerful AI capabilities directly within your infrastructure. Think of it as your personal AI powerhouse, capable of running sophisticated language models while maintaining complete data privacy.
+Ollama represents our commitment to providing powerful AI capabilities directly within your infrastructure.
 
 Key capabilities include:
 - Sophisticated model management for multiple AI models
@@ -44,7 +44,7 @@ Key capabilities include:
   - ALIA/Salamandra for Spanish-language excellence
   - Custom models for specific use cases
 
-### Bedrock Gateway: Your Bridge to Cloud AI
+### Bedrock Gateway: Bridge to Cloud AI
 
 The Bedrock Gateway exemplifies our approach to hybrid capabilities, providing seamless access to AWS's powerful AI models while maintaining security and control. This component acts as an intelligent intermediary, handling:
 - Sophisticated API compatibility and transformation
@@ -57,7 +57,7 @@ The Bedrock Gateway exemplifies our approach to hybrid capabilities, providing s
   - Jurassic (AI21) for creative content
   - Command (Cohere) for business applications
 
-## Component Interactions: A Symphony of Services
+## Component Interactions
 
 Understanding how these components work together is crucial for optimal deployment. Let's explore the interaction patterns across different deployment modes:
 
@@ -153,7 +153,6 @@ As your usage grows, Horizons grows with you. Our scaling capabilities ensure yo
 In Local and Hybrid modes, we focus on maximizing your infrastructure's potential:
 - Intelligent vertical scaling of Ollama to leverage available resources
 - Sophisticated PostgreSQL connection pooling for optimal database performance
-- Optional Redis caching for enhanced response times
 - Resource-aware model loading and unloading
 
 ### AWS Mode: Enterprise-Grade Scalability
@@ -168,14 +167,14 @@ AWS mode unleashes the full power of cloud scaling:
 
 Maintaining a healthy system requires vigilant monitoring. Horizons provides comprehensive health monitoring capabilities:
 
-### Health Checks: Your Early Warning System
+### Health Checks
 
 Each component provides detailed health information:
 - WebUI status through `/health` endpoint
 - Ollama health via `/api/tags`
 - Bedrock Gateway monitoring via `/health`
 
-### Performance Metrics: Understanding Your System
+### Performance Metrics: Understanding The System
 
 We track crucial metrics to ensure optimal performance:
 - Real-time request latency monitoring
@@ -192,9 +191,8 @@ Security isn't just a feature in Horizons - it's a fundamental aspect of every c
 
 We implement multiple security layers:
 - Enterprise-grade TLS encryption between all components
-- Robust API key authentication
-- Intelligent rate limiting to prevent abuse
-- Comprehensive input validation at all entry points
+- Intelligent rate limiting to prevent abuse **(ENTERPRISE)**
+- Comprehensive input validation at all entry points **(ENTERPRISE)**
 
 ## Your Next Steps
 

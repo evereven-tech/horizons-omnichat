@@ -20,7 +20,6 @@ In local deployments, we focus on providing robust security without complexity. 
 - Strong basic authentication with configurable credentials
 - Session-based authentication for consistent user experience
 - Role-based access control (RBAC) for granular permissions
-- API key authentication for programmatic access
 
 ### Hybrid Mode Enhancements
 
@@ -29,7 +28,6 @@ When deploying in hybrid mode, we layer additional security features on top of o
 - Seamless AWS IAM integration for Bedrock access
 - Token-based authentication for enhanced security
 - Fine-grained API permissions management
-- Enhanced audit logging capabilities
 
 ### AWS Mode Enterprise Security
 
@@ -37,14 +35,16 @@ In AWS deployments, we leverage the full power of cloud security services:
 
 - AWS Cognito user pools for robust identity management
 - JWT token validation for secure authentication
-- **(ENTERPRISE)** Multi-factor authentication (MFA) support
-- **(ENTERPRISE)** SAML/OAuth2 integration capabilities
+- Multi-factor authentication (MFA) support **(ENTERPRISE)**
+- SAML/OAuth2 integration capabilities with Cognito
+- Enhanced audit logging capabilities **(ENTERPRISE)**
+
 
 ### Enterprise Security Guardrails
 
 Our enterprise security guardrails provide additional layers of protection:
 
-**(ENTERPRISE)** Guardrails Layer:
+**Guardrails Layer (ENTERPRISE)** :
 - Functional Security Layer (Level 1)
   - Sophisticated input validation for LLM prompts
   - Topic-specific security controls
@@ -108,22 +108,6 @@ We implement enterprise-grade network security through:
 | System Data | Logs, metrics | Restricted access |
 | Configuration | API keys, credentials | Encrypted, versioned |
 
-## Access Control
-
-### Identity Management
-```yaml
-Roles:
-  - Administrator
-  - Operator
-  - User
-  - API Client
-
-Permissions:
-  - chat:read
-  - chat:write
-  - model:manage
-  - system:configure
-```
 
 ### Session Management
 - Secure session handling
@@ -131,7 +115,7 @@ Permissions:
 - Concurrent session limits
 - Session invalidation on logout
 
-## Compliance & Auditing
+## Compliance & Auditing **(ENTERPRISE)** 
 
 ### Audit Logging
 - Authentication events
@@ -146,9 +130,9 @@ Permissions:
 - Data export capabilities
 - Privacy controls
 
-## Threat Protection
+## Threat Protection **(ENTERPRISE)** 
 
-**(ENTERPRISE)** Add WAF to infrastructure
+Add WAF to infrastructure
 
 ### Application Security
 - Input validation
@@ -163,9 +147,10 @@ Permissions:
 - Vulnerability scanning
 - Intrusion detection
 
-## Security Monitoring
+## Security Monitoring **(ENTERPRISE)** 
 
-### Real-time Monitoring
+### Real-time Monitoring 
+
 ```yaml
 Metrics:
   - Authentication failures
@@ -180,35 +165,6 @@ Metrics:
 - Resource access attempts
 - System anomalies
 
-## Incident Response
-
-### Response Process
-1. Detection
-2. Analysis
-3. Containment
-4. Eradication
-5. Recovery
-6. Lessons learned
-
-### Recovery Procedures
-- Backup restoration
-- System rebuilding
-- Access revocation
-- Forensic analysis
-
-## Security Best Practices
-
-### Development
-- Secure coding guidelines
-- Code review requirements
-- Dependency scanning
-- Security testing
-
-### Operations
-- Change management
-- Access reviews
-- Security patching
-- Configuration management
 
 ## Next Steps
 
