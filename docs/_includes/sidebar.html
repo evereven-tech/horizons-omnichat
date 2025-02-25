@@ -1,0 +1,20 @@
+<div class="sidebar">
+  <nav>
+    <ul class="sidebar-nav">
+      {% for item in site.navigation %}
+        <li>
+          <a href="{{ site.baseurl }}{{ item.url }}">{{ item.title }}</a>
+          {% if item.subitems %}
+            <ul class="subitems">
+              {% for subitem in item.subitems %}
+                <li>
+                  <a href="{{ site.baseurl }}{{ subitem.url }}">{{ subitem.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+</div>

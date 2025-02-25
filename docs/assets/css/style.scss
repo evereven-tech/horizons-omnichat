@@ -40,3 +40,53 @@ a {
   color: #198C44;
 }
 
+/* Nuevo layout con sidebar */
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: #f5f5f5;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  position: fixed;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin-bottom: 5px;
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 5px 10px;
+  color: #198C44;
+  text-decoration: none;
+}
+
+.sidebar-nav a:hover {
+  background: #e9e9e9;
+  color: #1FAD53;
+}
+
+.sidebar-nav .subitems {
+  list-style: none;
+  padding-left: 20px;
+}
+
+/* Ajustar el contenido principal */
+#main-content {
+  margin-left: 270px;
+  padding: 20px;
+  width: calc(100% - 270px);
+}
+
