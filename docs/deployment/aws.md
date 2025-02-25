@@ -39,6 +39,7 @@ make aws-apply
 ### Infrastructure Deployment
 
 1. **Terraform State Issues**
+
 ```bash
 # Check state
 terraform -chdir=aws state list
@@ -48,6 +49,7 @@ terraform -chdir=aws refresh
 ```
 
 2. **Resource Creation Failures**
+
 ```bash
 # Get detailed error output
 TF_LOG=DEBUG terraform -chdir=aws apply
@@ -59,6 +61,7 @@ aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,Attribut
 ### ECS Services
 
 1. **Task Definition Issues**
+
 ```bash
 # List task definitions
 aws ecs list-task-definitions
@@ -68,12 +71,14 @@ aws ecs describe-task-definition --task-definition horizons-compute-webui
 ```
 
 2. **Service Health**
+
 ```bash
 # Check service status
 aws ecs describe-services --cluster horizons-compute-fargate --services horizons-compute-webui | grep -e status -e failures
 ```
 
 3. **Container Logs**
+
 ```bash
 # Get log streams
 aws logs describe-log-streams --log-group-name /ecs/horizons/webui
@@ -85,6 +90,7 @@ aws logs get-log-events --log-group-name /ecs/horizons/webui --log-stream-name $
 ### Network Issues
 
 1. **VPC Configuration**
+
 ```bash
 # Check VPC endpoints
 aws ec2 describe-vpc-endpoints --filters Name=vpc-id,Values=vpc-XXXXX
@@ -94,6 +100,7 @@ aws ec2 describe-security-groups --filters Name=group-name,Values=horizons-*
 ```
 
 2. **Load Balancer**
+
 ```bash
 # Check target health
 aws elbv2 describe-target-health --target-group-arn $TARGET_GROUP_ARN
@@ -102,6 +109,7 @@ aws elbv2 describe-target-health --target-group-arn $TARGET_GROUP_ARN
 ### Authentication
 
 1. **Cognito Issues**
+
 ```bash
 # List user pools
 aws cognito-idp list-user-pools --max-results 20
@@ -111,6 +119,7 @@ aws cognito-idp describe-user-pool --user-pool-id $POOL_ID
 ```
 
 2. **SSL Certificate**
+
 ```bash
 # Verify certificate
 aws acm describe-certificate --certificate-arn $CERT_ARN
@@ -119,12 +128,14 @@ aws acm describe-certificate --certificate-arn $CERT_ARN
 ### Database
 
 1. **RDS Connectivity**
+
 ```bash
 # Check RDS status
 aws rds describe-db-instances --db-instance-identifier horizons-persistence-db
 ```
 
 2. **Performance Issues**
+
 ```bash
 # View slow query logs
 aws rds download-db-log-file-portion --db-instance-identifier horizons-persistence-db --log-file-name error/postgresql.log.YYYY-MM-DD-HH
@@ -135,6 +146,7 @@ aws rds download-db-log-file-portion --db-instance-identifier horizons-persisten
 ### Backup and Recovery
 
 1. **Database Backups**
+
 ```bash
 # Create snapshot
 aws rds create-db-snapshot --db-instance-identifier horizons-persistence-db --db-snapshot-identifier your-backup
@@ -144,6 +156,7 @@ aws rds describe-db-snapshots --db-instance-identifier horizons-persistence-db
 ```
 
 2. **EFS Backups**
+
 ```bash
 # Create EFS backup
 aws backup start-backup-job --backup-vault-name horizons-backup --resource-arn $EFS_ARN
@@ -152,12 +165,14 @@ aws backup start-backup-job --backup-vault-name horizons-backup --resource-arn $
 ### Updates and Upgrades
 
 1. **Container Images**
+
 ```bash
 # Update task definitions
 aws ecs update-service --cluster horizons-compute-fargate --service horizons-compute-webui --force-new-deployment
 ```
 
 2. **Infrastructure Updates**
+
 ```bash
 # Apply Terraform changes
 make aws-plan
@@ -167,6 +182,7 @@ make aws-apply
 ### Monitoring
 
 1. **CloudWatch Dashboards**
+
 ```bash
 # View metrics
 aws cloudwatch get-dashboard --dashboard-name horizons-monitoring

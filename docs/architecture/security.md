@@ -27,9 +27,9 @@ All Local Mode features plus:
 All Hybrid Mode features plus:
 - AWS Cognito user pools
 - JWT token validation
-- (EXTRA) Multi-factor authentication (MFA)
-- (EXTRA) SAML/OAuth2 integration
-- (EXTRA) Guardrails Layer
+- **(ENTERPRISE)** Multi-factor authentication (MFA)
+- **(ENTERPRISE)** SAML/OAuth2 integration
+- **(ENTERPRISE)** Guardrails Layer
   - Functional Security Layer (guardrails lv.1)
     - Input validation specific to LLM prompts
     - Specific topics for the model/product
@@ -75,7 +75,8 @@ graph TD
 - Perfect forward secrecy
 
 ### Data Classification
-| Type | Examples | Protection |
+
+| **Type** | **Examples** | **Protection** |
 |------|----------|------------|
 | User Data | Chat history, preferences | Encrypted, access controlled |
 | System Data | Logs, metrics | Restricted access |
@@ -121,7 +122,7 @@ Permissions:
 
 ## Threat Protection
 
-(EXTRA) Add WAF to infrastructure
+**(ENTERPRISE)** Add WAF to infrastructure
 
 ### Application Security
 - Input validation

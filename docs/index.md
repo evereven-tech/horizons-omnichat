@@ -88,7 +88,7 @@ We've organized our documentation with your learning journey in mind:
 
 Horizons is available in three editions to suit different needs:
 
-| Community | Enterprise |
+| **Community** | **Enterprise** |
 |-----------------|------------|
 | Open Source | Premium Support |
 | Local or Cloud Deployment | Guaranteed SLA |

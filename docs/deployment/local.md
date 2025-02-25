@@ -42,6 +42,7 @@ make local-up
 #### Container Startup Failures
 
 1. **Database Connection Issues**
+
 ```bash
 # Check database logs
 docker logs open-webui-db
@@ -51,6 +52,7 @@ docker exec open-webui-db pg_isready
 ```
 
 2. **Ollama Model Download Issues**
+
 ```bash
 # Check Ollama logs
 docker logs ollama
@@ -60,6 +62,7 @@ docker exec ollama ollama pull tinyllama
 ```
 
 3. **WebUI Connection Issues**
+
 ```bash
 # Check WebUI logs
 docker logs open-webui
@@ -71,17 +74,20 @@ curl http://localhost:3002/health
 ### GPU Support
 
 1. **Verify NVIDIA Driver Installation**
+
 ```bash
 nvidia-smi
 ```
 
 2. **Check Docker GPU Access**
+
 ```bash
 # Should list GPU devices
 docker run --rm --gpus all nvidia/cuda:12.8.0-base-oraclelinux9 nvidia-smi
 ```
 
 3. **Enable GPU in Configuration**
+
 ```bash
 # Edit .env file
 OLLAMA_USE_GPU=true
@@ -90,6 +96,7 @@ OLLAMA_USE_GPU=true
 ### Resource Issues
 
 1. **Memory Problems**
+
 ```bash
 # Check container memory usage
 docker stats
@@ -98,6 +105,7 @@ docker stats
 ```
 
 2. **Disk Space**
+
 ```bash
 # Check available space
 df -h
@@ -109,6 +117,7 @@ docker system prune
 ### Network Issues
 
 1. **Port Conflicts**
+
 ```bash
 # Check what's using port 3002
 sudo lsof -i :3002
@@ -117,6 +126,7 @@ sudo lsof -i :3002
 ```
 
 2. **Container Communication**
+
 ```bash
 # Verify network creation
 docker network ls | grep local_chatbot-net

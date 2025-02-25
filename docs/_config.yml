@@ -40,8 +40,6 @@ navigation:
   - title: "🏗️ Architecture"
     url: /architecture/
     subitems:
-      - title: "📊 Overview"
-        url: /architecture
       - title: "🧩 Components"
         url: /architecture/components
       - title: "🔒 Security"
