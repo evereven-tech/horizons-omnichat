@@ -24,8 +24,6 @@ navigation:
         url: /getting-started/features/
       - title: Requirements
         url: /getting-started/requirements/
-      - title: Installation
-        url: /getting-started/installation/
 
   - title: Deployment
     url: /deployment/

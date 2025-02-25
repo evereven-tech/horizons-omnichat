@@ -50,13 +50,13 @@ Understanding performance goes beyond simple up/down status. We track several ke
    - Storage utilization
    - Network bandwidth
 
-3. **Application Metrics**
+3. **Application Metrics (Enterprise)**
    - Active user sessions
    - Request rates
    - Model usage statistics
    - Error rates
 
-### Proactive Monitoring
+### Proactive Monitoring (Enterprise)
 
 Prevention is better than cure. Our proactive monitoring approach helps you identify potential issues before they impact your users:
 
@@ -101,8 +101,8 @@ In AWS deployments, we leverage cloud-native monitoring tools:
 1. **CloudWatch Integration**
    - Custom metrics
    - Log aggregation
-   - Alarm configuration
-   - Dashboard creation
+   - Alarm configuration (Enterprise)
+   - Dashboard creation (Enterprise)
 
 2. **Infrastructure Monitoring**
    - ECS service health
@@ -110,9 +110,9 @@ In AWS deployments, we leverage cloud-native monitoring tools:
    - Network metrics
    - Auto-scaling events
 
-### Alert Management
+### Alert Management (Enterprise)
 
-Effective monitoring isn't just about collecting data - it's about knowing when and how to respond. Our alert management strategy ensures the right people get the right information at the right time.
+Our alert management strategy ensures the right people get the right information at the right time.
 
 #### Alert Configuration
 
@@ -136,49 +136,6 @@ We implement a tiered alert system:
    - Usage statistics
    - Trend reports
 
-### Response Procedures
-
-When alerts trigger, having clear response procedures is crucial:
-
-1. **Initial Assessment**
-   - Verify alert authenticity
-   - Assess impact scope
-   - Identify affected components
-   - Determine urgency
-
-2. **Response Actions**
-   - Follow runbooks
-   - Implement fixes
-   - Monitor resolution
-   - Document actions
-
-3. **Post-Incident Review**
-   - Analyze root cause
-   - Update procedures
-   - Improve monitoring
-   - Share learnings
-
-## Best Practices
-
-To get the most from your monitoring:
-
-1. **Regular Review**
-   - Audit monitoring coverage
-   - Update alert thresholds
-   - Refine response procedures
-   - Validate monitoring tools
-
-2. **Documentation**
-   - Keep runbooks updated
-   - Document alert patterns
-   - Maintain contact lists
-   - Record system changes
-
-3. **Team Training**
-   - Alert response training
-   - Tool familiarity
-   - Procedure reviews
-   - Regular drills
 
 ## Next Steps
 

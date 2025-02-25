@@ -96,27 +96,6 @@ Leverage cloud-native capabilities:
 - IAM security
 - Automated backups
 
-## Best Practices
-
-To maintain a healthy Horizons deployment:
-
-1. **Regular Reviews**
-   - Security audits
-   - Performance analysis
-   - Configuration checks
-   - Backup validation
-
-2. **Documentation**
-   - Keep procedures updated
-   - Document changes
-   - Maintain runbooks
-   - Track configurations
-
-3. **Team Training**
-   - Regular drills
-   - Knowledge sharing
-   - Skill updates
-   - Process reviews
 
 ## Getting Started with Operations
 

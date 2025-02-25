@@ -14,7 +14,7 @@ Operational security is a critical aspect of day-to-day operations in Horizons O
 The first line of defense in daily operations is ensuring that only authorized users have access to the system. Depending on your deployment mode, this involves different considerations:
 
 #### Local Mode
-Local mode prioritizes simplicity without compromising security. We implement:
+Local mode prioritizes simplicity without compromising security. User can implement at WebUI:
 
 - Robust basic authentication with strong password policies
 - Regular credential rotation
@@ -31,7 +31,7 @@ In AWS environments, we leverage the full power of cloud security services:
 - Identity federation for corporate system integration
 - Granular role-based access control (RBAC) policies
 
-### Network Protection
+### Network Protection (AWS Mode)
 
 Network security is crucial for protecting communications between components:
 
@@ -43,7 +43,7 @@ We implement a defense-in-depth strategy:
    - Separate VLANs for different components
    - Segment-specific firewall policies
 
-2. **Traffic Control**
+2. **Traffic Control (Enterprise)**
    - Continuous network traffic monitoring
    - Real-time anomaly detection
    - Automated threat response
@@ -52,7 +52,7 @@ We implement a defense-in-depth strategy:
 
 Data protection is an ongoing responsibility that requires constant attention:
 
-#### Data Lifecycle
+#### Data Lifecycle (Enterprise)
 We follow a structured approach to data protection:
 
 1. **Creation and Capture**
@@ -77,7 +77,7 @@ We follow a structured approach to data protection:
 
 ## Monitoring and Response
 
-### Continuous Monitoring System
+### Continuous Monitoring System (Enterprise)
 
 We implement a proactive monitoring system that includes:
 
@@ -91,7 +91,7 @@ We implement a proactive monitoring system that includes:
    - Regular compliance reporting
    - Periodic policy and procedure reviews
 
-### Incident Response
+### Incident Response (Enterprise)
 
 We maintain an updated and tested incident response plan:
 
@@ -136,6 +136,5 @@ To implement these security measures in your deployment:
 1. Review the [Security Architecture](../architecture/security.md)
 2. Configure [Monitoring](monitoring.md)
 3. Implement [Backup Procedures](backup.md)
-4. Establish [Access Policies](configuration.md#authentication)
 
 {% include footer.html %}
