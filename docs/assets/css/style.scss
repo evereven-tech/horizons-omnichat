@@ -101,10 +101,8 @@ a {
     width: 250px;
     border-right: 1px solid #ddd;
     border-bottom: none;
-    position: sticky;
+    position: static;
     top: 185px;
-    height: calc(100vh - 185px);
-    overflow-y: auto;
   }
 }
 
@@ -144,7 +142,7 @@ a {
   margin-top: 20px;
   
   @media screen and (min-width: 768px) {
-    margin-left: 0;
+    margin-left: 50;
     width: calc(100% - 250px);
   }
 }
