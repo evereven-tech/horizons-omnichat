@@ -52,7 +52,8 @@ a {
   padding: 20px;
   border-right: 1px solid #ddd;
   position: fixed;
-  height: 100%;
+  top: 185px;
+  bottom: 0;
   overflow-y: auto;
 }
 
@@ -88,5 +89,6 @@ a {
   margin-left: 350px;
   padding: 20px;
   width: calc(100% - 350px);
+  margin-top: 20px;
 }
 
