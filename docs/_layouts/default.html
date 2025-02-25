@@ -8,6 +8,9 @@
     {% seo %}
   </head>
   <body>
+    <!-- Añadir el botón de menú -->
+    <button class="menu-toggle">☰</button>
+    
     <header>
       <div class="inner">
         <a href="{{ '/' | absolute_url }}">
@@ -35,5 +38,19 @@
         ga('send', 'pageview');
       </script>
     {% endif %}
+
+    <!-- Añadir el script para manejar el menú -->
+    <script>
+      document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('.sidebar').classList.toggle('active');
+      });
+
+      // Cerrar el menú al hacer clic fuera de él
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.sidebar') && !e.target.closest('.menu-toggle')) {
+          document.querySelector('.sidebar').classList.remove('active');
+        }
+      });
+    </script>
   </body>
 </html>
