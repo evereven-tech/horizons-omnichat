@@ -59,10 +59,10 @@ cd horizons
 # Initialize the environment
 make init
 
-# Choose your deployment mode
+# Choose your deployment mode (Remember having properly set variables)
 make local-up    # For local deployment
 make hybrid-up   # For hybrid deployment
-make aws-apply   # For AWS deployment
+make aws-plan && make aws-apply   # For AWS deployment
 ```
 
 > ⚠️ **Important**: Make sure to check the [system requirements](getting-started/requirements.md) before starting.

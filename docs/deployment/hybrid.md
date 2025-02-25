@@ -38,13 +38,14 @@ make hybrid-up
 ```
 
 4. You can access at the following url:
-- http://localhost:3002/
+- [http://localhost:3002](http://localhost:3002)
 
 ## Troubleshooting
 
 ### AWS Configuration Issues
 
 1. **AWS Credentials**
+
 ```bash
 # Verify AWS credentials
 aws sts get-caller-identity
@@ -54,6 +55,7 @@ env | grep AWS_
 ```
 
 2. **Bedrock Access**
+
 ```bash
 # Test Bedrock connectivity
 aws bedrock list-foundation-models
@@ -65,6 +67,7 @@ docker logs bedrock-gateway
 ### Container Issues
 
 1. **Service Dependencies**
+
 ```bash
 # Check service health (on hybrid folder)
 docker compose ps
@@ -74,6 +77,7 @@ docker compose logs | grep -i error
 ```
 
 2. **Network Connectivity**
+
 ```bash
 # Test Bedrock Gateway endpoint
 curl http://localhost:8000/health
@@ -85,6 +89,7 @@ docker exec open-webui curl bedrock-gateway/health
 ### Model Issues
 
 1. **Local Models (Ollama)**
+
 ```bash
 # List downloaded models
 docker exec ollama ollama list
@@ -94,6 +99,7 @@ docker logs -f ollama
 ```
 
 2. **Bedrock Models**
+
 ```bash
 # Test model availability
 curl http://localhost:8000/v1/models \
@@ -103,6 +109,7 @@ curl http://localhost:8000/v1/models \
 ### Common Error Scenarios
 
 1. **Authentication Failures**
+
 ```bash
 # Check API key configuration
 grep BEDROCK_API_KEY hybrid/.env
@@ -113,6 +120,7 @@ aws sts get-caller-identity
 ```
 
 2. **Resource Constraints**
+
 ```bash
 # Monitor resource usage
 docker stats
@@ -122,6 +130,7 @@ nvidia-smi -l 1
 ```
 
 3. **Database Issues**
+
 ```bash
 # Verify database connection
 docker exec open-webui-db pg_isready
