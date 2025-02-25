@@ -21,70 +21,70 @@ navigation:
     url: /getting-started/
     subitems:
       - title: Features
-        url: /getting-started/features/
+        url: /getting-started/features
       - title: Requirements
-        url: /getting-started/requirements/
+        url: /getting-started/requirements
 
   - title: Deployment
     url: /deployment/
     subitems:
       - title: Local
-        url: /deployment/local/
+        url: /deployment/local
       - title: Hybrid
-        url: /deployment/hybrid/
+        url: /deployment/hybrid
       - title: AWS
-        url: /deployment/aws/
+        url: /deployment/aws
       - title: Kubernetes
-        url: /deployment/kubernetes/
+        url: /deployment/kubernetes
 
   - title: Architecture
     url: /architecture/
     subitems:
       - title: Overview
-        url: /architecture/
+        url: /architecture
       - title: Components
-        url: /architecture/components/
+        url: /architecture/components
       - title: Security
-        url: /architecture/security/
+        url: /architecture/security
 
   - title: Operations
     url: /operations/
     subitems:
       - title: Configuration
-        url: /operations/configuration/
+        url: /operations/configuration
       - title: Monitoring
-        url: /operations/monitoring/
+        url: /operations/monitoring
       - title: Backup
-        url: /operations/backup/
+        url: /operations/backup
       - title: Security
-        url: /operations/security/
+        url: /operations/security
       - title: Troubleshooting
-        url: /operations/troubleshooting/
+        url: /operations/troubleshooting
 
   - title: Security
     url: /security/
     subitems:
       - title: Compliance
-        url: /security/compliance/
+        url: /security/compliance
       - title: Privacy
-        url: /security/privacy/
+        url: /security/privacy
 
   - title: Community
     url: /community/
     subitems:
       - title: FAQ
-        url: /community/faq/
+        url: /community/faq
       - title: Roadmap
-        url: /community/roadmap/
+        url: /community/roadmap
       - title: Showcase
-        url: /community/showcase/
+        url: /community/showcase
 
   - title: Enterprise
     url: /enterprise/
     subitems:
       - title: Support
-        url: /enterprise/support/
+        url: /enterprise/support
       - title: Training
-        url: /enterprise/training/
+        url: /enterprise/training
       - title: Consulting
-        url: /enterprise/consulting/
+        url: /enterprise/consulting
