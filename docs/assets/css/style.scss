@@ -40,20 +40,32 @@ a {
   color: #198C44;
 }
 
-/* Nuevo layout con sidebar */
+/* Responsive layout with sidebar */
 .wrapper {
   display: flex;
   min-height: 100vh;
+  flex-direction: column;
+  
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
 }
 
 .sidebar {
-  width: 250px;
+  width: 100%;
   background: #f5f5f5;
   padding: 20px;
-  border-right: 1px solid #ddd;
-  top: 185px;
-  bottom: 0;
-  overflow-y: auto;
+  border-bottom: 1px solid #ddd;
+  
+  @media screen and (min-width: 768px) {
+    width: 250px;
+    border-right: 1px solid #ddd;
+    border-bottom: none;
+    position: sticky;
+    top: 185px;
+    height: calc(100vh - 185px);
+    overflow-y: auto;
+  }
 }
 
 .sidebar-nav {
@@ -68,9 +80,11 @@ a {
 
 .sidebar-nav a {
   display: block;
-  padding: 5px 10px;
+  padding: 8px 10px;
   color: #198C44;
   text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
 }
 
 .sidebar-nav a:hover {
@@ -83,11 +97,114 @@ a {
   padding-left: 20px;
 }
 
-/* Ajustar el contenido principal */
+/* Main content adjustments */
 #main-content {
-  margin-left: 250px;
   padding: 20px;
-  width: calc(100% - 250px);
+  width: 100%;
   margin-top: 20px;
+  
+  @media screen and (min-width: 768px) {
+    margin-left: 0;
+    width: calc(100% - 250px);
+  }
+}
+
+/* Responsive tables */
+table {
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+  
+  @media screen and (min-width: 768px) {
+    display: table;
+  }
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive code blocks */
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+/* Header adjustments */
+header {
+  padding: 20px;
+  text-align: center;
+  
+  @media screen and (min-width: 768px) {
+    padding: 40px;
+  }
+  
+  h1 {
+    font-size: 24px;
+    
+    @media screen and (min-width: 768px) {
+      font-size: 32px;
+    }
+  }
+  
+  h2 {
+    font-size: 16px;
+    
+    @media screen and (min-width: 768px) {
+      font-size: 20px;
+    }
+  }
+}
+
+/* Navigation improvements */
+.sidebar-nav {
+  .active {
+    background: #e9e9e9;
+    font-weight: bold;
+  }
+  
+  @media screen and (max-width: 767px) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    
+    li {
+      flex: 1 1 auto;
+    }
+    
+    .subitems {
+      width: 100%;
+      padding-left: 10px;
+    }
+  }
+}
+
+/* Improved accessibility */
+a:focus,
+button:focus {
+  outline: 3px solid #1FAD53;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .sidebar {
+    display: none;
+  }
+  
+  #main-content {
+    margin: 0;
+    width: 100%;
+  }
+  
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
 }
 
