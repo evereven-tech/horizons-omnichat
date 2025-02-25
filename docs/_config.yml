@@ -15,76 +15,76 @@ plugins:
 
 # Main navigation
 navigation:
-  - title: Home
+  - title: "🏠 Home"
     url: /
-  - title: Getting Started
+  - title: "🚀 Getting Started"
     url: /getting-started/
     subitems:
-      - title: Features
+      - title: "✨ Features"
         url: /getting-started/features
-      - title: Requirements
+      - title: "📋 Requirements"
         url: /getting-started/requirements
 
-  - title: Deployment
+  - title: "🔧 Deployment"
     url: /deployment/
     subitems:
-      - title: Local
+      - title: "💻 Local"
         url: /deployment/local
-      - title: Hybrid
+      - title: "🔄 Hybrid"
         url: /deployment/hybrid
-      - title: AWS
+      - title: "☁️ AWS"
         url: /deployment/aws
-      - title: Kubernetes
+      - title: "⚓ Kubernetes"
         url: /deployment/kubernetes
 
-  - title: Architecture
+  - title: "🏗️ Architecture"
     url: /architecture/
     subitems:
-      - title: Overview
+      - title: "📊 Overview"
         url: /architecture
-      - title: Components
+      - title: "🧩 Components"
         url: /architecture/components
-      - title: Security
+      - title: "🔒 Security"
         url: /architecture/security
 
-  - title: Operations
+  - title: "⚙️ Operations"
     url: /operations/
     subitems:
-      - title: Configuration
+      - title: "⚡ Configuration"
         url: /operations/configuration
-      - title: Monitoring
+      - title: "📈 Monitoring"
         url: /operations/monitoring
-      - title: Backup
+      - title: "💾 Backup"
         url: /operations/backup
-      - title: Security
+      - title: "🛡️ Security"
         url: /operations/security
-      - title: Troubleshooting
+      - title: "🔍 Troubleshooting"
         url: /operations/troubleshooting
 
-  - title: Security
+  - title: "🔐 Security"
     url: /security/
     subitems:
-      - title: Compliance
+      - title: "📜 Compliance"
         url: /security/compliance
-      - title: Privacy
+      - title: "🔏 Privacy"
         url: /security/privacy
 
-  - title: Community
+  - title: "👥 Community"
     url: /community/
     subitems:
-      - title: FAQ
+      - title: "❓ FAQ"
         url: /community/faq
-      - title: Roadmap
+      - title: "🗺️ Roadmap"
         url: /community/roadmap
-      - title: Showcase
+      - title: "🌟 Showcase"
         url: /community/showcase
 
-  - title: Enterprise
+  - title: "🏢 Enterprise"
     url: /enterprise/
     subitems:
-      - title: Support
+      - title: "🤝 Support"
         url: /enterprise/support
-      - title: Training
+      - title: "📚 Training"
         url: /enterprise/training
-      - title: Consulting
+      - title: "💼 Consulting"
         url: /enterprise/consulting
