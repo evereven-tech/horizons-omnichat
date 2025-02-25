@@ -90,16 +90,3 @@ navigation:
         url: /enterprise/training/
       - title: Consulting
         url: /enterprise/consulting/
-
-# Jekyll Spaceship config
-jekyll-spaceship:
-  # default enabled processors
-  processors:
-    - table-processor
-    - mathjax-processor
-    - plantuml-processor
-    - mermaid-processor
-    - polyfill-processor
-    - media-processor
-    - emoji-processor
-    - element-processor
