@@ -52,7 +52,7 @@ We implement a defense-in-depth strategy:
 
 Data protection is an ongoing responsibility that requires constant attention:
 
-#### Data Lifecycle (Enterprise)
+#### Data Lifecycle **(ENTERPRISE)**
 We follow a structured approach to data protection:
 
 1. **Creation and Capture**
@@ -77,7 +77,7 @@ We follow a structured approach to data protection:
 
 ## Monitoring and Response
 
-### Continuous Monitoring System (Enterprise)
+### Continuous Monitoring System **(ENTERPRISE)**
 
 We implement a proactive monitoring system that includes:
 
@@ -91,7 +91,7 @@ We implement a proactive monitoring system that includes:
    - Regular compliance reporting
    - Periodic policy and procedure reviews
 
-### Incident Response (Enterprise)
+### Incident Response **(ENTERPRISE)**
 
 We maintain an updated and tested incident response plan:
 

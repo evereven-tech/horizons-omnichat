@@ -50,13 +50,13 @@ Understanding performance goes beyond simple up/down status. We track several ke
    - Storage utilization
    - Network bandwidth
 
-3. **Application Metrics (Enterprise)**
+3. **Application Metrics (ENTERPRISE)**
    - Active user sessions
    - Request rates
    - Model usage statistics
    - Error rates
 
-### Proactive Monitoring (Enterprise)
+### Proactive Monitoring (ENTERPRISE)
 
 Prevention is better than cure. Our proactive monitoring approach helps you identify potential issues before they impact your users:
 
@@ -101,8 +101,8 @@ In AWS deployments, we leverage cloud-native monitoring tools:
 1. **CloudWatch Integration**
    - Custom metrics
    - Log aggregation
-   - Alarm configuration (Enterprise)
-   - Dashboard creation (Enterprise)
+   - Alarm configuration **(ENTERPRISE)**
+   - Dashboard creation **(ENTERPRISE)**
 
 2. **Infrastructure Monitoring**
    - ECS service health
@@ -110,13 +110,13 @@ In AWS deployments, we leverage cloud-native monitoring tools:
    - Network metrics
    - Auto-scaling events
 
-### Alert Management (Enterprise)
+### Alert Management (ENTERPRISE)
 
 Our alert management strategy ensures the right people get the right information at the right time.
 
 #### Alert Configuration
 
-We implement a tiered alert system:
+We implement a tiered alert system with the following:
 
 1. **Critical Alerts**
    - Service outages
