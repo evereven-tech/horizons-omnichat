@@ -10,7 +10,7 @@
 
 A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
 
-![Horizons Demo](assets/intro_horizon.gif)
+![Horizons Demo](assets/horizons_fast_demo.gif)
 
 [Getting Started](#-quick-start) •
 [Documentation](https://evereven-tech.github.io/horizons-omnichat/) •
