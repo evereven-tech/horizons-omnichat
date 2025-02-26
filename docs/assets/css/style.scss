@@ -44,6 +44,7 @@ a {
 .wrapper {
   display: flex;
   min-height: 100vh;
+  padding-right: 40px;
   
   @media screen and (max-width: 767px) {
     .sidebar {
