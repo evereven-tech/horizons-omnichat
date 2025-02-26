@@ -13,6 +13,8 @@ Welcome to Horizons, a flexible and powerful chatbot platform that brings enterp
 [Documentation](#documentation) • 
 [Enterprise](#editions)
 
+![Horizons Demo](docs/assets/horizons_fast_demo.gif)
+
 </div>
 
 ## Introduction
