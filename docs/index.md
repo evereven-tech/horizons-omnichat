@@ -9,8 +9,8 @@ title: Home
 
 Welcome to Horizons, a flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
 
-[Get Started](#quick-start){: .btn .btn-primary }
-[Documentation](#documentation){: .btn }
+[Get Started](#quick-start) •
+[Documentation](#documentation) • 
 [Enterprise](#editions)
 
 </div>

@@ -12,6 +12,8 @@ Documentation repository for Horizons OmniChat platform.
 
 </div>
 
+![Horizons Demo](docs/assets/horizons_fast_demo.gif)
+
 ---
 
 ## 📚 About This Repository
