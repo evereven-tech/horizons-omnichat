@@ -29,6 +29,10 @@ resource "aws_ecs_task_definition" "webui" {
           value = var.aws_region
         },
         {
+          name  = "BYPASS_MODEL_ACCESS_CONTROL"
+          value = "True"
+        },
+        {
           "name" : "OPENAI_API_BASE_URL",
           "value" : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1"
         },
