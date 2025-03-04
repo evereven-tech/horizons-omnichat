@@ -60,16 +60,16 @@ resource "aws_autoscaling_group" "ollama" {
   name                = "${var.project_name}-compute-ollama"
   desired_capacity    = var.ollama_desired_count
   max_size            = var.ollama_max_count
-  min_size            = 1 # Garantizamos mínimo 1 instancia
+  min_size            = var.ollama_min_count
   target_group_arns   = [aws_lb_target_group.ollama.arn]
   vpc_zone_identifier = aws_subnet.private[*].id
 
   mixed_instances_policy {
     instances_distribution {
-      on_demand_base_capacity                  = 1 # Garantizamos 1 instancia on-demand
-      on_demand_percentage_above_base_capacity = 0 # El resto en spot
-      spot_allocation_strategy                 = "capacity-optimized"
-      spot_max_price                           = var.spot_config.spot_price["g4dn.xlarge"]
+      on_demand_base_capacity                  = 0 # Usar solo instancias spot
+      on_demand_percentage_above_base_capacity = 0 # 0% on-demand por encima de la capacidad base
+      spot_allocation_strategy                 = var.spot_config.allocation_strategy
+      spot_instance_pools                      = 3 # Número de pools de spot a considerar
     }
 
     launch_template {
@@ -78,8 +78,15 @@ resource "aws_autoscaling_group" "ollama" {
         version            = "$Latest"
       }
 
-      override {
-        instance_type = "g4dn.xlarge"
+      # Añadir todos los tipos de instancias con sus prioridades
+      dynamic "override" {
+        for_each = var.gpu_config.instance_types
+        content {
+          instance_type     = override.value
+          weighted_capacity = "1"
+          # Opcional: añadir spot_price específico para cada tipo
+          spot_price = lookup(var.spot_config.spot_price, override.value, null)
+        }
       }
     }
   }
@@ -172,10 +179,10 @@ resource "aws_autoscaling_schedule" "scale_up_workday" {
 resource "aws_autoscaling_schedule" "scale_down_workday" {
   scheduled_action_name  = "${var.project_name}-compute-scale-down-workday"
   min_size               = 0
-  max_size               = 0
-  desired_capacity       = 0
-  recurrence             = "0 19 * * mon-fri" # 19:00 PM, Lunes a Viernes
-  time_zone              = "Europe/Madrid"    # Zona horaria de España
+  max_size               = var.ollama_max_count  # Mantener el máximo para no perder la configuración
+  desired_capacity       = 0                     # Escalar a 0 instancias
+  recurrence             = "0 19 * * mon-fri"    # 19:00 PM, Lunes a Viernes
+  time_zone              = "Europe/Madrid"       # Zona horaria de España
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
