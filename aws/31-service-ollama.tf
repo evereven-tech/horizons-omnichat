@@ -57,6 +57,14 @@ resource "aws_ecs_task_definition" "ollama" {
         }
       ]
 
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://localhost:11434/api/tags || exit 1"]
+        interval    = 30
+        timeout     = 10
+        retries     = 3
+        startPeriod = 90  # Los modelos pueden tardar en cargarse
+      }
+
       resourceRequirements = [
         {
           type  = "GPU"
@@ -82,6 +90,11 @@ resource "aws_ecs_task_definition" "ollama" {
             permissions   = ["read", "write"]
           }
         ]
+        initProcessEnabled = true
+        capabilities = {
+          add  = ["SYS_ADMIN"]
+          drop = []
+        }
       }
 
       dockerLabels = {
@@ -120,15 +133,6 @@ resource "aws_ecs_task_definition" "ollama" {
       runtimePlatform = {
         operatingSystemFamily = "LINUX"
         cpuArchitecture       = "X86_64"
-      }
-
-      # Habilitar proceso init
-      linuxParameters = {
-        initProcessEnabled = true
-        capabilities = {
-          add  = ["SYS_ADMIN"]
-          drop = []
-        }
       }
     }
   ])
