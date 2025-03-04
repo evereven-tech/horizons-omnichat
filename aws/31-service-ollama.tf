@@ -62,7 +62,7 @@ resource "aws_ecs_task_definition" "ollama" {
         interval    = 30
         timeout     = 10
         retries     = 3
-        startPeriod = 90  # Los modelos pueden tardar en cargarse
+        startPeriod = 90 # Los modelos pueden tardar en cargarse
       }
 
       resourceRequirements = [

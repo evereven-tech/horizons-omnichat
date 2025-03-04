@@ -84,8 +84,23 @@ resource "aws_autoscaling_group" "ollama" {
         content {
           instance_type     = override.value
           weighted_capacity = "1"
-          # Opcional: añadir spot_price específico para cada tipo
-          spot_price = lookup(var.spot_config.spot_price, override.value, null)
+
+          #instance_requirements {
+          #  accelerator_manufacturers                   = ["nvidia"]
+          #  spot_max_price_percentage_over_lowest_price = 50
+          #
+          #  accelerator_count {
+          #    min = 1 # Min 1x GPU N
+          #  }
+          #
+          #  memory_mib {
+          #    min = 16384 # Min 16GB RAM
+          #  }
+          #
+          #  vcpu_count {
+          #    min = 4 # Min 4x vCPU
+          #  }
+          #}
         }
       }
     }
@@ -179,10 +194,10 @@ resource "aws_autoscaling_schedule" "scale_up_workday" {
 resource "aws_autoscaling_schedule" "scale_down_workday" {
   scheduled_action_name  = "${var.project_name}-compute-scale-down-workday"
   min_size               = 0
-  max_size               = var.ollama_max_count  # Mantener el máximo para no perder la configuración
-  desired_capacity       = 0                     # Escalar a 0 instancias
-  recurrence             = "0 19 * * mon-fri"    # 19:00 PM, Lunes a Viernes
-  time_zone              = "Europe/Madrid"       # Zona horaria de España
+  max_size               = var.ollama_max_count # Mantener el máximo para no perder la configuración
+  desired_capacity       = 0                    # Escalar a 0 instancias
+  recurrence             = "0 19 * * mon-fri"   # 19:00 PM, Lunes a Viernes
+  time_zone              = "Europe/Madrid"      # Zona horaria de España
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 

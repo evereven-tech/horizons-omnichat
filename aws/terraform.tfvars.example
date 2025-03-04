@@ -32,11 +32,6 @@ gpu_config = {
 }
 
 spot_config = {
-  spot_price = {
-    "g4dn.xlarge" = "0.50"
-    "g5.xlarge"   = "0.60"
-    "p3.2xlarge"  = "1.00"
-  }
   interruption_behavior = "terminate"
   allocation_strategy   = "capacity-optimized-prioritized"
 }
