@@ -14,7 +14,7 @@ echo "Using AWS Account: ${AWS_ACCOUNT}"
 echo "ECR URL: ${ECR_URL}"
 
 # Versiones a procesar
-VERSIONS=("latest" "v0.5.14" "v0.5.11" "v0.5.10" "v0.5.7")
+VERSIONS=("main" "v0.5.18" "v0.5.14")
 
 # Login en ECR
 aws ecr get-login-password --region ${AWS_REGION} | podman login --username AWS --password-stdin ${ECR_URL}
