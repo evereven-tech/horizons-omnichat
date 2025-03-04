@@ -84,23 +84,6 @@ resource "aws_autoscaling_group" "ollama" {
         content {
           instance_type     = override.value
           weighted_capacity = "1"
-
-          #instance_requirements {
-          #  accelerator_manufacturers                   = ["nvidia"]
-          #  spot_max_price_percentage_over_lowest_price = 50
-          #
-          #  accelerator_count {
-          #    min = 1 # Min 1x GPU N
-          #  }
-          #
-          #  memory_mib {
-          #    min = 16384 # Min 16GB RAM
-          #  }
-          #
-          #  vcpu_count {
-          #    min = 4 # Min 4x vCPU
-          #  }
-          #}
         }
       }
     }
