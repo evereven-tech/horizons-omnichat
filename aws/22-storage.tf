@@ -75,6 +75,39 @@ resource "aws_efs_access_point" "models" {
 # ECR
 # #############################################################################
 
+# Definir un local para la política de ciclo de vida común
+locals {
+  ecr_lifecycle_policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1
+        description  = "Keep only the last 10 tagged images"
+        selection = {
+          tagStatus   = "tagged"
+          countType   = "imageCountMoreThan"
+          countNumber = 10
+        }
+        action = {
+          type = "expire"
+        }
+      },
+      {
+        rulePriority = 2
+        description  = "Remove untagged images older than 7 days"
+        selection = {
+          tagStatus   = "untagged"
+          countType   = "sinceImagePushed"
+          countUnit   = "days"
+          countNumber = 7
+        }
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+}
+
 # ECR Repository para OpenWebUI
 resource "aws_ecr_repository" "webui" {
   name                 = "${var.project_name}-webui"
@@ -97,49 +130,7 @@ resource "aws_ecr_repository" "webui" {
 # Política de ciclo de vida para OpenWebUI
 resource "aws_ecr_lifecycle_policy" "webui" {
   repository = aws_ecr_repository.webui.name
-
-  policy = jsonencode({
-    rules = [
-      {
-        rulePriority = 1
-        description  = "Keep only the last 5 images with 'latest' tag"
-        selection = {
-          tagStatus     = "tagged"
-          tagPrefixList = ["latest"]
-          countType     = "imageCountMoreThan"
-          countNumber   = 5
-        }
-        action = {
-          type = "expire"
-        }
-      },
-      {
-        rulePriority = 2
-        description  = "Keep only the last 10 tagged images"
-        selection = {
-          tagStatus   = "tagged"
-          countType   = "imageCountMoreThan"
-          countNumber = 10
-        }
-        action = {
-          type = "expire"
-        }
-      },
-      {
-        rulePriority = 3
-        description  = "Remove untagged images older than 7 days"
-        selection = {
-          tagStatus   = "untagged"
-          countType   = "sinceImagePushed"
-          countUnit   = "days"
-          countNumber = 7
-        }
-        action = {
-          type = "expire"
-        }
-      }
-    ]
-  })
+  policy     = local.ecr_lifecycle_policy
 }
 
 # ECR Repository para Bedrock Gateway
@@ -164,49 +155,7 @@ resource "aws_ecr_repository" "bedrock_gateway" {
 # Política de ciclo de vida para Bedrock Gateway
 resource "aws_ecr_lifecycle_policy" "bedrock_gateway" {
   repository = aws_ecr_repository.bedrock_gateway.name
-
-  policy = jsonencode({
-    rules = [
-      {
-        rulePriority = 1
-        description  = "Keep only the last 5 images with 'latest' tag"
-        selection = {
-          tagStatus     = "tagged"
-          tagPrefixList = ["latest"]
-          countType     = "imageCountMoreThan"
-          countNumber   = 5
-        }
-        action = {
-          type = "expire"
-        }
-      },
-      {
-        rulePriority = 2
-        description  = "Keep only the last 10 tagged images"
-        selection = {
-          tagStatus   = "tagged"
-          countType   = "imageCountMoreThan"
-          countNumber = 10
-        }
-        action = {
-          type = "expire"
-        }
-      },
-      {
-        rulePriority = 3
-        description  = "Remove untagged images older than 7 days"
-        selection = {
-          tagStatus   = "untagged"
-          countType   = "sinceImagePushed"
-          countUnit   = "days"
-          countNumber = 7
-        }
-        action = {
-          type = "expire"
-        }
-      }
-    ]
-  })
+  policy     = local.ecr_lifecycle_policy
 }
 
 # ECR Repository para Ollama
@@ -231,47 +180,5 @@ resource "aws_ecr_repository" "ollama" {
 # Política de ciclo de vida para Ollama
 resource "aws_ecr_lifecycle_policy" "ollama" {
   repository = aws_ecr_repository.ollama.name
-
-  policy = jsonencode({
-    rules = [
-      {
-        rulePriority = 1
-        description  = "Keep only the last 5 images with 'latest' tag"
-        selection = {
-          tagStatus     = "tagged"
-          tagPrefixList = ["latest"]
-          countType     = "imageCountMoreThan"
-          countNumber   = 5
-        }
-        action = {
-          type = "expire"
-        }
-      },
-      {
-        rulePriority = 2
-        description  = "Keep only the last 10 tagged images"
-        selection = {
-          tagStatus   = "tagged"
-          countType   = "imageCountMoreThan"
-          countNumber = 10
-        }
-        action = {
-          type = "expire"
-        }
-      },
-      {
-        rulePriority = 3
-        description  = "Remove untagged images older than 7 days"
-        selection = {
-          tagStatus   = "untagged"
-          countType   = "sinceImagePushed"
-          countUnit   = "days"
-          countNumber = 7
-        }
-        action = {
-          type = "expire"
-        }
-      }
-    ]
-  })
+  policy     = local.ecr_lifecycle_policy
 }
