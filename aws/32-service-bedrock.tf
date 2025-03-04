@@ -35,6 +35,13 @@ resource "aws_ecs_task_definition" "bedrock" {
           valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:bedrock_api_key::"
         }
       ]
+      healthCheck = {
+        command     = ["CMD-SHELL", "python -c \"import http.client; conn = http.client.HTTPConnection('localhost', 80); conn.request('GET', '/health'); response = conn.getresponse(); exit(0 if response.status == 200 else 1)\""]
+        interval    = 30
+        timeout     = 5
+        retries     = 3
+        startPeriod = 60
+      }
       logConfiguration = {
         logDriver = "awslogs"
         options = {
