@@ -3,6 +3,15 @@
 # Exit on error
 set -e
 
+# Detect container runtime (podman or docker)
+CONTAINER_RUNTIME=$(which podman 2>/dev/null || which docker 2>/dev/null)
+if [ -z "$CONTAINER_RUNTIME" ]; then
+    echo "Error: No container runtime found. Please install podman or docker."
+    exit 1
+fi
+RUNTIME_CMD=$(basename "$CONTAINER_RUNTIME")
+echo "Using container runtime: $RUNTIME_CMD"
+
 # Default values
 DEFAULT_AWS_REGION="eu-west-1"
 DEFAULT_PROJECT_NAME="horizons"
@@ -29,7 +38,7 @@ log_error() {
 check_dependencies() {
     local missing_deps=0
 
-    for cmd in podman aws jq git; do
+    for cmd in $RUNTIME_CMD aws jq git; do
         if ! command -v $cmd &> /dev/null; then
             log_error "$cmd is required but not installed."
             missing_deps=1
@@ -68,18 +77,18 @@ log_info "Git submodule updated successfully!"
 
 # Login to ECR
 log_info "Logging into ECR..."
-aws ecr get-login-password --region ${AWS_REGION} | podman login --username AWS --password-stdin ${ECR_REGISTRY}
+aws ecr get-login-password --region ${AWS_REGION} | $RUNTIME_CMD login --username AWS --password-stdin ${ECR_REGISTRY}
 
 # Build and push Bedrock Gateway with both tags
 log_info "Building Bedrock Gateway image..."
-podman build -t ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest \
+$RUNTIME_CMD build -t ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest \
     -t ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:${DATE_TAG} \
     -f ../external/bedrock-gateway/src/Dockerfile_ecs ../external/bedrock-gateway/src/
 
 log_info "Pushing Bedrock Gateway image with latest tag..."
-podman push ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest
+$RUNTIME_CMD push ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:latest
 
 log_info "Pushing Bedrock Gateway image with date tag (${DATE_TAG})..."
-podman push ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:${DATE_TAG}
+$RUNTIME_CMD push ${ECR_REGISTRY}/${PROJECT_NAME}-bedrock-gateway:${DATE_TAG}
 
 log_info "Bedrock Gateway image built and pushed successfully with tags: latest and ${DATE_TAG}!"

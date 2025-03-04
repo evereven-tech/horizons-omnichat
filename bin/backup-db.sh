@@ -11,6 +11,15 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Detect container runtime (podman or docker)
+CONTAINER_RUNTIME=$(which podman 2>/dev/null || which docker 2>/dev/null)
+if [ -z "$CONTAINER_RUNTIME" ]; then
+    echo -e "${RED}Error: No container runtime found. Please install podman or docker.${NC}"
+    exit 1
+fi
+RUNTIME_CMD=$(basename "$CONTAINER_RUNTIME")
+echo -e "${GREEN}Using container runtime: $RUNTIME_CMD${NC}"
+
 # PostgreSQL container name
 DB_CONTAINER="open-webui-db"
 
@@ -31,7 +40,7 @@ check_container() {
         echo -e "${YELLOW}Loading configuration from $env_file${NC}"
         source "$env_file"
         
-        if podman ps | grep -q "$DB_CONTAINER"; then
+        if $RUNTIME_CMD ps | grep -q "$DB_CONTAINER"; then
             echo -e "${GREEN}Found PostgreSQL container in $env_dir environment${NC}"
             return 0
         fi
@@ -57,7 +66,7 @@ echo -e "${YELLOW}User: $POSTGRES_USER${NC}"
 
 # Execute the backup
 echo -e "${GREEN}Creating backup at: $BACKUP_FILE${NC}"
-podman exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
+$RUNTIME_CMD exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
   pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" > "$BACKUP_FILE"
 
 # Verify backup was successful

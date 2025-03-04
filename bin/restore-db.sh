@@ -11,6 +11,15 @@ NC='\033[0m' # No Color
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+# Detect container runtime (podman or docker)
+CONTAINER_RUNTIME=$(which podman 2>/dev/null || which docker 2>/dev/null)
+if [ -z "$CONTAINER_RUNTIME" ]; then
+    echo -e "${RED}Error: No container runtime found. Please install podman or docker.${NC}"
+    exit 1
+fi
+RUNTIME_CMD=$(basename "$CONTAINER_RUNTIME")
+echo -e "${GREEN}Using container runtime: $RUNTIME_CMD${NC}"
+
 # PostgreSQL container name
 DB_CONTAINER="open-webui-db"
 
@@ -23,7 +32,7 @@ check_container() {
         echo -e "${YELLOW}Loading configuration from $env_file${NC}"
         source "$env_file"
         
-        if docker ps | grep -q "$DB_CONTAINER"; then
+        if $RUNTIME_CMD ps | grep -q "$DB_CONTAINER"; then
             echo -e "${GREEN}Found PostgreSQL container in $env_dir environment${NC}"
             return 0
         fi
@@ -76,20 +85,20 @@ echo -e "${GREEN}Restoring database from $BACKUP_FILE...${NC}"
 
 # Terminate existing connections
 echo -e "${YELLOW}Terminating existing database connections...${NC}"
-docker exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
+$RUNTIME_CMD exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
   psql -U "$POSTGRES_USER" -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$POSTGRES_DB' AND pid <> pg_backend_pid();"
 
 # Drop and recreate database
 echo -e "${YELLOW}Dropping and recreating database...${NC}"
-docker exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
+$RUNTIME_CMD exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
   psql -U "$POSTGRES_USER" -c "DROP DATABASE IF EXISTS $POSTGRES_DB;"
 
-docker exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
+$RUNTIME_CMD exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
   psql -U "$POSTGRES_USER" -c "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER;"
 
 # Restore from backup file
 echo -e "${YELLOW}Importing data from backup...${NC}"
-cat "$BACKUP_FILE" | docker exec -i -e PGPASSWORD="$POSTGRES_PASSWORD" "$DB_CONTAINER" \
+cat "$BACKUP_FILE" | $RUNTIME_CMD exec -i -e PGPASSWORD="$POSTGRES_PASSWORD" "$DB_CONTAINER" \
   psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"
 
 # Verify restoration was successful

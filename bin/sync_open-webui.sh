@@ -3,27 +3,36 @@
 set -e    # Exit on error
 set -x    # Print commands before executing them (helpful for debugging)
 
+# Detect container runtime (podman or docker)
+CONTAINER_RUNTIME=$(which podman 2>/dev/null || which docker 2>/dev/null)
+if [ -z "$CONTAINER_RUNTIME" ]; then
+    echo "Error: No container runtime found. Please install podman or docker."
+    exit 1
+fi
+RUNTIME_CMD=$(basename "$CONTAINER_RUNTIME")
+echo "Using container runtime: $RUNTIME_CMD"
+
 # Variables
 AWS_ACCOUNT=$(aws sts get-caller-identity | jq -r .Account)
 AWS_REGION="eu-west-1"
 REPO_NAME="horizons-webui"
 ECR_URL="${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
-# Log información de la cuenta
+# Log account information
 echo "Using AWS Account: ${AWS_ACCOUNT}"
 echo "ECR URL: ${ECR_URL}"
 
-# Versiones a procesar
+# Versions to process
 VERSIONS=("main" "v0.5.18" "v0.5.14")
 
-# Login en ECR
-aws ecr get-login-password --region ${AWS_REGION} | podman login --username AWS --password-stdin ${ECR_URL}
+# Login to ECR
+aws ecr get-login-password --region ${AWS_REGION} | $RUNTIME_CMD login --username AWS --password-stdin ${ECR_URL}
 
-# Función para limpiar imágenes huérfanas
+# Function to clean up orphaned images
 cleanup_untagged_images() {
     echo "Checking for untagged images..."
 
-    # Obtener lista de imágenes sin tag (huérfanas)
+    # Get list of untagged (orphaned) images
     untagged_images=$(aws ecr describe-images \
         --repository-name ${REPO_NAME} \
         --region ${AWS_REGION} \
@@ -46,28 +55,28 @@ cleanup_untagged_images() {
     fi
 }
 
-# Procesar cada versión
+# Process each version
 for VERSION in "${VERSIONS[@]}"; do
     echo "Processing version: $VERSION"
 
-    # Pull de la imagen
-    podman pull ghcr.io/open-webui/open-webui:${VERSION}
+    # Pull the image
+    $RUNTIME_CMD pull ghcr.io/open-webui/open-webui:${VERSION}
 
-    # Tag para ECR (si es 'main', usar 'latest' como tag adicional)
+    # Tag for ECR (if 'main', use 'latest' as additional tag)
     if [ "$VERSION" == "main" ]; then
-        podman tag ghcr.io/open-webui/open-webui:${VERSION} ${ECR_URL}/${REPO_NAME}:latest
-        podman push ${ECR_URL}/${REPO_NAME}:latest
+        $RUNTIME_CMD tag ghcr.io/open-webui/open-webui:${VERSION} ${ECR_URL}/${REPO_NAME}:latest
+        $RUNTIME_CMD push ${ECR_URL}/${REPO_NAME}:latest
     fi
 
-    # Tag y push normal
-    podman tag ghcr.io/open-webui/open-webui:${VERSION} ${ECR_URL}/${REPO_NAME}:${VERSION}
-    podman push ${ECR_URL}/${REPO_NAME}:${VERSION}
+    # Normal tag and push
+    $RUNTIME_CMD tag ghcr.io/open-webui/open-webui:${VERSION} ${ECR_URL}/${REPO_NAME}:${VERSION}
+    $RUNTIME_CMD push ${ECR_URL}/${REPO_NAME}:${VERSION}
 done
 
-# Limpiar imágenes huérfanas
+# Clean up orphaned images
 cleanup_untagged_images
 
-# Verificar las imágenes
+# Verify images
 echo "Verifying repository contents:"
 aws ecr describe-images \
     --repository-name ${REPO_NAME} \
