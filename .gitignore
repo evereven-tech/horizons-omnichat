@@ -17,6 +17,10 @@ hybrid/tmp
 # Terraform backend configuration
 aws/backend.hcl
 
+# Database backups
+/backups/
+/backups*.sql
+
 # Created by https://www.toptal.com/developers/gitignore/api/terraform
 # Edit at https://www.toptal.com/developers/gitignore?templates=terraform
 
