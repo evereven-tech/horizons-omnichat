@@ -83,22 +83,22 @@ fi
 
 echo -e "${GREEN}Restoring database from $BACKUP_FILE...${NC}"
 
-# Terminate existing connections
+# Terminate existing connections - execute inside the container
 echo -e "${YELLOW}Terminating existing database connections...${NC}"
-$RUNTIME_CMD exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
-  psql -U "$POSTGRES_USER" -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$POSTGRES_DB' AND pid <> pg_backend_pid();"
+$RUNTIME_CMD exec "$DB_CONTAINER" \
+  psql -U "$POSTGRES_USER" -d postgres -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$POSTGRES_DB' AND pid <> pg_backend_pid();"
 
-# Drop and recreate database
+# Drop and recreate database - execute inside the container
 echo -e "${YELLOW}Dropping and recreating database...${NC}"
-$RUNTIME_CMD exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
-  psql -U "$POSTGRES_USER" -c "DROP DATABASE IF EXISTS $POSTGRES_DB;"
+$RUNTIME_CMD exec "$DB_CONTAINER" \
+  psql -U "$POSTGRES_USER" -d postgres -c "DROP DATABASE IF EXISTS $POSTGRES_DB;"
 
-$RUNTIME_CMD exec -e PGPASSWORD="$POSTGRES_PASSWORD" -t "$DB_CONTAINER" \
-  psql -U "$POSTGRES_USER" -c "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER;"
+$RUNTIME_CMD exec "$DB_CONTAINER" \
+  psql -U "$POSTGRES_USER" -d postgres -c "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER;"
 
 # Restore from backup file
 echo -e "${YELLOW}Importing data from backup...${NC}"
-cat "$BACKUP_FILE" | $RUNTIME_CMD exec -i -e PGPASSWORD="$POSTGRES_PASSWORD" "$DB_CONTAINER" \
+cat "$BACKUP_FILE" | $RUNTIME_CMD exec -i "$DB_CONTAINER" \
   psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"
 
 # Verify restoration was successful
