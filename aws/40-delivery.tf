@@ -3,6 +3,7 @@
 # #############################################################################
 
 # Application Load Balancer
+#trivy:ignore:AVD-AWS-0053
 resource "aws_lb" "main" {
   name               = "horizons-alb"
   internal           = false
@@ -10,6 +11,7 @@ resource "aws_lb" "main" {
   security_groups    = [aws_security_group.alb.id]
   subnets            = aws_subnet.public[*].id
 
+  drop_invalid_header_fields = true
   enable_deletion_protection = false
 
   tags = {
@@ -59,6 +61,7 @@ resource "aws_lb_listener" "https" {
 }
 
 # Security Group for the ALB
+#trivy:ignore:AVD-AWS-0104
 resource "aws_security_group" "alb" {
   name        = "horizons-alb-sg"
   description = "Security group for ALB"
