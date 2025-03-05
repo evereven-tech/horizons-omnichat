@@ -72,10 +72,10 @@ resource "aws_db_parameter_group" "postgres13" {
 # RDS Networking
 # #############################################################################
 
-# Subnet Group para RDS
+# Subnet Group for RDS
 resource "aws_db_subnet_group" "rds" {
   name       = "${var.project_name}-persistence-rds"
-  subnet_ids = aws_subnet.private[*].id # Usar todas las subnets privadas disponibles
+  subnet_ids = aws_subnet.private[*].id # Use all available private subnets
 
   tags = {
     Name  = "${var.project_name}-persistence-rds"
@@ -83,7 +83,7 @@ resource "aws_db_subnet_group" "rds" {
   }
 }
 
-# Security Group para RDS
+# Security Group for RDS
 resource "aws_security_group" "rds" {
   name        = "${var.project_name}-persistence-rds"
   description = "Security group for RDS PostgreSQL"
