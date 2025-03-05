@@ -7,7 +7,7 @@
 
 Documentation repository for Horizons OmniChat platform.
 
-[View Documentation](https://evereven-tech.github.io/horizons-omnichat/) •
+[View Documentation](https://doc.horizons.evereven.tech/) •
 [Main Repository](https://github.com/evereven-tech/horizons-omnichat/tree/main)
 
 </div>
