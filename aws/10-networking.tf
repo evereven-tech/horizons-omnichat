@@ -162,6 +162,7 @@ resource "aws_security_group" "vpc_endpoints" {
       aws_security_group.ecs_tasks.id,
       aws_security_group.bedrock_tasks.id
     ]
+    description = "Allow access from ECS Tasks"
   }
 
   tags = {

@@ -187,6 +187,7 @@ resource "aws_security_group" "ollama_tasks" {
     to_port         = 11434
     protocol        = "tcp"
     security_groups = [aws_security_group.ecs_tasks.id]
+    description     = "Allow access to API"
   }
 
   egress {

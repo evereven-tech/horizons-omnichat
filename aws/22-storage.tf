@@ -63,6 +63,7 @@ resource "aws_security_group" "efs" {
     to_port         = 2049
     protocol        = "tcp"
     security_groups = [aws_security_group.ollama_tasks.id]
+    description     = "Allow access to EFS"
   }
 
   tags = {

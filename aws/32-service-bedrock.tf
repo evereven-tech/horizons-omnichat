@@ -104,6 +104,7 @@ resource "aws_security_group" "bedrock_tasks" {
     to_port         = 80
     protocol        = "tcp"
     security_groups = [aws_security_group.ecs_tasks.id]
+    description     = "Allow access to API"
   }
 
   egress {

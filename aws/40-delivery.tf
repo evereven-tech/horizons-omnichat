@@ -69,6 +69,7 @@ resource "aws_security_group" "alb" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow redirection from http:80 to https:443"
   }
 
   ingress {
@@ -76,6 +77,7 @@ resource "aws_security_group" "alb" {
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow access to Internet, but protected by Cognito"
   }
 
   egress {
