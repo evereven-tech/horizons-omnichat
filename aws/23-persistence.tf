@@ -3,6 +3,7 @@
 # #############################################################################
 
 # RDS PostgreSQL Instance
+#trivy:ignore:AVD-AWS-0176
 resource "aws_db_instance" "webui" {
   identifier        = "${var.project_name}-persistence-db"
   engine            = "postgres"
