@@ -90,7 +90,7 @@ services:
       - AWS_DEFAULT_REGION=${AWS_REGION:-us-west-1}
       - API_KEY=${BEDROCK_API_KEY}
     healthcheck:
-      test: ["CMD", "python", "-c", "import http.client; http.client.HTTPConnection('localhost').request('GET', '/health')"]
+      test: ["CMD-SHELL", "python -c \"import http.client, sys; conn = http.client.HTTPConnection('localhost'); conn.request('GET', '/health'); response = conn.getresponse(); sys.exit(0 if response.status == 200 else 1)\""]
       interval: 10s
       timeout: 5s
       retries: 10
