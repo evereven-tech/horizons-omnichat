@@ -37,6 +37,9 @@ repos:
 #          - --args=--framework=terraform
       - id: terraform_trivy
         files: ^aws/
+        args:
+          - --args=--tf-vars terraform.tfvars
+          - --args=--skip-dirs="**/.terraform"
 
 #  - repo: https://github.com/igorshubovych/markdownlint-cli
 #    rev: v0.39.0
