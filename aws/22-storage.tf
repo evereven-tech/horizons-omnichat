@@ -81,11 +81,12 @@ locals {
     rules = [
       {
         rulePriority = 1
-        description  = "Keep only the last 10 tagged images"
+        description  = "Remove untagged images older than 7 days"
         selection = {
-          tagStatus   = "tagged"
-          countType   = "imageCountMoreThan"
-          countNumber = 10
+          tagStatus   = "untagged"
+          countType   = "sinceImagePushed"
+          countUnit   = "days"
+          countNumber = 7
         }
         action = {
           type = "expire"
@@ -93,12 +94,11 @@ locals {
       },
       {
         rulePriority = 2
-        description  = "Remove untagged images older than 7 days"
+        description  = "Keep only the last 10 tagged images"
         selection = {
-          tagStatus   = "untagged"
-          countType   = "sinceImagePushed"
-          countUnit   = "days"
-          countNumber = 7
+          tagStatus   = "any"
+          countType   = "imageCountMoreThan"
+          countNumber = 10
         }
         action = {
           type = "expire"
