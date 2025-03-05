@@ -2,7 +2,7 @@
 title: "Horizons: The OmniChat"
 description: "A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure."
 baseurl: "/horizons-omnichat"
-url: "https://evereven-tech.github.io"
+url: "https://doc.horizons.evereven.tech"
 
 # Theme & plugins
 remote_theme: pages-themes/architect@v0.2.0
