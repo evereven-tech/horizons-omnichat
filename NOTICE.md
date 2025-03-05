@@ -1,6 +1,6 @@
 # Third-Party Software Licenses
 
-This project includes or depends upon the following third-party software components, 
+This project includes or depends upon the following third-party software components,
 which are licensed under their respective terms:
 
 ## Core Components

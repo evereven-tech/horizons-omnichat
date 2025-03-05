@@ -35,17 +35,17 @@ BACKUP_FILE="$BACKUP_DIR/backup_${TIMESTAMP}.sql"
 check_container() {
     local env_dir=$1
     local env_file="$PROJECT_ROOT/$env_dir/.env"
-    
+
     if [ -f "$env_file" ]; then
         echo -e "${YELLOW}Loading configuration from $env_file${NC}"
         source "$env_file"
-        
+
         if $RUNTIME_CMD ps | grep -q "$DB_CONTAINER"; then
             echo -e "${GREEN}Found PostgreSQL container in $env_dir environment${NC}"
             return 0
         fi
     fi
-    
+
     return 1
 }
 
