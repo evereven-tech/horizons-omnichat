@@ -32,11 +32,11 @@ resource "aws_cognito_user_pool_client" "main" {
   name         = "horizons-client"
   user_pool_id = aws_cognito_user_pool.main.id
 
-  # Generar secret key para la autenticación con ALB
+  # Generate secret key for authentication with ALB
   generate_secret                      = true
   allowed_oauth_flows_user_pool_client = true
 
-  # Flujos de autenticación explícitos
+  # Explicit authentication flows
   explicit_auth_flows = [
     "ALLOW_USER_PASSWORD_AUTH",
     "ALLOW_REFRESH_TOKEN_AUTH"
@@ -63,7 +63,7 @@ resource "aws_cognito_user_pool_client" "main" {
 # Application Secrets
 # #############################################################################
 
-# Secrets Manager para secretos de la aplicación
+# Secrets Manager to store app secrets
 resource "aws_secretsmanager_secret" "app_secrets" {
   name        = "${var.project_name}/config/app-secrets"
   description = "Application secrets for ${var.project_name} configuration"
@@ -85,7 +85,7 @@ resource "aws_secretsmanager_secret_version" "app_secrets" {
   })
 }
 
-# Política IAM para acceso a los secretos
+# IAM policy for managing access to secrets
 data "aws_iam_policy_document" "secrets_access" {
   statement {
     effect = "Allow"
@@ -99,14 +99,14 @@ data "aws_iam_policy_document" "secrets_access" {
   }
 }
 
-# Adjuntar política de secretos al rol de ejecución de ECS
+# Attach secrets policy to the ECS execution role
 resource "aws_iam_role_policy" "ecs_task_secrets" {
   name   = "${var.project_name}-config-secrets-access"
   role   = aws_iam_role.ecs_task_execution.id
   policy = data.aws_iam_policy_document.secrets_access.json
 }
 
-# Política adicional para SSM en el rol de ejecución
+# Additional policy for SSM in the execution role
 resource "aws_iam_role_policy" "ecs_task_execution_ssm" {
   name = "${var.project_name}-security-ecs-execution-ssm"
   role = aws_iam_role.ecs_task_execution.id
@@ -130,7 +130,7 @@ resource "aws_iam_role_policy" "ecs_task_execution_ssm" {
 # Password seeds
 # #############################################################################
 
-# Generador de contraseña segura para PostgreSQL
+# Random secure password generator for PostgreSQL
 resource "random_password" "postgres" {
   length           = 32
   special          = true
@@ -141,7 +141,7 @@ resource "random_password" "postgres" {
   min_numeric      = 4
 }
 
-# Generador de contraseña segura para Bedrock Gateway
+# Random secure password generator for Bedrock Gateway
 resource "random_password" "bedrock_api_key" {
   length           = 32
   special          = true
@@ -152,7 +152,7 @@ resource "random_password" "bedrock_api_key" {
   min_numeric      = 4
 }
 
-# Generador de contraseña segura para Open WebUI
+# Random secure password generator for Open WebUI
 resource "random_password" "webui_secret_key" {
   length           = 32
   special          = true

@@ -2,7 +2,7 @@
 # Container Orchestration
 # #############################################################################
 
-# Cluster ECS para Ollama (EC2)
+# ECS Cluster for Ollama
 resource "aws_ecs_cluster" "ec2" {
   name = "${var.project_name}-compute-ec2"
 
@@ -17,7 +17,7 @@ resource "aws_ecs_cluster" "ec2" {
   }
 }
 
-# Añadir la capacidad del cluster EC2
+# Capacity Provider for cluster using EC2 (ASG+Spot)
 resource "aws_ecs_cluster_capacity_providers" "ec2" {
   cluster_name = aws_ecs_cluster.ec2.name
 
@@ -30,7 +30,6 @@ resource "aws_ecs_cluster_capacity_providers" "ec2" {
   }
 }
 
-# Capacity Provider para EC2
 resource "aws_ecs_capacity_provider" "ec2" {
   name = "${var.project_name}-compute-ec2"
 
@@ -55,7 +54,7 @@ resource "aws_ecs_capacity_provider" "ec2" {
 # Resilience
 # #############################################################################
 
-# Auto Scaling Group para Ollama
+# Auto Scaling Group for Ollama
 resource "aws_autoscaling_group" "ollama" {
   name                = "${var.project_name}-compute-ollama"
   desired_capacity    = var.ollama_desired_count
@@ -66,10 +65,10 @@ resource "aws_autoscaling_group" "ollama" {
 
   mixed_instances_policy {
     instances_distribution {
-      on_demand_base_capacity                  = 0 # Usar solo instancias spot
-      on_demand_percentage_above_base_capacity = 0 # 0% on-demand por encima de la capacidad base
+      on_demand_base_capacity                  = 0 # Use only Spot instances
+      on_demand_percentage_above_base_capacity = 0 # 0% on-demand over the base capacity
       spot_allocation_strategy                 = var.spot_config.allocation_strategy
-      spot_instance_pools                      = 3 # Número de pools de spot a considerar
+      spot_instance_pools                      = 3 # Number of spot pools to consider
     }
 
     launch_template {
@@ -78,7 +77,7 @@ resource "aws_autoscaling_group" "ollama" {
         version            = "$Latest"
       }
 
-      # Añadir todos los tipos de instancias con sus prioridades
+      # Iterator to add all types of instances with their priorities
       dynamic "override" {
         for_each = var.gpu_config.instance_types
         content {
@@ -101,14 +100,14 @@ resource "aws_autoscaling_group" "ollama" {
     propagate_at_launch = true
   }
 
-  # Importante para la integración con ECS
+  # Tag Important and required for integration with ECS
   tag {
     key                 = "AmazonECSManaged"
     value               = true
     propagate_at_launch = true
   }
 
-  # No proteger contra scale-in para permitir reemplazo de instancias spot
+  # Do not protect against scale-in to allow replacement of spot instances
   protect_from_scale_in = false
 
   lifecycle {
@@ -116,23 +115,21 @@ resource "aws_autoscaling_group" "ollama" {
   }
 }
 
-# Launch Template para instancias GPU
+# Launch Template for GPU instances
 resource "aws_launch_template" "ollama" {
-  name = "${var.project_name}-compute-ollama"
-
-  #image_id      = "ami-0dc6fd3fcf713ce9d" # AMI con drivers y software preinstalado
-  image_id      = data.aws_ami.ecs_ami.id # Update this with the latest ECS-optimized AMI ID for your region
-  instance_type = "g4dn.xlarge"           # Instancia con GPU NVIDIA T4
+  name          = "${var.project_name}-compute-ollama"
+  image_id      = data.aws_ami.ecs_ami.id # Calc using a terraform data structure
+  instance_type = "g4dn.xlarge"           # An instance with GPU NVIDIA
 
   update_default_version = true
 
-  # Metadata options recomendadas
+  # Recommended metadata options
   metadata_options {
     http_endpoint = "enabled"
     http_tokens   = "required"
   }
 
-  # User data para instalar el agente ECS y configurar Docker
+  # User data to install the ECS agent and configure Docker
   user_data = base64encode(<<-EOF
               #!/bin/bash
               echo ECS_CLUSTER=${aws_ecs_cluster.ec2.name} >> /etc/ecs/ecs.config
@@ -163,24 +160,24 @@ resource "aws_launch_template" "ollama" {
   }
 }
 
-# Scheduled scaling para horario laboral (L-V, 9-19)
+# Scheduled scaling for business hours (M-F, 9-19)
 resource "aws_autoscaling_schedule" "scale_up_workday" {
   scheduled_action_name  = "${var.project_name}-compute-scale-up-workday"
   min_size               = var.ollama_min_count
   max_size               = var.ollama_max_count
   desired_capacity       = var.ollama_desired_count
-  recurrence             = "0 9 * * mon-fri" # 9:00 AM, Lunes a Viernes
-  time_zone              = "Europe/Madrid"   # Zona horaria de España
+  recurrence             = "0 9 * * mon-fri" # 9:00 AM, Monday to Friday
+  time_zone              = "Europe/Madrid"   # Time zone of Spain
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
 resource "aws_autoscaling_schedule" "scale_down_workday" {
   scheduled_action_name  = "${var.project_name}-compute-scale-down-workday"
   min_size               = 0
-  max_size               = var.ollama_max_count # Mantener el máximo para no perder la configuración
-  desired_capacity       = 0                    # Escalar a 0 instancias
-  recurrence             = "0 19 * * mon-fri"   # 19:00 PM, Lunes a Viernes
-  time_zone              = "Europe/Madrid"      # Zona horaria de España
+  max_size               = var.ollama_max_count # Keep the maximum in order not to lose the configuration.
+  desired_capacity       = 0                    # Scale to 0 instances => avoid costs
+  recurrence             = "0 19 * * mon-fri"   # 19:00 PM, Monday to Friday
+  time_zone              = "Europe/Madrid"      # Time zone of Spain
   autoscaling_group_name = aws_autoscaling_group.ollama.name
 }
 
@@ -188,7 +185,7 @@ resource "aws_autoscaling_schedule" "scale_down_workday" {
 # Networking
 # #############################################################################
 
-# Security Group para Ollama
+# Security Group for Ollama
 resource "aws_security_group" "ollama" {
   name        = "${var.project_name}-compute-ollama"
   description = "Security group for Ollama instances"
@@ -218,7 +215,7 @@ resource "aws_security_group" "ollama" {
 # IAM
 # #############################################################################
 
-# IAM Role para las instancias EC2 de Ollama
+# IAM Role for EC2 Instances running Ollama container
 resource "aws_iam_role" "ollama_instance" {
   name = "${var.project_name}-security-ollama-instance"
 
@@ -241,13 +238,13 @@ resource "aws_iam_role" "ollama_instance" {
   }
 }
 
-# Instance Profile para las instancias EC2 de Ollama
+# Instance Profile for Ollama EC2 instances
 resource "aws_iam_instance_profile" "ollama" {
   name = "${var.project_name}-security-ollama"
   role = aws_iam_role.ollama_instance.name
 }
 
-# Política básica para las instancias EC2 de Ollama
+# Basic policy for Ollama EC2 instances
 resource "aws_iam_role_policy" "ollama_instance" {
   name = "${var.project_name}-security-ollama-instance-policy"
   role = aws_iam_role.ollama_instance.id
@@ -325,24 +322,25 @@ resource "aws_iam_role_policy" "ollama_instance" {
   })
 }
 
-# Política administrada de SSM para la instancia
+# SSM Administered Policy for the instance
 resource "aws_iam_role_policy_attachment" "ollama_instance_ssm" {
   role       = aws_iam_role.ollama_instance.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-# Política administrada de CloudWatch para la instancia
+# CloudWatch Managed Policy for the instance
 resource "aws_iam_role_policy_attachment" "ollama_instance_cloudwatch" {
   role       = aws_iam_role.ollama_instance.name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
-# Política para ECS
+# Policy for ECS
 resource "aws_iam_role_policy_attachment" "ollama_instance_ecs" {
   role       = aws_iam_role.ollama_instance.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-} # Política para manejo de ENIs para Ollama
+}
 
+# ENI Management Policy for Ollama
 resource "aws_iam_role_policy_attachment" "ecs_instance_eni" {
   role       = aws_iam_role.ollama_instance.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"

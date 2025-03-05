@@ -3,7 +3,7 @@
 # Ollama: Service & Task Definition
 # #############################################################################
 
-# Task Definition para Ollama
+# Task Definition for Ollama
 resource "aws_ecs_task_definition" "ollama" {
   family                   = "${var.project_name}-compute-ollama"
   requires_compatibilities = ["EC2"]
@@ -62,7 +62,7 @@ resource "aws_ecs_task_definition" "ollama" {
         interval    = 30
         timeout     = 10
         retries     = 3
-        startPeriod = 90 # Los modelos pueden tardar en cargarse
+        startPeriod = 90 # Models may take time to load
       }
 
       resourceRequirements = [
@@ -143,7 +143,7 @@ resource "aws_ecs_task_definition" "ollama" {
   }
 }
 
-# Servicio ECS para Ollama
+# ECS Service for Ollama
 resource "aws_ecs_service" "ollama" {
   name            = "${var.project_name}-compute-ollama"
   cluster         = aws_ecs_cluster.ec2.id
@@ -176,7 +176,7 @@ resource "aws_ecs_service" "ollama" {
 # Ollama: Networking
 # #############################################################################
 
-# Security Group para las tareas de Ollama
+# Security Group for Ollama's tasks
 resource "aws_security_group" "ollama_tasks" {
   name        = "${var.project_name}-compute-ollama-tasks"
   description = "Allow inbound traffic to Ollama tasks"
@@ -207,7 +207,7 @@ resource "aws_security_group" "ollama_tasks" {
 # #############################################################################
 
 
-# ECS Task Role para Ollama
+# ECS Task Role for Ollama
 resource "aws_iam_role" "ollama_task" {
   name = "${var.project_name}-security-ollama-task"
 
@@ -230,7 +230,7 @@ resource "aws_iam_role" "ollama_task" {
   }
 }
 
-# Policy para el rol de Ollama task
+# Policy for the role of Ollama task
 resource "aws_iam_role_policy" "ollama_task" {
   name = "${var.project_name}-security-ollama-task-policy"
   role = aws_iam_role.ollama_task.id

@@ -140,9 +140,3 @@ variable "spot_config" {
     allocation_strategy   = "lowest-price"
   }
 }
-
-variable "ollama_ami_id" {
-  description = "AMI ID for Ollama instances"
-  type        = string
-  default     = "ami-0dc6fd3fcf713ce9d"
-}

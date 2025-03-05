@@ -2,7 +2,7 @@
 # Container Orchestration
 # #############################################################################
 
-# Cluster para OpenWebUI con Fargate Spot
+# ECS Cluster for OpenWebUI & Bedrock Gateway
 resource "aws_ecs_cluster" "fargate" {
   name = "${var.project_name}-compute-fargate"
 
@@ -17,7 +17,7 @@ resource "aws_ecs_cluster" "fargate" {
   }
 }
 
-# Capacity Provider para Fargate Spot
+# Capacity Provider for cluster using Fargate Spot
 resource "aws_ecs_cluster_capacity_providers" "fargate" {
   cluster_name = aws_ecs_cluster.fargate.name
 
@@ -62,7 +62,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# Añadir permisos de CloudWatch Logs al rol de ejecución
+# Add Cloudwatch logs permissions to execution role
 resource "aws_iam_role_policy" "ecs_task_execution_logs" {
   name = "${var.project_name}-security-ecs-execution-logs"
   role = aws_iam_role.ecs_task_execution.id

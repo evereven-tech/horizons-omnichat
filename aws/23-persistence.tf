@@ -2,7 +2,7 @@
 # RDS PostgreSQL
 # #############################################################################
 
-# Instancia RDS PostgreSQL
+# RDS PostgreSQL Instance
 resource "aws_db_instance" "webui" {
   identifier        = "${var.project_name}-persistence-db"
   engine            = "postgres"
@@ -11,7 +11,7 @@ resource "aws_db_instance" "webui" {
   storage_type      = "gp3"
   allocated_storage = 20
 
-  # Habilitar auto-scaling del almacenamiento
+  # Enable auto-scaling of the storage
   max_allocated_storage = 100
 
   db_name  = var.postgres_db
@@ -27,16 +27,16 @@ resource "aws_db_instance" "webui" {
   backup_window           = "03:00-04:00"
   maintenance_window      = "Mon:04:00-Mon:05:00"
 
-  # Mejoras de rendimiento
+  # Performance improvements
   performance_insights_enabled          = true
   performance_insights_retention_period = 7
-  monitoring_interval                   = 0 # Desactivar monitoreo mejorado por ahora
+  monitoring_interval                   = 0 # Disable enhanced monitoring
 
-  # Configuración de disponibilidad
+  # Availability settings
   multi_az            = false
   publicly_accessible = false
 
-  # Parámetros de la base de datos
+  # Database parameters
   parameter_group_name = aws_db_parameter_group.postgres13.name
 
   tags = {

@@ -2,7 +2,7 @@
 # Open WebUI: Service & Task Definition
 # #############################################################################
 
-# Task Definition para OpenWebUI
+# Task Definition for OpenWebUI
 resource "aws_ecs_task_definition" "webui" {
   family                   = "${var.project_name}-compute-webui"
   requires_compatibilities = ["FARGATE"]
@@ -82,7 +82,7 @@ resource "aws_ecs_task_definition" "webui" {
   }
 }
 
-# Servicio ECS para OpenWebUI
+# ECS Service for OpenWebUI
 resource "aws_ecs_service" "webui" {
   name            = "${var.project_name}-compute-webui"
   cluster         = aws_ecs_cluster.fargate.id
@@ -122,7 +122,7 @@ resource "aws_ecs_service" "webui" {
 # Open WebUI: Networking
 # #############################################################################
 
-# Security Group para las tareas ECS
+# Security Group for ECS tasks
 resource "aws_security_group" "ecs_tasks" {
   name        = "${var.project_name}-compute-ecs-tasks"
   description = "Allow inbound traffic from ALB to ECS tasks"

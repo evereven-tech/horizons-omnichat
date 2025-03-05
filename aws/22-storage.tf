@@ -2,25 +2,6 @@
 # EFS
 # #############################################################################
 
-# Security Group para EFS
-resource "aws_security_group" "efs" {
-  name        = "${var.project_name}-storage-efs"
-  description = "Security group for EFS mount targets"
-  vpc_id      = aws_vpc.main.id
-
-  ingress {
-    from_port       = 2049
-    to_port         = 2049
-    protocol        = "tcp"
-    security_groups = [aws_security_group.ollama_tasks.id]
-  }
-
-  tags = {
-    Name  = "${var.project_name}-storage-efs"
-    Layer = "Storage"
-  }
-}
-
 # EFS File System
 resource "aws_efs_file_system" "models" {
   creation_token = "${var.project_name}-storage-models"
@@ -39,7 +20,7 @@ resource "aws_efs_file_system" "models" {
   }
 }
 
-# Mount targets en cada subnet privada
+# Mount targets on each private subnet
 resource "aws_efs_mount_target" "models" {
   count           = length(var.private_subnets)
   file_system_id  = aws_efs_file_system.models.id
@@ -47,7 +28,7 @@ resource "aws_efs_mount_target" "models" {
   security_groups = [aws_security_group.efs.id]
 }
 
-# Access Point para modelos
+# Access Point for models
 resource "aws_efs_access_point" "models" {
   file_system_id = aws_efs_file_system.models.id
 
@@ -71,11 +52,30 @@ resource "aws_efs_access_point" "models" {
   }
 }
 
+# Security Group for EFS
+resource "aws_security_group" "efs" {
+  name        = "${var.project_name}-storage-efs"
+  description = "Security group for EFS mount targets"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port       = 2049
+    to_port         = 2049
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ollama_tasks.id]
+  }
+
+  tags = {
+    Name  = "${var.project_name}-storage-efs"
+    Layer = "Storage"
+  }
+}
+
 #
 # ECR
 # #############################################################################
 
-# Definir un local para la política de ciclo de vida común
+# Define a venue for the common life-cycle policy
 locals {
   ecr_lifecycle_policy = jsonencode({
     rules = [
@@ -108,7 +108,7 @@ locals {
   })
 }
 
-# ECR Repository para OpenWebUI
+# ECR Repository for OpenWebUI
 resource "aws_ecr_repository" "webui" {
   name                 = "${var.project_name}-webui"
   image_tag_mutability = "MUTABLE"
@@ -127,13 +127,13 @@ resource "aws_ecr_repository" "webui" {
   }
 }
 
-# Política de ciclo de vida para OpenWebUI
+# Lifecycle Policy for OpenWebUI
 resource "aws_ecr_lifecycle_policy" "webui" {
   repository = aws_ecr_repository.webui.name
   policy     = local.ecr_lifecycle_policy
 }
 
-# ECR Repository para Bedrock Gateway
+# ECR Repository for Bedrock Gateway
 resource "aws_ecr_repository" "bedrock_gateway" {
   name                 = "${var.project_name}-bedrock-gateway"
   image_tag_mutability = "MUTABLE"
@@ -152,13 +152,13 @@ resource "aws_ecr_repository" "bedrock_gateway" {
   }
 }
 
-# Política de ciclo de vida para Bedrock Gateway
+# Lifecycle Policy for Bedrock Gateway
 resource "aws_ecr_lifecycle_policy" "bedrock_gateway" {
   repository = aws_ecr_repository.bedrock_gateway.name
   policy     = local.ecr_lifecycle_policy
 }
 
-# ECR Repository para Ollama
+# ECR Repository for Ollama
 resource "aws_ecr_repository" "ollama" {
   name                 = "${var.project_name}-ollama"
   image_tag_mutability = "MUTABLE"
@@ -177,7 +177,7 @@ resource "aws_ecr_repository" "ollama" {
   }
 }
 
-# Política de ciclo de vida para Ollama
+# Life Cycle Policy for Ollama
 resource "aws_ecr_lifecycle_policy" "ollama" {
   repository = aws_ecr_repository.ollama.name
   policy     = local.ecr_lifecycle_policy

@@ -113,7 +113,7 @@ resource "aws_route_table_association" "private" {
 # VPC Endpoints
 # #############################################################################
 
-# VPC Endpoints para SSM
+# VPC Endpoints for SSM
 resource "aws_vpc_endpoint" "ssm" {
   vpc_id            = aws_vpc.main.id
   service_name      = "com.amazonaws.${var.aws_region}.ssm"
@@ -147,7 +147,7 @@ resource "aws_vpc_endpoint" "ec2messages" {
   private_dns_enabled = true
 }
 
-# Security Group para VPC Endpoints
+# Security Group for VPC Endpoints
 resource "aws_security_group" "vpc_endpoints" {
   name        = "${var.project_name}-networking-vpc-endpoints"
   description = "Security group for VPC Endpoints"
@@ -170,7 +170,7 @@ resource "aws_security_group" "vpc_endpoints" {
   }
 }
 
-# VPC Endpoint para CloudWatch Logs
+# VPC Endpoint for CloudWatch Logs
 resource "aws_vpc_endpoint" "logs" {
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${var.aws_region}.logs"
@@ -196,7 +196,7 @@ resource "aws_service_discovery_private_dns_namespace" "main" {
   }
 }
 
-# Service Discovery Service para OpenWebUI
+# Service Discovery for OpenWebUI
 resource "aws_service_discovery_service" "webui" {
   name = "webui"
 
@@ -216,7 +216,7 @@ resource "aws_service_discovery_service" "webui" {
   }
 }
 
-# Service Discovery para Ollama
+# Service Discovery for Ollama
 resource "aws_service_discovery_service" "ollama" {
   name = "ollama"
 
@@ -236,7 +236,7 @@ resource "aws_service_discovery_service" "ollama" {
   }
 }
 
-# Service Discovery Service para Bedrock Gateway
+# Service Discovery for Bedrock Gateway
 resource "aws_service_discovery_service" "bedrock" {
   name = "bedrock-gateway"
 

@@ -3,7 +3,7 @@
 # Bedrock Gateway: Service & Task Definition
 # #############################################################################
 
-# Task Definition para Bedrock Gateway
+# Task Definition for Bedrock Gateway
 resource "aws_ecs_task_definition" "bedrock" {
   family                   = "${var.project_name}-compute-bedrock"
   requires_compatibilities = ["FARGATE"]
@@ -59,7 +59,7 @@ resource "aws_ecs_task_definition" "bedrock" {
   }
 }
 
-# Servicio ECS para Bedrock Gateway
+# ECS Service for Bedrock Gateway
 resource "aws_ecs_service" "bedrock" {
   name            = "${var.project_name}-compute-bedrock"
   cluster         = aws_ecs_cluster.fargate.id
@@ -93,7 +93,7 @@ resource "aws_ecs_service" "bedrock" {
 # Bedrock Gateway: Networking
 # #############################################################################
 
-# Security Group para Bedrock Gateway
+# Security Group for Bedrock Gateway
 resource "aws_security_group" "bedrock_tasks" {
   name        = "${var.project_name}-compute-bedrock-tasks"
   description = "Allow inbound traffic from WebUI to Bedrock Gateway"

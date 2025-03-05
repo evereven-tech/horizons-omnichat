@@ -2,18 +2,7 @@
 # CloudWatch Logs
 # #############################################################################
 
-# CloudWatch Log Group para Bedrock Gateway
-resource "aws_cloudwatch_log_group" "bedrock" {
-  name              = "/ecs/${var.project_name}/bedrock"
-  retention_in_days = 30
-
-  tags = {
-    Name  = "${var.project_name}-monitoring-bedrock-logs"
-    Layer = "Monitoring"
-  }
-}
-
-# CloudWatch Log Group para WebUI
+# CloudWatch Log Group for WebUI
 resource "aws_cloudwatch_log_group" "webui" {
   name              = "/ecs/${var.project_name}/webui"
   retention_in_days = 30
@@ -24,7 +13,7 @@ resource "aws_cloudwatch_log_group" "webui" {
   }
 }
 
-# CloudWatch Log Group para Ollama
+# CloudWatch Log Group for Ollama
 resource "aws_cloudwatch_log_group" "ollama" {
   name              = "/ecs/${var.project_name}/ollama"
   retention_in_days = 30
@@ -35,11 +24,22 @@ resource "aws_cloudwatch_log_group" "ollama" {
   }
 }
 
+# CloudWatch Log Group for Bedrock Gateway
+resource "aws_cloudwatch_log_group" "bedrock" {
+  name              = "/ecs/${var.project_name}/bedrock"
+  retention_in_days = 30
+
+  tags = {
+    Name  = "${var.project_name}-monitoring-bedrock-logs"
+    Layer = "Monitoring"
+  }
+}
+
 #
 # CloudWatch Dashboard
 # #############################################################################
 
-# CloudWatch Dashboard para Horizons
+# CloudWatch Dashboard for Horizons
 resource "aws_cloudwatch_dashboard" "horizons" {
   dashboard_name = "${var.project_name}-monitoring"
 
@@ -120,7 +120,3 @@ resource "aws_cloudwatch_dashboard" "horizons" {
     ]
   })
 }
-
-#
-#
-# #############################################################################
