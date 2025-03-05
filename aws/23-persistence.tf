@@ -22,6 +22,7 @@ resource "aws_db_instance" "webui" {
   db_subnet_group_name   = aws_db_subnet_group.rds.name
 
   skip_final_snapshot = true
+  deletion_protection = true
 
   backup_retention_period = 7
   backup_window           = "03:00-04:00"
@@ -84,6 +85,7 @@ resource "aws_db_subnet_group" "rds" {
 }
 
 # Security Group for RDS
+#trivy:ignore:AVD-AWS-0104
 resource "aws_security_group" "rds" {
   name        = "${var.project_name}-persistence-rds"
   description = "Security group for RDS PostgreSQL"

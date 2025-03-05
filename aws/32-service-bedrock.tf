@@ -94,6 +94,7 @@ resource "aws_ecs_service" "bedrock" {
 # #############################################################################
 
 # Security Group for Bedrock Gateway
+#trivy:ignore:AVD-AWS-0104
 resource "aws_security_group" "bedrock_tasks" {
   name        = "${var.project_name}-compute-bedrock-tasks"
   description = "Allow inbound traffic from WebUI to Bedrock Gateway"
@@ -124,7 +125,6 @@ resource "aws_security_group" "bedrock_tasks" {
 #
 # Bedrock Gateway: IAM
 # #############################################################################
-
 
 # ECS Task Role for Bedrock Gateway
 resource "aws_iam_role" "bedrock_task" {

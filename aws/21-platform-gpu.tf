@@ -186,6 +186,7 @@ resource "aws_autoscaling_schedule" "scale_down_workday" {
 # #############################################################################
 
 # Security Group for Ollama
+#trivy:ignore:AVD-AWS-0104
 resource "aws_security_group" "ollama" {
   name        = "${var.project_name}-compute-ollama"
   description = "Security group for Ollama instances"

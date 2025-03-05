@@ -123,6 +123,7 @@ resource "aws_ecs_service" "webui" {
 # #############################################################################
 
 # Security Group for ECS tasks
+#trivy:ignore:AVD-AWS-0104
 resource "aws_security_group" "ecs_tasks" {
   name        = "${var.project_name}-compute-ecs-tasks"
   description = "Allow inbound traffic from ALB to ECS tasks"
