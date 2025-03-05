@@ -52,12 +52,14 @@ Choose the deployment that best fits your needs:
 ## 🛠 Quick Start
 
 1. **Prerequisites**
+
    ```bash
    # Check your environment
    ./bin/check-dev-environment.sh
    ```
 
 2. **Installation**
+
    ```bash
    # Clone the repository
    git clone https://github.com/evereven-tech/horizons-omnichat.git
@@ -95,6 +97,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 This project is licensed under the [MIT License](LICENSE.md). See [NOTICE.md](NOTICE.md) for third-party licenses.
 
 Built with:
+
 - [Ollama](https://github.com/ollama/ollama)
 - [Open WebUI](https://github.com/open-webui/open-webui)
 - [AWS Bedrock Access Gateway](https://github.com/aws-samples/bedrock-access-gateway)

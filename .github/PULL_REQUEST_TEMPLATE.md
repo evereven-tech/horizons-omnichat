@@ -22,7 +22,7 @@ Closes #
 - [ ] Integration Tests
 - [ ] Manual Testing
 
-## Checklist:
+## Checklist
 <!-- Go over all the following points, and put an `x` in all the boxes that apply -->
 - [ ] My code follows the code style of this project
 - [ ] I have updated the documentation accordingly
@@ -31,4 +31,4 @@ Closes #
 - [ ] My changes generate no new warnings
 - [ ] I have checked my code and corrected any misspellings
 
-## Screenshots (if appropriate):
+## Screenshots (if appropriate)

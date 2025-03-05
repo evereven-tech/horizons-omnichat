@@ -27,6 +27,7 @@ By participating in this project, you agree to abide by our Code of Conduct (see
 ## Pull Request Process
 
 1. **Fork the Repository**
+
    ```bash
    git clone https://github.com/evereven/horizons.git
    cd horizons
@@ -64,6 +65,7 @@ By participating in this project, you agree to abide by our Code of Conduct (see
    - Terraform (for AWS deployment)
 
 2. **Local Development**
+
    ```bash
    # Initialize the project
    make init
