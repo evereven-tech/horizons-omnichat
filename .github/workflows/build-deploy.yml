@@ -1,0 +1,83 @@
+name: Build and Deploy Documentation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      
+      - name: Build documentation
+        run: |
+          # Usando el mismo contenedor Jekyll que se usa en el Makefile
+          docker run --rm \
+            -v "${{ github.workspace }}:/srv/jekyll:rw,Z" \
+            -e JEKYLL_ROOTLESS=1 \
+            mcr.microsoft.com/devcontainers/jekyll:latest \
+            jekyll build --config /srv/jekyll/_config.yml --source /srv/jekyll/docs --destination /srv/jekyll/_site
+      
+      - name: Run markdownlint
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/srv/jekyll:rw,Z" \
+            mcr.microsoft.com/devcontainers/jekyll:latest \
+            sh -c "npm install -g markdownlint-cli && markdownlint /srv/jekyll/docs --config /srv/jekyll/.markdownlint.yaml || true"
+      
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: site
+          path: _site/
+          retention-days: 1
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: site
+          path: _site
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: '_site'
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
