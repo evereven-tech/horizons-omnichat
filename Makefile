@@ -11,8 +11,9 @@ bundle:
 	$(DOCKER_CMD) run --rm \
 		-v "$(PWD):/srv/jekyll:Z" \
 		-w /srv/jekyll \
+		-e JEKYLL_ROOTLESS=1 \
 		-it $(JEKYLL_CONTAINER) \
-		bundle install
+		bundle install 
 
 serve:
 	$(DOCKER_CMD) run --rm \
@@ -20,18 +21,19 @@ serve:
 		-p $(JEKYLL_PORT):$(JEKYLL_PORT) \
 		-e JEKYLL_ROOTLESS=1 \
 		-it $(JEKYLL_CONTAINER) \
-		jekyll serve --config /srv/jekyll/_config.yml --livereload --host 0.0.0.0 --trace
+		jekyll serve --config /srv/jekyll/_config.yml --source /srv/jekyll/ --livereload --host 0.0.0.0 --trace 
 
 build:
 	$(DOCKER_CMD) run --rm \
 		-v "$(PWD):/srv/jekyll:rw,Z" \
 		-e JEKYLL_ROOTLESS=1 \
 		-it $(JEKYLL_CONTAINER) \
-		jekyll build --config /srv/jekyll/_config.yml
+		jekyll build --config /srv/jekyll/_config.yml --source /srv/jekyll/
 
 clean:
 	$(DOCKER_CMD) run --rm \
 		-v "$(PWD):/srv/jekyll:Z" \
+		-e JEKYLL_ROOTLESS=1 \
 		-it $(JEKYLL_CONTAINER) \
 		jekyll clean
 
