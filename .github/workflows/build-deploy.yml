@@ -2,9 +2,7 @@ name: Build and Deploy Documentation
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ gh-pages ]
   workflow_dispatch:
 
 jobs:
