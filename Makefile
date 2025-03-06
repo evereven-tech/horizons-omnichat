@@ -11,10 +11,11 @@ build:
 
 serve: 
 	$(CONTAINER_CMD) run --rm \
-		--volume="$$PWD:/srv/jekyll:Z" \
+		--volume="$$PWD:/srv/jekyll:rw,Z" \
+		-e JEKYLL_ROOTLESS=1 \
 		--publish 4000:4000 \
 		jekyll/jekyll \
-		jekyll serve -s docs --trace
+		jekyll serve --source ./docs --destination ./dist --trace
 
 clean:
 	rm -rf dist

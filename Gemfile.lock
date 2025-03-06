@@ -14,7 +14,7 @@ GEM
     eventmachine (1.2.7)
     ffi (1.17.1-x86_64-linux-musl)
     forwardable-extended (2.6.0)
-    google-protobuf (4.29.3-x86_64-linux)
+    google-protobuf (4.30.0-x86_64-linux)
       bigdecimal
       rake (>= 13)
     http_parser.rb (0.8.0)
@@ -75,7 +75,7 @@ GEM
     rouge (4.5.1)
     rubyzip (2.4.1)
     safe_yaml (1.0.5)
-    sass-embedded (1.85.0)
+    sass-embedded (1.85.1)
       google-protobuf (~> 4.29)
       rake (>= 13)
     terminal-table (3.0.2)
@@ -87,7 +87,6 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  jekyll
   jekyll-feed
   jekyll-remote-theme
   jekyll-seo-tag
