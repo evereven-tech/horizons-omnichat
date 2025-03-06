@@ -18,6 +18,7 @@ hybrid/tmp
 aws/backend.hcl
 
 # Jekyll
+_site
 dist/
 .jekyll-cache/
 .sass-cache/

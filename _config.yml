@@ -1,7 +1,7 @@
 # Site Setup
 title: "Horizons: The OmniChat"
 description: "A flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure."
-baseurl: "/horizons-omnichat"
+#baseurl: "/"
 url: "https://doc.horizons.evereven.tech"
 
 # Theme & plugins
@@ -11,7 +11,6 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-feed
-  - jekyll-spaceship
 
 # Main navigation
 navigation:
