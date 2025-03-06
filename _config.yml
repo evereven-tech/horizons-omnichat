@@ -18,6 +18,20 @@ collections_dir: docs
 collections:
   architecture:
     output: true
+  getting-started:
+    output: true
+  deployment:
+    output: true
+  operations:
+    output: true
+  security:
+    output: true
+  community:
+    output: true
+  enterprise:
+    output: true
+  development:
+    output: true
 
 # Main navigation
 navigation:
