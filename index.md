@@ -15,7 +15,7 @@ Welcome to Horizons, a flexible and powerful chatbot platform that brings enterp
 
 </div>
 
-<img src="assets/horizons_fast_demo.gif" alt="Horizons Demo">
+<img src="docs/assets/horizons_fast_demo.gif" alt="Horizons Demo">
 
 ## Introduction
 

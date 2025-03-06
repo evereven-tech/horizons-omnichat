@@ -12,6 +12,13 @@ plugins:
   - jekyll-sitemap
   - jekyll-feed
 
+source: .
+destination: _site
+collections_dir: docs
+collections:
+  architecture:
+    output: true
+
 # Main navigation
 navigation:
   - title: "🏠 Home"

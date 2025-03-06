@@ -3,6 +3,10 @@
 .vscode
 .aider*
 
+# Other branch modules
+.gitmodules
+external
+
 # Environment files & examples
 .env.aws
 .env*
