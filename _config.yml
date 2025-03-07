@@ -12,27 +12,6 @@ plugins:
   - jekyll-sitemap
   - jekyll-feed
 
-source: .
-destination: _site
-collections_dir: docs
-collections:
-  architecture:
-    output: true
-  getting-started:
-    output: true
-  deployment:
-    output: true
-  operations:
-    output: true
-  security:
-    output: true
-  community:
-    output: true
-  enterprise:
-    output: true
-  development:
-    output: true
-
 # Main navigation
 navigation:
   - title: "🏠 Home"
@@ -106,3 +85,35 @@ navigation:
         url: /enterprise/training
       - title: "💼 Consulting"
         url: /enterprise/consulting
+
+# Document Collections
+source: .
+destination: _site
+collections_dir: docs
+collections:
+  architecture:
+    output: true
+  getting-started:
+    output: true
+  deployment:
+    output: true
+  operations:
+    output: true
+  security:
+    output: true
+  community:
+    output: true
+  enterprise:
+    output: true
+  development:
+    output: true
+
+# Files exclusions
+exclude:
+  - .github
+  - hybrid
+  - external
+  - Gemfile.lock
+  - bin
+  - aws
+  - backups

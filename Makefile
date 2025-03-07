@@ -9,7 +9,7 @@ JEKYLL_PORT := 4000
 # Main Targets
 bundle:
 	$(DOCKER_CMD) run --rm \
-		-v "$(PWD):/srv/jekyll:Z" \
+		-v "$(PWD):/srv/jekyll:rw,Z" \
 		-w /srv/jekyll \
 		-e JEKYLL_ROOTLESS=1 \
 		-it $(JEKYLL_CONTAINER) \
@@ -28,14 +28,14 @@ build:
 		-v "$(PWD):/srv/jekyll:rw,Z" \
 		-e JEKYLL_ROOTLESS=1 \
 		-it $(JEKYLL_CONTAINER) \
-		jekyll build --config /srv/jekyll/_config.yml --source /srv/jekyll/
+		jekyll build --config /srv/jekyll/_config.yml --source /srv/jekyll/ --destination /srv/jekyll/_site
 
 clean:
 	$(DOCKER_CMD) run --rm \
-		-v "$(PWD):/srv/jekyll:Z" \
+		-v "$(PWD):/srv/jekyll:rw,Z" \
 		-e JEKYLL_ROOTLESS=1 \
 		-it $(JEKYLL_CONTAINER) \
-		jekyll clean
+		jekyll clean --config /srv/jekyll/_config.yml --destination /srv/jekyll/_site
 
 help:
 	@echo "Available Commands:"
