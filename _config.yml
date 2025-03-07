@@ -89,7 +89,6 @@ navigation:
 # Document Collections
 source: .
 destination: _site
-collections_dir: docs
 collections:
   architecture:
     output: true
