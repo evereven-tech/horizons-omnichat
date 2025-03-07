@@ -116,3 +116,4 @@ exclude:
   - bin
   - aws
   - backups
+  - Makefile

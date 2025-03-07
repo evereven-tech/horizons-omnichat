@@ -5,17 +5,19 @@ title: Home
 
 <div align="center">
 
-# 🌅 Horizons: The OmniChat
-
-Welcome to Horizons, a flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
-
-<a href="#quick-start">Get Started</a> •
-<a href="#documentation">Documentation</a> • 
-<a href="#editions">Enterprise</a>
-
+  <h1>🌅 Horizons: The OmniChat</h1>
+  <p>
+    Welcome to Horizons, a flexible and powerful chatbot platform that brings enterprise-grade LLM capabilities to your infrastructure.
+    <br/>
+    <a href="#quick-start">Get Started</a> •
+    <a href="#documentation">Documentation</a> • 
+    <a href="#editions">Enterprise</a>
+  </p>
+  
+  <span>
+    <img src="/assets/horizons_fast_demo.gif" alt="Horizons Demo">
+  </span>
 </div>
-
-<img src="/assets/horizons_fast_demo.gif" alt="Horizons Demo">
 
 ## Introduction
 
