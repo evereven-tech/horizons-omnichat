@@ -35,6 +35,8 @@ resource "aws_ecs_capacity_provider" "ec2" {
 
   auto_scaling_group_provider {
     auto_scaling_group_arn = aws_autoscaling_group.ollama.arn
+    #managed_termination_protection = "DISABLED"
+    managed_draining = "ENABLED"
 
     managed_scaling {
       maximum_scaling_step_size = 1
@@ -133,7 +135,7 @@ resource "aws_launch_template" "ollama" {
   user_data = base64encode(<<-EOF
               #!/bin/bash
               echo ECS_CLUSTER=${aws_ecs_cluster.ec2.name} >> /etc/ecs/ecs.config
-              echo ECS_ENABLE_GPU_SUPPORT=true >> /etc/ecs/ecs.config
+              echo ECS_ENABLE_GPU_SUPPORT=true >> /etc/ecs/ecs.config              
               EOF
   )
 
@@ -295,11 +297,29 @@ resource "aws_iam_role_policy" "ollama_instance" {
         Action = [
           "ssm:GetParameters",
           "ssm:GetParameter",
-          "ssm:UpdateInstanceInformation",
+          "ssm:UpdateInstanceInformation"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
           "ssmmessages:CreateControlChannel",
           "ssmmessages:CreateDataChannel",
           "ssmmessages:OpenControlChannel",
           "ssmmessages:OpenDataChannel"
+        ]
+        Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ec2messages:AcknowledgeMessage",
+          "ec2messages:DeleteMessage",
+          "ec2messages:FailMessage",
+          "ec2messages:GetEndpoint",
+          "ec2messages:GetMessages",
+          "ec2messages:SendReply"
         ]
         Resource = "*"
       },
