@@ -30,6 +30,8 @@ services:
         condition: service_healthy
       bedrock-gateway:
         condition: service_healthy
+      litellm-proxy:
+        condition: service_healthy
     ports:
       - 3002:8080
     networks:
@@ -40,8 +42,10 @@ services:
       - 'WEBUI_DB_HOST=webui-db'
       - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
     volumes:
-      #- ./tmp/:/app/backend/data/                                  # Useful for blocking updates
-      - ./config.json:/app/backend/data/config.json
+      - type: volume
+        source: open-webui
+        target: /app/backend/data
+      - ./config.json:/app/backend/config.json
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "8080"]
       interval: 10s
@@ -70,6 +74,36 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+      start_period: 30s
+
+  litellm-proxy:
+    container_name: litellm-proxy
+    restart: unless-stopped
+    image: ghcr.io/berriai/litellm:main-latest
+    depends_on:
+      webui-db:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    networks:
+      - chatbot-net
+    environment:
+      - UI_USERNAME=${UI_USERNAME}
+      - UI_PASSWORD=${UI_PASSWORD}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - LITELLM_SALT_KEY=${LITELLM_SALT_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - XAI_API_KEY=${XAI_API_KEY}
+    volumes:
+      - ./litellm-config.yaml:/app/config.yaml
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:4000/health/liveness"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
       start_period: 30s
 
   bedrock-gateway:

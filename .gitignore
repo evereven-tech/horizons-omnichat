@@ -10,9 +10,9 @@
 !*/.env.example
 !**/.env.example
 
-hybrid/config.json
-hybrid/old_config.json
 hybrid/tmp
+hybrid/config.json
+hybrid/litellm_config.yaml
 
 # Terraform backend configuration
 aws/backend.hcl
