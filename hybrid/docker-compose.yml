@@ -99,7 +99,7 @@ services:
       - XAI_API_KEY=${XAI_API_KEY}
       - STORE_MODEL_IN_DB=True
     volumes:
-      - ./litellm-config.yaml:/app/config.yaml
+      - ./litellm_config.yaml:/app/config.yaml
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:4000/health/liveness"]
       interval: 10s
