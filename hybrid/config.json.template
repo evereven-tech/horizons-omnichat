@@ -63,7 +63,19 @@
     "api_keys": [
       "BEDROCK_API_KEY",
       "LITELLM_API_KEY"
-    ]
+    ],
+    "api_configs": {
+			"0": {
+				"enable": true,
+				"prefix_id": "bedrock",
+				"model_ids": []
+			},
+			"1": {
+				"enable": true,
+				"prefix_id": "litellm",
+				"model_ids": []
+			}
+		}
   },
   "ollama": {
     "base_urls": [
