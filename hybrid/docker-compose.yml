@@ -8,7 +8,9 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - open-webui:/var/lib/postgresql/data
+      - type: volume
+        source: open-webui-db
+        target: /var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
@@ -19,11 +21,22 @@ services:
       timeout: 5s
       retries: 5
 
+  init-volume:
+    image: alpine
+    volumes:
+      - open-webui:/data
+      - ./config.json:/config.json
+    command: cp /config.json /data/config.json
+    profiles:
+      - init
+
   open-webui:
     container_name: open-webui
     restart: unless-stopped
     image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     depends_on:
+      init-volume:
+        condition: service_completed_successfully
       webui-db:
         condition: service_healthy
       ollama:
@@ -37,15 +50,14 @@ services:
     networks:
       - chatbot-net
     environment:
-      - 'OLLAMA_BASE_URL=http://ollama:11434'
-      - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
-      - 'WEBUI_DB_HOST=webui-db'
-      - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - WEBUI_DB_HOST=webui-db
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}
     volumes:
       - type: volume
         source: open-webui
         target: /app/backend/data
-      - ./config.json:/app/backend/config.json
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "8080"]
       interval: 10s
@@ -133,6 +145,7 @@ services:
 
 volumes:
   open-webui:
+  open-webui-db:
   ollama-data:
 
 networks:
