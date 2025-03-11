@@ -97,6 +97,7 @@ services:
       - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
       - MISTRAL_API_KEY=${MISTRAL_API_KEY}
       - XAI_API_KEY=${XAI_API_KEY}
+      - STORE_MODEL_IN_DB=True
     volumes:
       - ./litellm-config.yaml:/app/config.yaml
     healthcheck:
