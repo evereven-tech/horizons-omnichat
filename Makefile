@@ -37,6 +37,7 @@ local-down:
 ENV_FILE := hybrid/.env
 JSON_FILE := hybrid/config.json
 BEDROCK_API := BEDROCK_API_KEY
+LITELLM_API := LITELLM_API_KEY
 
 # Load vars from .env file
 MAKECMDGOALS ?= ""
@@ -54,6 +55,7 @@ validate-hybrid:
 hybrid-up: validate-hybrid
 	@echo "Starting hybrid deployment..."
 	@sed -i 's/"$(BEDROCK_API)"/"$(BEDROCK_API_KEY)"/' $(JSON_FILE)
+	@sed -i 's/"$(LITELLM_API)"/"$(LITELLM_MASTER_KEY)"/' $(JSON_FILE)
 	@cd hybrid && export OLLAMA_USE_GPU=$$(grep OLLAMA_USE_GPU .env | cut -d '=' -f2) && \
 	echo "GPU Support: $$OLLAMA_USE_GPU" && \
 	if [ "$$OLLAMA_USE_GPU" = "true" ]; then \
