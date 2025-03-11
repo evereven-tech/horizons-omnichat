@@ -27,8 +27,6 @@ services:
       - open-webui:/data
       - ./config.json:/config.json
     command: cp /config.json /data/config.json
-    profiles:
-      - init
 
   open-webui:
     container_name: open-webui
