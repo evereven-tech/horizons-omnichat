@@ -34,9 +34,9 @@ resource "aws_ecs_capacity_provider" "ec2" {
   name = "${var.project_name}-compute-ec2"
 
   auto_scaling_group_provider {
-    auto_scaling_group_arn         = aws_autoscaling_group.ollama.arn
+    auto_scaling_group_arn = aws_autoscaling_group.ollama.arn
     #managed_termination_protection = "DISABLED"
-    managed_draining               = "ENABLED"
+    managed_draining = "ENABLED"
 
     managed_scaling {
       maximum_scaling_step_size = 1
@@ -314,12 +314,12 @@ resource "aws_iam_role_policy" "ollama_instance" {
       {
         Effect = "Allow"
         Action = [
-           "ec2messages:AcknowledgeMessage",                                                                                                                                                  
-           "ec2messages:DeleteMessage",                                                                                                                                                       
-           "ec2messages:FailMessage",                                                                                                                                                         
-           "ec2messages:GetEndpoint",                                                                                                                                                         
-           "ec2messages:GetMessages",                                                                                                                                                         
-           "ec2messages:SendReply"           
+          "ec2messages:AcknowledgeMessage",
+          "ec2messages:DeleteMessage",
+          "ec2messages:FailMessage",
+          "ec2messages:GetEndpoint",
+          "ec2messages:GetMessages",
+          "ec2messages:SendReply"
         ]
         Resource = "*"
       },
