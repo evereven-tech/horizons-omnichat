@@ -157,11 +157,11 @@ resource "aws_security_group" "vpc_endpoints" {
     from_port = 443
     to_port   = 443
     protocol  = "tcp"
-    security_groups = [
-      aws_security_group.ollama.id,
+    security_groups = compact([
+      local.security_group_ollama_id,
       aws_security_group.ecs_tasks.id,
       aws_security_group.bedrock_tasks.id
-    ]
+    ])
     description = "Allow access from ECS Tasks"
   }
 
@@ -219,7 +219,9 @@ resource "aws_service_discovery_service" "webui" {
 
 # Service Discovery for Ollama
 resource "aws_service_discovery_service" "ollama" {
-  name = "ollama"
+
+  count = local.gpu_enabled_flap
+  name  = "ollama"
 
   dns_config {
     namespace_id = aws_service_discovery_private_dns_namespace.main.id

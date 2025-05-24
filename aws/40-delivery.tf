@@ -122,6 +122,9 @@ resource "aws_lb_target_group" "webui" {
 
 # Ollama Target Group
 resource "aws_lb_target_group" "ollama" {
+
+  count = local.gpu_enabled_flap
+
   name        = "${var.project_name}-compute-ollama"
   port        = 11434
   protocol    = "HTTP"

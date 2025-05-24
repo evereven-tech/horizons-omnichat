@@ -15,6 +15,9 @@ resource "aws_cloudwatch_log_group" "webui" {
 
 # CloudWatch Log Group for Ollama
 resource "aws_cloudwatch_log_group" "ollama" {
+
+  count = local.gpu_enabled_flap
+
   name              = "/ecs/${var.project_name}/ollama"
   retention_in_days = 30
 
@@ -48,15 +51,18 @@ resource "aws_cloudwatch_dashboard" "horizons" {
       {
         type = "metric"
         properties = {
-          metrics = [
+          metrics = concat([
+            ["AWS/ECS", "CPUUtilization", "ServiceName", "${var.project_name}-monitoring-webui"],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", "${var.project_name}-monitoring-webui"]
+            ], local.gpu_enabled ? [
             ["AWS/ECS", "CPUUtilization", "ServiceName", "${var.project_name}-monitoring-ollama"],
             ["AWS/ECS", "MemoryUtilization", "ServiceName", "${var.project_name}-monitoring-ollama"],
-            ["AWS/EC2", "GPUUtilization", "AutoScalingGroupName", aws_autoscaling_group.ollama.name],
-            ["AWS/EC2", "GPUMemoryUtilization", "AutoScalingGroupName", aws_autoscaling_group.ollama.name]
-          ]
+            ["AWS/EC2", "GPUUtilization", "AutoScalingGroupName", local.autoscaling_group_ollama_name],
+            ["AWS/EC2", "GPUMemoryUtilization", "AutoScalingGroupName", local.autoscaling_group_ollama_name]
+          ] : [])
           period = 300
           stat   = "Average"
-          title  = "Ollama Resource Utilization"
+          title  = local.gpu_enabled ? "Ollama & WebUI Resource Utilization" : "WebUI Resource Utilization"
           region = var.aws_region
         }
       },
@@ -92,11 +98,13 @@ resource "aws_cloudwatch_dashboard" "horizons" {
       {
         type = "metric"
         properties = {
-          metrics = [
-            ["AWS/ECS", "RunningTaskCount", "ClusterName", aws_ecs_cluster.ec2.name],
-            ["AWS/AutoScaling", "GroupInServiceInstances", "AutoScalingGroupName", aws_autoscaling_group.ollama.name],
+          metrics = concat([
+            ["AWS/ECS", "RunningTaskCount", "ClusterName", aws_ecs_cluster.fargate.name],
             ["AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", aws_db_instance.webui.id]
-          ]
+            ], local.gpu_enabled ? [
+            ["AWS/ECS", "RunningTaskCount", "ClusterName", local.ecs_cluster_ec2_name],
+            ["AWS/AutoScaling", "GroupInServiceInstances", "AutoScalingGroupName", local.autoscaling_group_ollama_name]
+          ] : [])
           period = 300
           stat   = "Average"
           title  = "System Health"
@@ -106,11 +114,13 @@ resource "aws_cloudwatch_dashboard" "horizons" {
       {
         type = "metric"
         properties = {
-          metrics = [
+          metrics = concat([
             ["AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "LoadBalancer", aws_lb.main.arn_suffix],
             ["AWS/ApplicationELB", "HTTPCode_Target_4XX_Count", "LoadBalancer", aws_lb.main.arn_suffix],
-            ["AWS/ECS", "ServiceCount", "ClusterName", aws_ecs_cluster.ec2.name]
-          ]
+            ["AWS/ECS", "ServiceCount", "ClusterName", aws_ecs_cluster.fargate.name]
+            ], local.gpu_enabled ? [
+            ["AWS/ECS", "ServiceCount", "ClusterName", local.ecs_cluster_ec2_name]
+          ] : [])
           period = 300
           stat   = "Sum"
           title  = "Error Rates"

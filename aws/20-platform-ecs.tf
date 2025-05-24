@@ -77,11 +77,11 @@ resource "aws_iam_role_policy" "ecs_task_execution_logs" {
           "logs:PutLogEvents",
           "logs:CreateLogGroup"
         ]
-        Resource = [
+        Resource = compact([
           "${aws_cloudwatch_log_group.bedrock.arn}:*",
           "${aws_cloudwatch_log_group.webui.arn}:*",
-          "${aws_cloudwatch_log_group.ollama.arn}:*"
-        ]
+          local.cloudwatch_log_group_ollama_arn != null ? "${local.cloudwatch_log_group_ollama_arn}:*" : null
+        ])
       }
     ]
   })

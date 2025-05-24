@@ -33,12 +33,12 @@ resource "aws_ecs_task_definition" "webui" {
           value = "True"
         },
         {
-          "name" : "OPENAI_API_BASE_URL",
-          "value" : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1"
+          name : "OPENAI_API_BASE_URL",
+          value : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1"
         },
         {
-          "name" : "OLLAMA_BASE_URL",
-          "value" : "http://${aws_service_discovery_service.ollama.name}.${aws_service_discovery_private_dns_namespace.main.name}:11434"
+          name : "OLLAMA_BASE_URL",
+          value : "http://${local.service_discovery_ollama_name}.${aws_service_discovery_private_dns_namespace.main.name}:11434"
         }
       ]
 
