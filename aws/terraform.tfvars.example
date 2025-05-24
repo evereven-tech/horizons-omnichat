@@ -19,10 +19,14 @@ cognito_domain_prefix = "auth-chatbot-company_name"
 #postgres_password  = "changemeinproduction"
 #bedrock_api_key    = 123456
 #webui_secret_key   = "changemeinproduction"
-webui_version      = "0.5.10"
+webui_version      = "v0.6.10"
 
 # Ollama Configuration
 ollama_models = "tinyllama,llama2,mistral"
+
+# GPU Configuration
+# Set to true if you want to deploy a spot GPU instance with Ollama 
+enable_gpu = true
 
 # Ollama Compute Environment
 gpu_config = {

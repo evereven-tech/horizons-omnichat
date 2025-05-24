@@ -5,23 +5,26 @@
 
 # Task Definition for Ollama
 resource "aws_ecs_task_definition" "ollama" {
+
+  count = local.gpu_enabled_flap
+
   family                   = "${var.project_name}-compute-ollama"
   requires_compatibilities = ["EC2"]
   network_mode             = "awsvpc"
   cpu                      = 2048
   memory                   = 8192
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
-  task_role_arn            = aws_iam_role.ollama_task.arn
+  task_role_arn            = local.iam_role_ollama_task_arn
 
   volume {
     name                = "models"
     configure_at_launch = false
 
     efs_volume_configuration {
-      file_system_id     = aws_efs_file_system.models.id
+      file_system_id     = local.efs_file_system_id
       transit_encryption = "ENABLED"
       authorization_config {
-        access_point_id = aws_efs_access_point.models.id
+        access_point_id = local.efs_access_point_id
         iam             = "ENABLED"
       }
     }
@@ -30,7 +33,7 @@ resource "aws_ecs_task_definition" "ollama" {
   container_definitions = jsonencode([
     {
       name       = "ollama"
-      image      = "${aws_ecr_repository.ollama.repository_url}:${var.ollama_version}"
+      image      = "${local.ecr_repository_ollama_url}:${var.ollama_version}"
       user       = "root"
       privileged = true
       essential  = true
@@ -113,7 +116,7 @@ resource "aws_ecs_task_definition" "ollama" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = aws_cloudwatch_log_group.ollama.name
+          "awslogs-group"         = "/ecs/${var.project_name}/ollama"
           "awslogs-region"        = var.aws_region
           "awslogs-stream-prefix" = "ollama"
         }
@@ -145,21 +148,24 @@ resource "aws_ecs_task_definition" "ollama" {
 
 # ECS Service for Ollama
 resource "aws_ecs_service" "ollama" {
+
+  count = local.gpu_enabled_flap
+
   name            = "${var.project_name}-compute-ollama"
-  cluster         = aws_ecs_cluster.ec2.id
-  task_definition = aws_ecs_task_definition.ollama.arn
+  cluster         = local.ecs_cluster_ec2_id
+  task_definition = local.ecs_task_definition_ollama_arn
 
   desired_count = 1
   launch_type   = "EC2"
 
   network_configuration {
     subnets          = aws_subnet.private[*].id
-    security_groups  = [aws_security_group.ollama_tasks.id]
+    security_groups  = [local.security_group_ollama_tasks_id]
     assign_public_ip = false
   }
 
   service_registries {
-    registry_arn = aws_service_discovery_service.ollama.arn
+    registry_arn = local.service_discovery_ollama_arn
   }
 
   enable_execute_command  = true
@@ -179,6 +185,9 @@ resource "aws_ecs_service" "ollama" {
 # Security Group for Ollama's tasks
 #trivy:ignore:AVD-AWS-0104
 resource "aws_security_group" "ollama_tasks" {
+
+  count = local.gpu_enabled_flap
+
   name        = "${var.project_name}-compute-ollama-tasks"
   description = "Allow inbound traffic to Ollama tasks"
   vpc_id      = aws_vpc.main.id
@@ -212,6 +221,9 @@ resource "aws_security_group" "ollama_tasks" {
 
 # ECS Task Role for Ollama
 resource "aws_iam_role" "ollama_task" {
+
+  count = local.gpu_enabled_flap
+
   name = "${var.project_name}-security-ollama-task"
 
   assume_role_policy = jsonencode({
@@ -235,8 +247,11 @@ resource "aws_iam_role" "ollama_task" {
 
 # Policy for the role of Ollama task
 resource "aws_iam_role_policy" "ollama_task" {
+
+  count = local.gpu_enabled_flap
+
   name = "${var.project_name}-security-ollama-task-policy"
-  role = aws_iam_role.ollama_task.id
+  role = local.iam_role_ollama_task_id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -247,7 +262,7 @@ resource "aws_iam_role_policy" "ollama_task" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ]
-        Resource = "${aws_cloudwatch_log_group.ollama.arn}:*"
+        Resource = "${local.cloudwatch_log_group_ollama_arn}:*"
       },
       {
         Effect = "Allow"
@@ -269,8 +284,8 @@ resource "aws_iam_role_policy" "ollama_task" {
           "elasticfilesystem:DescribeFileSystems"
         ]
         Resource = [
-          aws_efs_file_system.models.arn,
-          "${aws_efs_file_system.models.arn}/*"
+          local.efs_file_system_arn,
+          "${local.efs_file_system_arn}/*"
         ]
       }
     ]

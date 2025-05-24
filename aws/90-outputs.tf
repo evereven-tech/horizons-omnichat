@@ -20,12 +20,12 @@ output "vpc_cidr_block" {
 
 output "efs_filesystem_id" {
   description = "ID of EFS filesystem for models"
-  value       = aws_efs_file_system.models.id
+  value       = local.efs_file_system_id
 }
 
 output "efs_access_point_id" {
   description = "ID of EFS access point"
-  value       = aws_efs_access_point.models.id
+  value       = local.efs_access_point_id
 }
 
 output "repository_urls" {
@@ -33,7 +33,7 @@ output "repository_urls" {
   value = {
     webui           = aws_ecr_repository.webui.repository_url
     bedrock_gateway = aws_ecr_repository.bedrock_gateway.repository_url
-    ollama          = aws_ecr_repository.ollama.repository_url
+    ollama          = local.ecr_repository_ollama_url
   }
 }
 
@@ -42,6 +42,6 @@ output "service_dns" {
   value = {
     webui   = "${aws_service_discovery_service.webui.name}.${aws_service_discovery_private_dns_namespace.main.name}"
     bedrock = "${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}"
-    ollama  = "${aws_service_discovery_service.ollama.name}.${aws_service_discovery_private_dns_namespace.main.name}"
+    ollama  = var.enable_gpu ? "${local.service_discovery_ollama_name}.${aws_service_discovery_private_dns_namespace.main.name}" : null
   }
 }

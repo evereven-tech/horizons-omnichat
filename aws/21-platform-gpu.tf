@@ -4,6 +4,9 @@
 
 # ECS Cluster for Ollama
 resource "aws_ecs_cluster" "ec2" {
+
+  count = local.gpu_enabled_flap
+
   name = "${var.project_name}-compute-ec2"
 
   setting {
@@ -19,24 +22,29 @@ resource "aws_ecs_cluster" "ec2" {
 
 # Capacity Provider for cluster using EC2 (ASG+Spot)
 resource "aws_ecs_cluster_capacity_providers" "ec2" {
-  cluster_name = aws_ecs_cluster.ec2.name
 
-  capacity_providers = [aws_ecs_capacity_provider.ec2.name]
+  count = local.gpu_enabled_flap
+
+  cluster_name       = local.ecs_cluster_ec2_name
+  capacity_providers = [local.ecs_capacity_provider_ec2_name]
 
   default_capacity_provider_strategy {
     base              = 0
     weight            = 100
-    capacity_provider = aws_ecs_capacity_provider.ec2.name
+    capacity_provider = local.ecs_capacity_provider_ec2_name
   }
 }
 
 resource "aws_ecs_capacity_provider" "ec2" {
+
+  count = local.gpu_enabled_flap
+
   name = "${var.project_name}-compute-ec2"
 
   auto_scaling_group_provider {
-    auto_scaling_group_arn         = aws_autoscaling_group.ollama.arn
+    auto_scaling_group_arn = local.autoscaling_group_ollama_arn
     #managed_termination_protection = "DISABLED"
-    managed_draining               = "ENABLED"
+    managed_draining = "ENABLED"
 
     managed_scaling {
       maximum_scaling_step_size = 1
@@ -58,11 +66,14 @@ resource "aws_ecs_capacity_provider" "ec2" {
 
 # Auto Scaling Group for Ollama
 resource "aws_autoscaling_group" "ollama" {
+
+  count = local.gpu_enabled_flap
+
   name                = "${var.project_name}-compute-ollama"
   desired_capacity    = var.ollama_desired_count
   max_size            = var.ollama_max_count
   min_size            = var.ollama_min_count
-  target_group_arns   = [aws_lb_target_group.ollama.arn]
+  target_group_arns   = [local.lb_target_group_ollama_arn]
   vpc_zone_identifier = aws_subnet.private[*].id
 
   mixed_instances_policy {
@@ -75,7 +86,7 @@ resource "aws_autoscaling_group" "ollama" {
 
     launch_template {
       launch_template_specification {
-        launch_template_id = aws_launch_template.ollama.id
+        launch_template_id = local.launch_template_ollama_id
         version            = "$Latest"
       }
 
@@ -119,6 +130,9 @@ resource "aws_autoscaling_group" "ollama" {
 
 # Launch Template for GPU instances
 resource "aws_launch_template" "ollama" {
+
+  count = local.gpu_enabled_flap
+
   name          = "${var.project_name}-compute-ollama"
   image_id      = data.aws_ami.ecs_ami.id # Calc using a terraform data structure
   instance_type = "g4dn.xlarge"           # An instance with GPU NVIDIA
@@ -134,18 +148,18 @@ resource "aws_launch_template" "ollama" {
   # User data to install the ECS agent and configure Docker
   user_data = base64encode(<<-EOF
               #!/bin/bash
-              echo ECS_CLUSTER=${aws_ecs_cluster.ec2.name} >> /etc/ecs/ecs.config
+              echo ECS_CLUSTER=${local.ecs_cluster_ec2_name} >> /etc/ecs/ecs.config
               echo ECS_ENABLE_GPU_SUPPORT=true >> /etc/ecs/ecs.config
               EOF
   )
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups             = [aws_security_group.ollama.id]
+    security_groups             = [local.security_group_ollama_id]
   }
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.ollama.name
+    name = local.iam_instance_profile_ollama_name
   }
 
   monitoring {
@@ -164,23 +178,29 @@ resource "aws_launch_template" "ollama" {
 
 # Scheduled scaling for business hours (M-F, 9-19)
 resource "aws_autoscaling_schedule" "scale_up_workday" {
+
+  count = local.gpu_enabled_flap
+
   scheduled_action_name  = "${var.project_name}-compute-scale-up-workday"
   min_size               = var.ollama_min_count
   max_size               = var.ollama_max_count
   desired_capacity       = var.ollama_desired_count
   recurrence             = "0 9 * * mon-fri" # 9:00 AM, Monday to Friday
   time_zone              = "Europe/Madrid"   # Time zone of Spain
-  autoscaling_group_name = aws_autoscaling_group.ollama.name
+  autoscaling_group_name = local.autoscaling_group_ollama_name
 }
 
 resource "aws_autoscaling_schedule" "scale_down_workday" {
+
+  count = local.gpu_enabled_flap
+
   scheduled_action_name  = "${var.project_name}-compute-scale-down-workday"
   min_size               = 0
   max_size               = var.ollama_max_count # Keep the maximum in order not to lose the configuration.
   desired_capacity       = 0                    # Scale to 0 instances => avoid costs
   recurrence             = "0 19 * * mon-fri"   # 19:00 PM, Monday to Friday
   time_zone              = "Europe/Madrid"      # Time zone of Spain
-  autoscaling_group_name = aws_autoscaling_group.ollama.name
+  autoscaling_group_name = local.autoscaling_group_ollama_name
 }
 
 #
@@ -190,6 +210,9 @@ resource "aws_autoscaling_schedule" "scale_down_workday" {
 # Security Group for Ollama
 #trivy:ignore:AVD-AWS-0104
 resource "aws_security_group" "ollama" {
+
+  count = local.gpu_enabled_flap
+
   name        = "${var.project_name}-compute-ollama"
   description = "Security group for Ollama instances"
   vpc_id      = aws_vpc.main.id
@@ -222,6 +245,9 @@ resource "aws_security_group" "ollama" {
 
 # IAM Role for EC2 Instances running Ollama container
 resource "aws_iam_role" "ollama_instance" {
+
+  count = local.gpu_enabled_flap
+
   name = "${var.project_name}-security-ollama-instance"
 
   assume_role_policy = jsonencode({
@@ -245,14 +271,20 @@ resource "aws_iam_role" "ollama_instance" {
 
 # Instance Profile for Ollama EC2 instances
 resource "aws_iam_instance_profile" "ollama" {
+
+  count = local.gpu_enabled_flap
+
   name = "${var.project_name}-security-ollama"
-  role = aws_iam_role.ollama_instance.name
+  role = local.iam_role_ollama_instance_name
 }
 
 # Basic policy for Ollama EC2 instances
 resource "aws_iam_role_policy" "ollama_instance" {
+
+  count = local.gpu_enabled_flap
+
   name = "${var.project_name}-security-ollama-instance-policy"
-  role = aws_iam_role.ollama_instance.id
+  role = local.iam_role_ollama_instance_id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -314,12 +346,12 @@ resource "aws_iam_role_policy" "ollama_instance" {
       {
         Effect = "Allow"
         Action = [
-           "ec2messages:AcknowledgeMessage",                                                                                                                                                  
-           "ec2messages:DeleteMessage",                                                                                                                                                       
-           "ec2messages:FailMessage",                                                                                                                                                         
-           "ec2messages:GetEndpoint",                                                                                                                                                         
-           "ec2messages:GetMessages",                                                                                                                                                         
-           "ec2messages:SendReply"           
+          "ec2messages:AcknowledgeMessage",
+          "ec2messages:DeleteMessage",
+          "ec2messages:FailMessage",
+          "ec2messages:GetEndpoint",
+          "ec2messages:GetMessages",
+          "ec2messages:SendReply"
         ]
         Resource = "*"
       },
@@ -337,7 +369,7 @@ resource "aws_iam_role_policy" "ollama_instance" {
           "sts:AssumeRole"
         ]
         Resource = [
-          aws_iam_role.ollama_task.arn,
+          local.iam_role_ollama_task_arn,
           aws_iam_role.ecs_task_execution.arn
         ]
       }
@@ -347,24 +379,28 @@ resource "aws_iam_role_policy" "ollama_instance" {
 
 # SSM Administered Policy for the instance
 resource "aws_iam_role_policy_attachment" "ollama_instance_ssm" {
-  role       = aws_iam_role.ollama_instance.name
+  count      = local.gpu_enabled_flap
+  role       = local.iam_role_ollama_instance_name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 # CloudWatch Managed Policy for the instance
 resource "aws_iam_role_policy_attachment" "ollama_instance_cloudwatch" {
-  role       = aws_iam_role.ollama_instance.name
+  count      = local.gpu_enabled_flap
+  role       = local.iam_role_ollama_instance_name
   policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
 }
 
 # Policy for ECS
 resource "aws_iam_role_policy_attachment" "ollama_instance_ecs" {
-  role       = aws_iam_role.ollama_instance.name
+  count      = local.gpu_enabled_flap
+  role       = local.iam_role_ollama_instance_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
 # ENI Management Policy for Ollama
 resource "aws_iam_role_policy_attachment" "ecs_instance_eni" {
-  role       = aws_iam_role.ollama_instance.name
+  count      = local.gpu_enabled_flap
+  role       = local.iam_role_ollama_instance_name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
