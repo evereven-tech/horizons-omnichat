@@ -23,7 +23,7 @@ resource "aws_ecs_task_definition" "webui" {
         }
       ]
 
-      environment = [
+      environment = concat([
         {
           name  = "AWS_DEFAULT_REGION"
           value = var.aws_region
@@ -35,12 +35,13 @@ resource "aws_ecs_task_definition" "webui" {
         {
           name : "OPENAI_API_BASE_URL",
           value : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1"
-        },
+        }
+      ], local.gpu_enabled ? [
         {
           name : "OLLAMA_BASE_URL",
           value : "http://${local.service_discovery_ollama_name}.${aws_service_discovery_private_dns_namespace.main.name}:11434"
         }
-      ]
+      ] : [])
 
       secrets = [
         {
