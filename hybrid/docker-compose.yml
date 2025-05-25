@@ -8,40 +8,54 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - open-webui:/var/lib/postgresql/data
+      - type: volume
+        source: open-webui-db
+        target: /var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
       - chatbot-net
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 3s
       timeout: 5s
       retries: 5
+
+#  init-volume:
+#    image: alpine
+#    volumes:
+#      - open-webui:/data
+#      - ./config.json:/config.json
+#    command: cp /config.json /data/config.json
 
   open-webui:
     container_name: open-webui
     restart: unless-stopped
     image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     depends_on:
+#      init-volume:
+#        condition: service_completed_successfully
       webui-db:
         condition: service_healthy
       ollama:
         condition: service_healthy
       bedrock-gateway:
         condition: service_healthy
+      litellm-proxy:
+        condition: service_healthy
     ports:
       - 3002:8080
     networks:
       - chatbot-net
     environment:
-      - 'OLLAMA_BASE_URL=http://ollama:11434'
-      - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
-      - 'WEBUI_DB_HOST=webui-db'
-      - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - WEBUI_DB_HOST=webui-db
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}
     volumes:
-      #- ./tmp/:/app/backend/data/                                  # Useful for blocking updates
-      - ./config.json:/app/backend/data/config.json
+      - type: volume
+        source: open-webui
+        target: /app/backend/data
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "8080"]
       interval: 10s
@@ -72,6 +86,37 @@ services:
       retries: 5
       start_period: 30s
 
+  litellm-proxy:
+    container_name: litellm-proxy
+    restart: unless-stopped
+    image: ghcr.io/berriai/litellm:main-latest
+    depends_on:
+      webui-db:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    networks:
+      - chatbot-net
+    environment:
+      - UI_USERNAME=${UI_USERNAME}
+      - UI_PASSWORD=${UI_PASSWORD}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - LITELLM_SALT_KEY=${LITELLM_SALT_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - XAI_API_KEY=${XAI_API_KEY}
+      - STORE_MODEL_IN_DB=True
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:4000/health/liveness"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
   bedrock-gateway:
     container_name: bedrock-gateway
     restart: unless-stopped
@@ -98,6 +143,7 @@ services:
 
 volumes:
   open-webui:
+  open-webui-db:
   ollama-data:
 
 networks:
