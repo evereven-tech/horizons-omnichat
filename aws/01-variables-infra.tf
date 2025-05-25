@@ -115,6 +115,11 @@ variable "efs_models_throughput" {
 # GPU EC2 Spot based
 # #############################################################################
 
+variable "enable_gpu" {
+  description = "Whether to provision GPU-enabled EC2 instances for Ollama"
+  type        = bool
+}
+
 variable "gpu_config" {
   description = "GPU configuration for Ollama instances"
   type = object({

@@ -4,6 +4,9 @@
 
 # EFS File System
 resource "aws_efs_file_system" "models" {
+
+  count = local.gpu_enabled_flap
+
   creation_token = "${var.project_name}-storage-models"
   encrypted      = true
 
@@ -22,15 +25,20 @@ resource "aws_efs_file_system" "models" {
 
 # Mount targets on each private subnet
 resource "aws_efs_mount_target" "models" {
-  count           = length(var.private_subnets)
-  file_system_id  = aws_efs_file_system.models.id
+
+  count = var.enable_gpu ? length(var.private_subnets) : 0
+
+  file_system_id  = local.efs_file_system_id
   subnet_id       = aws_subnet.private[count.index].id
-  security_groups = [aws_security_group.efs.id]
+  security_groups = [local.security_group_efs_id]
 }
 
 # Access Point for models
 resource "aws_efs_access_point" "models" {
-  file_system_id = aws_efs_file_system.models.id
+
+  count = local.gpu_enabled_flap
+
+  file_system_id = local.efs_file_system_id
 
   posix_user {
     gid = 0 # root group
@@ -54,6 +62,9 @@ resource "aws_efs_access_point" "models" {
 
 # Security Group for EFS
 resource "aws_security_group" "efs" {
+
+  count = local.gpu_enabled_flap
+
   name        = "${var.project_name}-storage-efs"
   description = "Security group for EFS mount targets"
   vpc_id      = aws_vpc.main.id
@@ -62,7 +73,7 @@ resource "aws_security_group" "efs" {
     from_port       = 2049
     to_port         = 2049
     protocol        = "tcp"
-    security_groups = [aws_security_group.ollama_tasks.id]
+    security_groups = [local.security_group_ollama_tasks_id]
     description     = "Allow access to EFS"
   }
 
@@ -161,6 +172,9 @@ resource "aws_ecr_lifecycle_policy" "bedrock_gateway" {
 
 # ECR Repository for Ollama
 resource "aws_ecr_repository" "ollama" {
+
+  count = local.gpu_enabled_flap
+
   name                 = "${var.project_name}-ollama"
   image_tag_mutability = "MUTABLE"
 
@@ -180,6 +194,9 @@ resource "aws_ecr_repository" "ollama" {
 
 # Life Cycle Policy for Ollama
 resource "aws_ecr_lifecycle_policy" "ollama" {
-  repository = aws_ecr_repository.ollama.name
+
+  count = local.gpu_enabled_flap
+
+  repository = local.ecr_repository_ollama_name
   policy     = local.ecr_lifecycle_policy
 }
