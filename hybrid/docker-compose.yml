@@ -21,20 +21,20 @@ services:
       timeout: 5s
       retries: 5
 
-#  init-volume:
-#    image: alpine
-#    volumes:
-#      - open-webui:/data
-#      - ./config.json:/config.json
-#    command: cp /config.json /data/config.json
+  init-volume:
+    image: alpine
+    volumes:
+      - open-webui:/data
+      - ./config.json:/config.json
+    command: cp /config.json /data/config.json
 
   open-webui:
     container_name: open-webui
     restart: unless-stopped
     image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     depends_on:
-#      init-volume:
-#        condition: service_completed_successfully
+      init-volume:
+        condition: service_completed_successfully
       webui-db:
         condition: service_healthy
       ollama:
@@ -97,19 +97,15 @@ services:
       - "4000:4000"
     networks:
       - chatbot-net
+    command: [ "--config", "/app/config.yaml", "--port", "4000", "--num_workers", "2" ]
     environment:
       - UI_USERNAME=${UI_USERNAME}
       - UI_PASSWORD=${UI_PASSWORD}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}
-      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
-      - LITELLM_SALT_KEY=${LITELLM_SALT_KEY}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
-      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
-      - XAI_API_KEY=${XAI_API_KEY}
       - STORE_MODEL_IN_DB=True
     volumes:
       - ./litellm_config.yaml:/app/config.yaml
+      - ./.env:/app/.env
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:4000/health/liveness"]
       interval: 10s

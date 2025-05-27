@@ -54,7 +54,7 @@
       }
     ]
   },
-  "openai": {
+ "openai": {
     "enable": true,
     "api_base_urls": [
       "http://bedrock-gateway:80/api/v1",
@@ -65,21 +65,36 @@
       "LITELLM_API_KEY"
     ],
     "api_configs": {
-			"0": {
-				"enable": true,
-				"prefix_id": "bedrock",
-				"model_ids": []
-			},
-			"1": {
-				"enable": true,
-				"prefix_id": "litellm",
-				"model_ids": []
-			}
-		}
+      "0": {
+        "enable": true,
+        "tags": [],
+        "prefix_id": "ext-bedrock",
+        "model_ids": [],
+        "connection_type": "external"
+      },
+      "1": {
+        "enable": true,
+        "tags": [],
+        "prefix_id": "ext-litellm",
+        "model_ids": [],
+        "connection_type": "external"
+      }
+    }
   },
   "ollama": {
     "base_urls": [
       "http://ollama:11434"
-    ]
+    ],
+    "enable": true,
+    "api_configs": {
+      "0": {
+        "enable": true,
+        "tags": [],
+        "prefix_id": "int-ollama",
+        "model_ids": [],
+        "connection_type": "local",
+        "key": ""
+      }
+    }
   }
 }
