@@ -10,9 +10,9 @@ model_list:
       model: huggingface/meta-llama/Meta-Llama-3.1-8B-Instruct
       api_key: "os.environ/HUGGINGFACE_API_KEY"
 
-  - model_name: mistral-small-latest
+  - model_name: mistral/*
     litellm_params:
-      model: mistral/mistral-small-latest
+      model: mistral/*      
       api_key: "os.environ/MISTRAL_API_KEY"       # ensure you have `MISTRAL_API_KEY` in your .env
 
   - model_name: my-model
