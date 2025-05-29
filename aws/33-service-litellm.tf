@@ -36,7 +36,7 @@ resource "aws_ecs_task_definition" "litellm" {
         }
       ]
 
-      secrets = [
+      secrets = concat([
         {
           name      = "DATABASE_URL"
           valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:database_url::"
@@ -49,7 +49,7 @@ resource "aws_ecs_task_definition" "litellm" {
           name      = "LITELLM_MASTER_KEY"
           valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:litellm_master_key::"
         }
-      ]
+      ], local.external_api_secrets)
 
       healthCheck = {
         command     = ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:4000/health/liveness"]

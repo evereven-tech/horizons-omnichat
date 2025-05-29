@@ -39,3 +39,16 @@ spot_config = {
   interruption_behavior = "terminate"
   allocation_strategy   = "capacity-optimized-prioritized"
 }
+
+# External API Keys
+# Dynamic configuration for third-party LLM providers
+# Only define the providers you have API keys for
+external_api_keys = {
+  openai    = "sk-proj-..."
+  mistral   = "..."
+  anthropic = "sk-ant-..."
+  cohere    = "..."
+  # Add any new providers as needed
+  # groq      = "gsk_..."
+  # together  = "..."
+}
