@@ -78,10 +78,12 @@ resource "aws_secretsmanager_secret_version" "app_secrets" {
   secret_id = aws_secretsmanager_secret.app_secrets.id
   secret_string = jsonencode({
 
-    webui_secret_key  = random_password.webui_secret_key.result
-    postgres_password = random_password.postgres.result
-    bedrock_api_key   = random_password.bedrock_api_key.result
-    database_url      = "postgresql://${var.postgres_user}:${random_password.postgres.result}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
+    webui_secret_key    = random_password.webui_secret_key.result
+    postgres_password   = random_password.postgres.result
+    bedrock_api_key     = random_password.bedrock_api_key.result
+    litellm_master_key  = random_password.litellm_master_key.result
+    litellm_ui_password = random_password.litellm_ui_password.result
+    database_url        = "postgresql://${var.postgres_user}:${random_password.postgres.result}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
   })
 }
 
@@ -161,4 +163,26 @@ resource "random_password" "webui_secret_key" {
   min_upper        = 4
   min_lower        = 4
   min_numeric      = 4
+}
+
+# Random secure password generator for LiteLLM Master Key
+resource "random_password" "litellm_master_key" {
+  length           = 32
+  special          = true
+  override_special = "-_"
+  min_special      = 2
+  min_upper        = 4
+  min_lower        = 4
+  min_numeric      = 4
+}
+
+# Random secure password generator for LiteLLM UI credentials
+resource "random_password" "litellm_ui_password" {
+  length           = 16
+  special          = true
+  override_special = "-_"
+  min_special      = 1
+  min_upper        = 2
+  min_lower        = 2
+  min_numeric      = 2
 }

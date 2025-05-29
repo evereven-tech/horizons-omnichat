@@ -160,7 +160,8 @@ resource "aws_security_group" "vpc_endpoints" {
     security_groups = compact([
       local.security_group_ollama_id,
       aws_security_group.ecs_tasks.id,
-      aws_security_group.bedrock_tasks.id
+      aws_security_group.bedrock_tasks.id,
+      aws_security_group.litellm_tasks.id
     ])
     description = "Allow access from ECS Tasks"
   }
@@ -242,6 +243,26 @@ resource "aws_service_discovery_service" "ollama" {
 # Service Discovery for Bedrock Gateway
 resource "aws_service_discovery_service" "bedrock" {
   name = "bedrock-gateway"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.main.id
+
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+
+    routing_policy = "MULTIVALUE"
+  }
+
+  health_check_custom_config {
+    failure_threshold = 1
+  }
+}
+
+# Service Discovery for LiteLLM
+resource "aws_service_discovery_service" "litellm" {
+  name = "litellm-proxy"
 
   dns_config {
     namespace_id = aws_service_discovery_private_dns_namespace.main.id

@@ -33,10 +33,10 @@ resource "aws_ecs_task_definition" "webui" {
           value = "True"
         },
         {
-          name : "OPENAI_API_BASE_URL",
-          value : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1"
+          name : "OPENAI_API_BASE_URLS",
+          value : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1;http://${aws_service_discovery_service.litellm.name}.${aws_service_discovery_private_dns_namespace.main.name}:4000"
         }
-      ], local.gpu_enabled ? [
+        ], local.gpu_enabled ? [
         {
           name : "OLLAMA_BASE_URL",
           value : "http://${local.service_discovery_ollama_name}.${aws_service_discovery_private_dns_namespace.main.name}:11434"
@@ -49,8 +49,8 @@ resource "aws_ecs_task_definition" "webui" {
           valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:webui_secret_key::"
         },
         {
-          name      = "OPENAI_API_KEY"
-          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:bedrock_api_key::"
+          name      = "OPENAI_API_KEYS"
+          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:bedrock_api_key::;${aws_secretsmanager_secret.app_secrets.arn}:litellm_api_key::"
         },
         {
           name      = "DATABASE_URL"

@@ -22,13 +22,19 @@ variable "postgres_user" {
 variable "webui_version" {
   description = "Version of OpenWebUI to deploy"
   type        = string
-  default     = "latest"
+  default     = "main"
 }
 
 variable "bedrock_version" {
   description = "Version of Bedrock Gateway to deploy"
   type        = string
   default     = "latest"
+}
+
+variable "litellm_version" {
+  description = "Version of LiteLLM to deploy"
+  type        = string
+  default     = "main-stable"
 }
 
 variable "ollama_version" {

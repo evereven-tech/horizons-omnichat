@@ -101,6 +101,12 @@ variable "ollama_min_count" {
   default     = 0
 }
 
+variable "litellm_desired_count" {
+  description = "Desired number of LiteLLM instances"
+  type        = number
+  default     = 1
+}
+
 #
 # Persistence
 # #############################################################################
