@@ -132,8 +132,10 @@ resource "aws_secretsmanager_secret" "external_api_keys" {
 resource "aws_secretsmanager_secret_version" "external_api_keys" {
   for_each = nonsensitive(toset(keys(var.external_api_keys)))
 
-  secret_id     = aws_secretsmanager_secret.external_api_keys[each.key].id
-  secret_string = var.external_api_keys[each.key]
+  secret_id = aws_secretsmanager_secret.external_api_keys[each.key].id
+  secret_string = jsonencode({
+    api_key = var.external_api_keys[each.key]
+  })
 }
 
 # IAM policy for accessing external API secrets

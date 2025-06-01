@@ -40,15 +40,14 @@ spot_config = {
   allocation_strategy   = "capacity-optimized-prioritized"
 }
 
-# External API Keys
-# Dynamic configuration for third-party LLM providers
-# Only define the providers you have API keys for
+# Little-LLM Configuration
 external_api_keys = {
   openai    = "sk-proj-..."
   mistral   = "..."
   anthropic = "sk-ant-..."
-  cohere    = "..."
-  # Add any new providers as needed
+  cohere    = "..."  
   # groq      = "gsk_..."
   # together  = "..."
+
+  # Add any new providers as needed
 }

@@ -23,7 +23,8 @@ resource "aws_ecs_task_definition" "litellm" {
         }
       ]
 
-      command = ["--config", "/app/config.yaml", "--port", "4000", "--num_workers", "2"]
+      #command = ["--config", "/app/config.yaml", "--port", "4000", "--num_workers", "2"]
+      command = ["--port", "4000", "--num_workers", "2"]
 
       environment = [
         {
