@@ -7,7 +7,7 @@
 resource "aws_db_instance" "webui" {
   identifier        = "${var.project_name}-persistence-db"
   engine            = "postgres"
-  engine_version    = "13"
+  engine_version    = "14.18"
   instance_class    = "db.t3.small"
   storage_type      = "gp3"
   allocated_storage = 20
@@ -22,12 +22,13 @@ resource "aws_db_instance" "webui" {
   vpc_security_group_ids = [aws_security_group.rds.id]
   db_subnet_group_name   = aws_db_subnet_group.rds.name
 
-  skip_final_snapshot = true
-  deletion_protection = true
+  skip_final_snapshot         = true
+  deletion_protection         = true
+  allow_major_version_upgrade = true
 
-  backup_retention_period = 7
-  backup_window           = "03:00-04:00"
-  maintenance_window      = "Mon:04:00-Mon:05:00"
+  backup_retention_period = 3
+  backup_window           = "00:00-02:00"
+  maintenance_window      = "Sun:02:00-Sun:06:00"
 
   # Performance improvements
   performance_insights_enabled          = true
@@ -39,7 +40,7 @@ resource "aws_db_instance" "webui" {
   publicly_accessible = false
 
   # Database parameters
-  parameter_group_name = aws_db_parameter_group.postgres13.name
+  parameter_group_name = aws_db_parameter_group.postgres.name
 
   tags = {
     Name  = "${var.project_name}-persistence-db"
@@ -47,7 +48,7 @@ resource "aws_db_instance" "webui" {
   }
 }
 
-# Grupo de parámetros personalizado
+# Custom parameter group for PostgreSQL v13 (to delete when no longer needed)
 resource "aws_db_parameter_group" "postgres13" {
   family = "postgres13"
   name   = "${var.project_name}-persistence-pg13"
@@ -66,6 +67,29 @@ resource "aws_db_parameter_group" "postgres13" {
 
   tags = {
     Name  = "${var.project_name}-persistence-pg13"
+    Layer = "Persistence"
+  }
+}
+
+# Custom parameter group for PostgreSQL
+resource "aws_db_parameter_group" "postgres" {
+  family = "postgres14"
+  name   = "${var.project_name}-persistence-pg-v14"
+
+  parameter {
+    name         = "work_mem"
+    value        = "16384"
+    apply_method = "pending-reboot"
+  }
+
+  parameter {
+    name         = "maintenance_work_mem"
+    value        = "128000"
+    apply_method = "pending-reboot"
+  }
+
+  tags = {
+    Name  = "${var.project_name}-persistence-pg-v14"
     Layer = "Persistence"
   }
 }
