@@ -70,4 +70,13 @@ locals {
   # Logs
   cloudwatch_log_group_ollama_arn = local.gpu_enabled && length(aws_cloudwatch_log_group.ollama) > 0 ? aws_cloudwatch_log_group.ollama[0].arn : null
 
+  # External API Keys
+  # Generate dynamic secrets list for ECS task definitions
+  external_api_secrets = [
+    for provider in nonsensitive(keys(var.external_api_keys)) : {
+      name      = "${upper(provider)}_API_KEY"
+      valueFrom = "${aws_secretsmanager_secret.external_api_keys[provider].arn}:api_key::"
+    }
+  ]
+
 }

@@ -38,6 +38,17 @@ resource "aws_cloudwatch_log_group" "bedrock" {
   }
 }
 
+# CloudWatch Log Group for LiteLLM
+resource "aws_cloudwatch_log_group" "litellm" {
+  name              = "/ecs/${var.project_name}/litellm"
+  retention_in_days = 30
+
+  tags = {
+    Name  = "${var.project_name}-monitoring-litellm-logs"
+    Layer = "Monitoring"
+  }
+}
+
 #
 # CloudWatch Dashboard
 # #############################################################################
@@ -92,6 +103,20 @@ resource "aws_cloudwatch_dashboard" "horizons" {
           period = 300
           stat   = "Average"
           title  = "Bedrock Gateway Health"
+          region = var.aws_region
+        }
+      },
+      {
+        type = "metric"
+        properties = {
+          metrics = [
+            ["AWS/ECS", "CPUUtilization", "ServiceName", "${var.project_name}-monitoring-litellm"],
+            ["AWS/ECS", "MemoryUtilization", "ServiceName", "${var.project_name}-monitoring-litellm"],
+            ["AWS/Logs", "IncomingLogEvents", "LogGroupName", aws_cloudwatch_log_group.litellm.name]
+          ]
+          period = 300
+          stat   = "Average"
+          title  = "LiteLLM Health"
           region = var.aws_region
         }
       },

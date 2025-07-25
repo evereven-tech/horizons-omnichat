@@ -22,13 +22,19 @@ variable "postgres_user" {
 variable "webui_version" {
   description = "Version of OpenWebUI to deploy"
   type        = string
-  default     = "latest"
+  default     = "main"
 }
 
 variable "bedrock_version" {
   description = "Version of Bedrock Gateway to deploy"
   type        = string
   default     = "latest"
+}
+
+variable "litellm_version" {
+  description = "Version of LiteLLM to deploy"
+  type        = string
+  default     = "main-stable"
 }
 
 variable "ollama_version" {
@@ -46,4 +52,24 @@ variable "ollama_models" {
   description = "Comma-separated list of Ollama models to install"
   type        = string
   default     = "tinyllama"
+}
+
+#
+# External API Keys
+# Dynamic configuration for third-party LLM providers
+# #############################################################################
+
+variable "external_api_keys" {
+  description = "External API keys for third-party providers (OpenAI, Mistral, Anthropic, etc.)"
+  type        = map(string)
+  default     = {}
+  sensitive   = true
+
+  validation {
+    condition = alltrue([
+      for provider, key in var.external_api_keys :
+      can(regex("^[a-zA-Z0-9_-]+$", provider))
+    ])
+    error_message = "Provider names must contain only alphanumeric characters, hyphens, and underscores."
+  }
 }

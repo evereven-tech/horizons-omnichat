@@ -48,9 +48,9 @@ services:
     networks:
       - chatbot-net
     environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
       - WEBUI_DB_HOST=webui-db
+      - OLLAMA_BASE_URL=http://ollama:11434
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}
     volumes:
       - type: volume
@@ -97,25 +97,21 @@ services:
       - "4000:4000"
     networks:
       - chatbot-net
+    command: [ "--config", "/app/config.yaml", "--port", "4000", "--num_workers", "2" ]
     environment:
       - UI_USERNAME=${UI_USERNAME}
       - UI_PASSWORD=${UI_PASSWORD}
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}
-      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
-      - LITELLM_SALT_KEY=${LITELLM_SALT_KEY}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - HUGGINGFACE_API_KEY=${HUGGINGFACE_API_KEY}
-      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
-      - XAI_API_KEY=${XAI_API_KEY}
       - STORE_MODEL_IN_DB=True
     volumes:
       - ./litellm_config.yaml:/app/config.yaml
+      - ./.env:/app/.env
     healthcheck:
       test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:4000/health/liveness"]
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 30s
+      start_period: 60s
 
   bedrock-gateway:
     container_name: bedrock-gateway

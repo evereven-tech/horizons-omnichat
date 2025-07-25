@@ -170,6 +170,31 @@ resource "aws_ecr_lifecycle_policy" "bedrock_gateway" {
   policy     = local.ecr_lifecycle_policy
 }
 
+# ECR Repository for LiteLLM
+resource "aws_ecr_repository" "litellm" {
+  name                 = "${var.project_name}-litellm"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+
+  tags = {
+    Name  = "${var.project_name}-litellm"
+    Layer = "Storage"
+  }
+}
+
+# Lifecycle Policy for LiteLLM
+resource "aws_ecr_lifecycle_policy" "litellm" {
+  repository = aws_ecr_repository.litellm.name
+  policy     = local.ecr_lifecycle_policy
+}
+
 # ECR Repository for Ollama
 resource "aws_ecr_repository" "ollama" {
 

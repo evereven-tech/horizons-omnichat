@@ -33,6 +33,7 @@ output "repository_urls" {
   value = {
     webui           = aws_ecr_repository.webui.repository_url
     bedrock_gateway = aws_ecr_repository.bedrock_gateway.repository_url
+    litellm         = aws_ecr_repository.litellm.repository_url
     ollama          = local.ecr_repository_ollama_url
   }
 }
@@ -42,6 +43,7 @@ output "service_dns" {
   value = {
     webui   = "${aws_service_discovery_service.webui.name}.${aws_service_discovery_private_dns_namespace.main.name}"
     bedrock = "${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}"
+    litellm = "${aws_service_discovery_service.litellm.name}.${aws_service_discovery_private_dns_namespace.main.name}"
     ollama  = var.enable_gpu ? "${local.service_discovery_ollama_name}.${aws_service_discovery_private_dns_namespace.main.name}" : null
   }
 }

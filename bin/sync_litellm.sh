@@ -15,15 +15,15 @@ echo "Using container runtime: $RUNTIME_CMD"
 # Variables
 AWS_ACCOUNT=$(aws sts get-caller-identity | jq -r .Account)
 AWS_REGION="eu-west-1"
-REPO_NAME="horizons-webui"
+REPO_NAME="horizons-litellm"
 ECR_URL="${AWS_ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
 # Log account information
 echo "Using AWS Account: ${AWS_ACCOUNT}"
 echo "ECR URL: ${ECR_URL}"
 
-# Versions to process
-VERSIONS=("main" "v0.6.18" "v0.6.1" "v0.6.0") 
+# Versions to process - using popular/stable versions of litellm
+VERSIONS=("main-stable" "litellm_patch_1_67_0_stable-latest")
 
 # Login to ECR
 aws ecr get-login-password --region ${AWS_REGION} | $RUNTIME_CMD login --username AWS --password-stdin ${ECR_URL}
@@ -59,17 +59,17 @@ cleanup_untagged_images() {
 for VERSION in "${VERSIONS[@]}"; do
     echo "Processing version: $VERSION"
 
-    # Pull the image
-    $RUNTIME_CMD pull ghcr.io/open-webui/open-webui:${VERSION}
+    # Pull the image from Docker Hub
+    $RUNTIME_CMD pull ghcr.io/berriai/litellm:${VERSION}
 
     # Tag for ECR (if 'main', use 'latest' as additional tag)
     if [ "$VERSION" == "main" ]; then
-        $RUNTIME_CMD tag ghcr.io/open-webui/open-webui:${VERSION} ${ECR_URL}/${REPO_NAME}:latest
+        $RUNTIME_CMD tag ghcr.io/berriai/litellm:${VERSION} ${ECR_URL}/${REPO_NAME}:latest
         $RUNTIME_CMD push ${ECR_URL}/${REPO_NAME}:latest
     fi
 
     # Normal tag and push
-    $RUNTIME_CMD tag ghcr.io/open-webui/open-webui:${VERSION} ${ECR_URL}/${REPO_NAME}:${VERSION}
+    $RUNTIME_CMD tag ghcr.io/berriai/litellm:${VERSION} ${ECR_URL}/${REPO_NAME}:${VERSION}
     $RUNTIME_CMD push ${ECR_URL}/${REPO_NAME}:${VERSION}
 done
 

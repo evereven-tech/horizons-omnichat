@@ -78,10 +78,14 @@ resource "aws_secretsmanager_secret_version" "app_secrets" {
   secret_id = aws_secretsmanager_secret.app_secrets.id
   secret_string = jsonencode({
 
-    webui_secret_key  = random_password.webui_secret_key.result
-    postgres_password = random_password.postgres.result
-    bedrock_api_key   = random_password.bedrock_api_key.result
-    database_url      = "postgresql://${var.postgres_user}:${random_password.postgres.result}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
+    webui_secret_key     = random_password.webui_secret_key.result
+    postgres_password    = random_password.postgres.result
+    bedrock_api_key      = random_password.bedrock_api_key.result
+    litellm_master_key   = random_password.litellm_master_key.result
+    litellm_ui_password  = random_password.litellm_ui_password.result
+    database_url         = "postgresql://${var.postgres_user}:${random_password.postgres.result}@${aws_db_instance.webui.endpoint}/${var.postgres_db}"
+    openai_api_keys      = "${random_password.bedrock_api_key.result};${random_password.litellm_master_key.result}"
+    openai_api_base_urls = "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1;http://${aws_service_discovery_service.litellm.name}.${aws_service_discovery_private_dns_namespace.main.name}:4000"
   })
 }
 
@@ -104,6 +108,58 @@ resource "aws_iam_role_policy" "ecs_task_secrets" {
   name   = "${var.project_name}-config-secrets-access"
   role   = aws_iam_role.ecs_task_execution.id
   policy = data.aws_iam_policy_document.secrets_access.json
+}
+
+#
+# External API Keys Secrets
+# Dynamic secrets for third-party providers
+# #############################################################################
+
+# Create individual secrets for each external API key
+resource "aws_secretsmanager_secret" "external_api_keys" {
+  for_each = nonsensitive(toset(keys(var.external_api_keys)))
+
+  name        = "${var.project_name}/external-api-keys/${each.key}"
+  description = "API key for ${each.key} provider"
+
+  tags = {
+    Name     = "${var.project_name}-external-api-${each.key}"
+    Layer    = "Configuration"
+    Provider = each.key
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "external_api_keys" {
+  for_each = nonsensitive(toset(keys(var.external_api_keys)))
+
+  secret_id = aws_secretsmanager_secret.external_api_keys[each.key].id
+  secret_string = jsonencode({
+    api_key = var.external_api_keys[each.key]
+  })
+}
+
+# IAM policy for accessing external API secrets
+data "aws_iam_policy_document" "external_secrets_access" {
+  count = length(var.external_api_keys) > 0 ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret"
+    ]
+    resources = [
+      for secret in aws_secretsmanager_secret.external_api_keys : secret.arn
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "ecs_external_secrets" {
+  count = length(var.external_api_keys) > 0 ? 1 : 0
+
+  name   = "${var.project_name}-config-external-secrets-access"
+  role   = aws_iam_role.ecs_task_execution.id
+  policy = data.aws_iam_policy_document.external_secrets_access[0].json
 }
 
 # Additional policy for SSM in the execution role
@@ -161,4 +217,26 @@ resource "random_password" "webui_secret_key" {
   min_upper        = 4
   min_lower        = 4
   min_numeric      = 4
+}
+
+# Random secure password generator for LiteLLM Master Key
+resource "random_password" "litellm_master_key" {
+  length           = 32
+  special          = true
+  override_special = "-_"
+  min_special      = 2
+  min_upper        = 4
+  min_lower        = 4
+  min_numeric      = 4
+}
+
+# Random secure password generator for LiteLLM UI credentials
+resource "random_password" "litellm_ui_password" {
+  length           = 16
+  special          = true
+  override_special = "-_"
+  min_special      = 1
+  min_upper        = 2
+  min_lower        = 2
+  min_numeric      = 2
 }

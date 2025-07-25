@@ -31,10 +31,6 @@ resource "aws_ecs_task_definition" "webui" {
         {
           name  = "BYPASS_MODEL_ACCESS_CONTROL"
           value = "True"
-        },
-        {
-          name : "OPENAI_API_BASE_URL",
-          value : "http://${aws_service_discovery_service.bedrock.name}.${aws_service_discovery_private_dns_namespace.main.name}:80/api/v1"
         }
         ], local.gpu_enabled ? [
         {
@@ -49,8 +45,12 @@ resource "aws_ecs_task_definition" "webui" {
           valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:webui_secret_key::"
         },
         {
-          name      = "OPENAI_API_KEY"
-          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:bedrock_api_key::"
+          name      = "OPENAI_API_KEYS"
+          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:openai_api_keys::"
+        },
+        {
+          name      = "OPENAI_API_BASE_URLS"
+          valueFrom = "${aws_secretsmanager_secret.app_secrets.arn}:openai_api_base_urls::"
         },
         {
           name      = "DATABASE_URL"
