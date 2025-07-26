@@ -46,23 +46,23 @@ resource "aws_subnet" "private" {
   }
 }
 
-# NAT Gateway
+# NAT Gateway - conditional creation
 resource "aws_eip" "nat" {
-  count  = length(var.public_subnets)
+  count  = local.nat_gateway_count
   domain = "vpc"
 
   tags = {
-    Name = "horizons-nat-eip-${count.index + 1}"
+    Name = local.nat_gateway_single ? "horizons-nat-eip" : "horizons-nat-eip-${count.index + 1}"
   }
 }
 
 resource "aws_nat_gateway" "main" {
-  count         = length(var.public_subnets)
+  count         = local.nat_gateway_count
   allocation_id = aws_eip.nat[count.index].id
-  subnet_id     = aws_subnet.public[count.index].id
+  subnet_id     = aws_subnet.public[local.nat_gateway_single ? 0 : count.index].id
 
   tags = {
-    Name = "horizons-nat-${count.index + 1}"
+    Name = local.nat_gateway_single ? "horizons-nat" : "horizons-nat-${count.index + 1}"
   }
 
   depends_on = [aws_internet_gateway.main]
@@ -86,9 +86,13 @@ resource "aws_route_table" "private" {
   count  = length(var.private_subnets)
   vpc_id = aws_vpc.main.id
 
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.main[count.index].id
+  # Only add NAT route if NAT Gateway is enabled
+  dynamic "route" {
+    for_each = local.nat_gateway_enabled ? [1] : []
+    content {
+      cidr_block     = "0.0.0.0/0"
+      nat_gateway_id = local.nat_gateway_single ? aws_nat_gateway.main[0].id : aws_nat_gateway.main[count.index].id
+    }
   }
 
   tags = {
@@ -110,45 +114,49 @@ resource "aws_route_table_association" "private" {
 }
 
 #
-# VPC Endpoints
+# VPC Endpoints - conditional creation
 # #############################################################################
 
 # VPC Endpoints for SSM
 resource "aws_vpc_endpoint" "ssm" {
+  count             = local.vpc_endpoints_flap
   vpc_id            = aws_vpc.main.id
   service_name      = "com.amazonaws.${var.aws_region}.ssm"
   vpc_endpoint_type = "Interface"
 
   subnet_ids         = aws_subnet.private[*].id
-  security_group_ids = [aws_security_group.vpc_endpoints.id]
+  security_group_ids = [aws_security_group.vpc_endpoints[0].id]
 
   private_dns_enabled = true
 }
 
 resource "aws_vpc_endpoint" "ssmmessages" {
+  count             = local.vpc_endpoints_flap
   vpc_id            = aws_vpc.main.id
   service_name      = "com.amazonaws.${var.aws_region}.ssmmessages"
   vpc_endpoint_type = "Interface"
 
   subnet_ids         = aws_subnet.private[*].id
-  security_group_ids = [aws_security_group.vpc_endpoints.id]
+  security_group_ids = [aws_security_group.vpc_endpoints[0].id]
 
   private_dns_enabled = true
 }
 
 resource "aws_vpc_endpoint" "ec2messages" {
+  count             = local.vpc_endpoints_flap
   vpc_id            = aws_vpc.main.id
   service_name      = "com.amazonaws.${var.aws_region}.ec2messages"
   vpc_endpoint_type = "Interface"
 
   subnet_ids         = aws_subnet.private[*].id
-  security_group_ids = [aws_security_group.vpc_endpoints.id]
+  security_group_ids = [aws_security_group.vpc_endpoints[0].id]
 
   private_dns_enabled = true
 }
 
-# Security Group for VPC Endpoints
+# Security Group for VPC Endpoints - conditional creation
 resource "aws_security_group" "vpc_endpoints" {
+  count       = local.vpc_endpoints_flap
   name        = "${var.project_name}-networking-vpc-endpoints"
   description = "Security group for VPC Endpoints"
   vpc_id      = aws_vpc.main.id
@@ -174,11 +182,12 @@ resource "aws_security_group" "vpc_endpoints" {
 
 # VPC Endpoint for CloudWatch Logs
 resource "aws_vpc_endpoint" "logs" {
+  count               = local.vpc_endpoints_flap
   vpc_id              = aws_vpc.main.id
   service_name        = "com.amazonaws.${var.aws_region}.logs"
   vpc_endpoint_type   = "Interface"
   subnet_ids          = aws_subnet.private[*].id
-  security_group_ids  = [aws_security_group.vpc_endpoints.id]
+  security_group_ids  = [aws_security_group.vpc_endpoints[0].id]
   private_dns_enabled = true
 }
 

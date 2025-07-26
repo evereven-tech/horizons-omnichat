@@ -27,6 +27,13 @@ locals {
   gpu_enabled      = var.enable_gpu
   gpu_enabled_flap = var.enable_gpu ? 1 : 0
 
+  # Network Optimization
+  nat_gateway_enabled   = var.nat_gateway_config.enabled
+  nat_gateway_single    = var.nat_gateway_config.single_nat
+  nat_gateway_count     = local.nat_gateway_enabled ? (local.nat_gateway_single ? 1 : length(var.public_subnets)) : 0
+  vpc_endpoints_enabled = var.vpc_endpoints_enabled
+  vpc_endpoints_flap    = var.vpc_endpoints_enabled ? 1 : 0
+
   # EFS & Storage
   efs_file_system_id          = local.gpu_enabled && length(aws_efs_file_system.models) > 0 ? aws_efs_file_system.models[0].id : null
   efs_file_system_arn         = local.gpu_enabled && length(aws_efs_file_system.models) > 0 ? aws_efs_file_system.models[0].arn : null
@@ -34,11 +41,12 @@ locals {
   efs_allowed_security_groups = local.security_group_ollama_tasks_id != null ? [local.security_group_ollama_tasks_id] : []
 
   # Networking
-  security_group_ollama_id       = length(aws_security_group.ollama) > 0 ? aws_security_group.ollama[0].id : null
-  security_group_efs_id          = local.gpu_enabled && length(aws_security_group.efs) > 0 ? aws_security_group.efs[0].id : null
-  security_group_ollama_tasks_id = length(aws_security_group.ollama_tasks) > 0 ? aws_security_group.ollama_tasks[0].id : null
-  ollama_security_groups         = local.security_group_ollama_id != null ? [local.security_group_ollama_id] : []
-  lb_target_group_ollama_arn     = local.gpu_enabled && length(aws_lb_target_group.ollama) > 0 ? aws_lb_target_group.ollama[0].arn : null
+  security_group_ollama_id        = length(aws_security_group.ollama) > 0 ? aws_security_group.ollama[0].id : null
+  security_group_efs_id           = local.gpu_enabled && length(aws_security_group.efs) > 0 ? aws_security_group.efs[0].id : null
+  security_group_ollama_tasks_id  = length(aws_security_group.ollama_tasks) > 0 ? aws_security_group.ollama_tasks[0].id : null
+  security_group_vpc_endpoints_id = local.vpc_endpoints_enabled && length(aws_security_group.vpc_endpoints) > 0 ? aws_security_group.vpc_endpoints[0].id : null
+  ollama_security_groups          = local.security_group_ollama_id != null ? [local.security_group_ollama_id] : []
+  lb_target_group_ollama_arn      = local.gpu_enabled && length(aws_lb_target_group.ollama) > 0 ? aws_lb_target_group.ollama[0].arn : null
 
   # Service Discovery
   service_discovery_ollama_arn  = local.gpu_enabled && length(aws_service_discovery_service.ollama) > 0 ? aws_service_discovery_service.ollama[0].arn : null

@@ -24,6 +24,17 @@ webui_version      = "v0.6.12"
 # Ollama Configuration
 ollama_models = "tinyllama,llama2,mistral"
 
+# Network Optimization (optional)
+# Configure NAT Gateway setup
+nat_gateway_config = {
+  enabled    = true   # Set to false to disable NAT Gateway entirely
+  single_nat = true   # true = single NAT (cost-optimized), false = one per AZ (HA)
+}
+
+# VPC Endpoints (optional)
+# Set to true to enable VPC endpoints for private communication
+vpc_endpoints_enabled = false  # Default to minimal setup
+
 # GPU Configuration
 # Set to true if you want to deploy a spot GPU instance with Ollama 
 enable_gpu = true
