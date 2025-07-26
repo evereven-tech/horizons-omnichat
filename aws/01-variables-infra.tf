@@ -112,6 +112,28 @@ variable "efs_models_throughput" {
 }
 
 #
+# Network Optimization
+# #############################################################################
+
+variable "nat_gateway_config" {
+  description = "NAT Gateway configuration"
+  type = object({
+    enabled    = bool
+    single_nat = bool # true = single NAT, false = one per AZ
+  })
+  default = {
+    enabled    = true
+    single_nat = true # Default to cost-optimized single NAT
+  }
+}
+
+variable "vpc_endpoints_enabled" {
+  description = "Whether to create VPC endpoints for private communication"
+  type        = bool
+  default     = false # Default to minimal setup
+}
+
+#
 # GPU EC2 Spot based
 # #############################################################################
 
