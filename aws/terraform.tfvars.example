@@ -1,6 +1,6 @@
 # AWS Region
 aws_region         = "eu-west-1"
-aws_region_bedrock = "us-east-1"
+aws_region_bedrock = "us-west-2"
 
 # Networking
 vpc_cidr           = "x.x.x.x/16"
