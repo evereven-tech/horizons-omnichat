@@ -23,7 +23,7 @@ echo "Using AWS Account: ${AWS_ACCOUNT}"
 echo "ECR URL: ${ECR_URL}"
 
 # Versions to process
-VERSIONS=("main" "v0.6.18" "v0.6.1" "v0.6.0")
+VERSIONS=("main" "v0.6.22" "v0.6.18" "v0.5.2")
 
 # Login to ECR
 aws ecr get-login-password --region ${AWS_REGION} | $RUNTIME_CMD login --username AWS --password-stdin ${ECR_URL}
