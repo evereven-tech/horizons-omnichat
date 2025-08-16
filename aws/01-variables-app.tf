@@ -22,7 +22,7 @@ variable "postgres_user" {
 variable "webui_version" {
   description = "Version of OpenWebUI to deploy"
   type        = string
-  default     = "main"
+  default     = "latest"
 }
 
 variable "bedrock_version" {
