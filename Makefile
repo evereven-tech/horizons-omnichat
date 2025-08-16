@@ -82,17 +82,21 @@ aws-plan: aws-init
 	@echo "Terraform plan..."
 	@cd $(TF_DIR) && terraform plan -out=tfplan
 
-aws-lint: aws-init
-	@echo "Terraform lint..."
-	@cd $(TF_DIR) && terraform fmt --recursive && terraform validate
-
 aws-apply: aws-init
 	@echo "Terraform Apply..."
 	@cd $(TF_DIR) && terraform apply tfplan
 
 aws-deploy: aws-plan aws-apply
 
-# Destruir infraestructura
+aws-lint: aws-init
+	@echo "Terraform lint..."
+	@cd $(TF_DIR) && terraform fmt --recursive && terraform validate
+
+aws-upgrade:
+	@echo "Terraform upgrade..."
+	@cd $(TF_DIR) && terraform init -upgrade
+
+# Destroy infrastructure
 aws-destroy: aws-init
 	@echo "¡CAUTION! This is going to destroy all AWS infraestructure related with Horizons. Are you really sure? (y/N)"
 	@read -p "Answer: " confirm; \
