@@ -7,6 +7,9 @@ init:
 	@if [ ! -d "external/bedrock-gateway" ]; then \
 		git submodule add https://github.com/aws-samples/bedrock-access-gateway.git external/bedrock-gateway; \
 	fi
+	@if [ ! -d "external/sample-ollama-server" ]; then \
+		git submodule add https://github.com/aws-samples/sample-ollama-server.git external/sample-ollama-server; \
+	fi
 	git submodule update --init --recursive
 
 # Local Targets ###############################################################
@@ -50,6 +53,7 @@ validate-hybrid:
 	@echo "Validating hybrid configuration..."
 	@cd hybrid && test -f .env || (echo "Error: .env file not found in hybrid/. Copy hybrid/.env.example to hybrid/.env first." && exit 1)
 	@cd hybrid && test -f config.json || (echo "Error: config.json file not found in hybrid/. Copy hybrid/config.json.template to hybrid/config.json first." && exit 1)
+	@cd hybrid && test -f litellm_config.yaml || (echo "Error: litellm_config.yaml not found. Run 'bin/generate-config-litellm-hybrid.sh' to generate LiteLLM configuration." && exit 1)
 	@test -d external/bedrock-gateway || (echo "Error: bedrock-gateway not found. Run 'make init' first." && exit 1)
 
 hybrid-up: validate-hybrid
@@ -98,7 +102,6 @@ aws-upgrade:
 	@echo "Terraform upgrade..."
 	@cd $(TF_DIR) && terraform init -upgrade
 
-# Destroy infrastructure
 aws-destroy: aws-init
 	@echo "¡CAUTION! This is going to destroy all AWS infraestructure related with Horizons. Are you really sure? (y/N)"
 	@read -p "Answer: " confirm; \
@@ -134,3 +137,4 @@ shell-bedrock: ## Connect to Bedrock Gateway container shell
 		--interactive
 
 # k8s Targets #################################################################
+# TBD
