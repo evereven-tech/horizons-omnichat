@@ -1,3 +1,7 @@
 [submodule "external/bedrock-gateway"]
 	path = external/bedrock-gateway
 	url = https://github.com/aws-samples/bedrock-access-gateway.git
+
+[submodule "external/sample-ollama-server"]
+	path = external/sample-ollama-server
+	url = https://github.com/aws-samples/sample-ollama-server.git
