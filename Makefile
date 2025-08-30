@@ -85,7 +85,7 @@ aws-validate:
 	@command -v terraform >/dev/null 2>&1 || (echo "Error: terraform is not installed. Please install Terraform first." && exit 1)
 	@command -v aws >/dev/null 2>&1 || (echo "Error: AWS CLI is not installed. Please install AWS CLI first." && exit 1)
 
-aws-init: validate-aws
+aws-init: aws-validate
 	@echo "Checking backend configuration..."
 	@test -f $(TF_DIR)/backend.hcl || (echo "Error: backend.hcl not found. Copy backend.hcl.example to backend.hcl and configure it." && exit 1)
 	@echo "Initializing Terraform..."
