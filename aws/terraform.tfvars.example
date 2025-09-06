@@ -50,3 +50,9 @@ spot_config = {
   interruption_behavior = "terminate"
   allocation_strategy   = "capacity-optimized-prioritized"
 }
+
+# Budget Configuration
+budget_notification_emails = ["someone@your-company.com"]
+budget_notification_thresholds = [25, 50, 75, 100, 125, 150]
+platform_budget_limit      = "200"
+marketplace_budget_limit    = "100"

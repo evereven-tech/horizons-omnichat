@@ -167,3 +167,27 @@ variable "spot_config" {
     allocation_strategy   = "lowest-price"
   }
 }
+
+#
+# Budgets & Limits
+# #############################################################################
+
+variable "budget_notification_emails" {
+  description = "Email addresses for budget notifications"
+  type        = list(string)
+}
+
+variable "budget_notification_thresholds" {
+  description = "Budget notification thresholds"
+  type        = list(number)
+}
+
+variable "platform_budget_limit" {
+  description = "Platform budget limit"
+  type        = string
+}
+
+variable "marketplace_budget_limit" {
+  description = "Marketplace budget limit"
+  type        = string
+}
