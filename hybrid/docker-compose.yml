@@ -2,7 +2,7 @@ services:
   webui-db:
     container_name: open-webui-db
     restart: always
-    image: docker.io/library/postgres:17
+    image: docker.io/library/postgres:18
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
