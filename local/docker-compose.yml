@@ -8,13 +8,15 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
-      - open-webui:/var/lib/postgresql/data
+      - type: volume
+        source: open-webui-db
+        target: /var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:
       - chatbot-net
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 3s
       timeout: 5s
       retries: 5
@@ -33,10 +35,10 @@ services:
     networks:
       - chatbot-net
     environment:
-      - 'OLLAMA_BASE_URL=http://ollama:11434'
-      - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
-      - 'WEBUI_DB_HOST=webui-db'
-      - 'DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}'
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+      - WEBUI_DB_HOST=webui-db
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "8080"]
       interval: 10s

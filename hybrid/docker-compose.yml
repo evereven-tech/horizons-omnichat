@@ -21,20 +21,11 @@ services:
       timeout: 5s
       retries: 5
 
-  init-volume:
-    image: alpine
-    volumes:
-      - open-webui:/data
-      - ./config.json:/config.json
-    command: cp /config.json /data/config.json
-
   open-webui:
     container_name: open-webui
     restart: unless-stopped
     image: ghcr.io/open-webui/open-webui:${WEBUI_VERSION}
     depends_on:
-      init-volume:
-        condition: service_completed_successfully
       webui-db:
         condition: service_healthy
       ollama:
@@ -56,6 +47,7 @@ services:
       - type: volume
         source: open-webui
         target: /app/backend/data
+      - ./config.json:/app/backend/data/config.json:ro
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "8080"]
       interval: 10s
@@ -80,16 +72,16 @@ services:
         source: ollama-data
         target: /root/.ollama
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      test: ["CMD-SHELL", "curl -f http://localhost:11434/api/tags || exit 1"]
       interval: 30s
-      timeout: 10s
+      timeout: 15s
       retries: 5
-      start_period: 30s
+      start_period: 60s
 
   litellm-proxy:
     container_name: litellm-proxy
     restart: unless-stopped
-    image: ghcr.io/berriai/litellm:main-latest
+    image: ghcr.io/berriai/litellm:main-stable
     depends_on:
       webui-db:
         condition: service_healthy
@@ -97,24 +89,54 @@ services:
       - "4000:4000"
     networks:
       - chatbot-net
-    command: [ "--config", "/app/config.yaml", "--port", "4000", "--num_workers", "2" ]
+    command: [ 
+      "--config", "/app/config.yaml", 
+      "--port", "4000", 
+      "--num_workers", "4",
+      "--detailed_debug"
+    ]
     environment:
+      # Core LiteLLM Configuration
+      - STORE_MODEL_IN_DB=True
       - UI_USERNAME=${UI_USERNAME}
       - UI_PASSWORD=${UI_PASSWORD}
-      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@webui-db:5432/${POSTGRES_DB}-proxy
+      - LITELLM_MASTER_KEY=${LITELLM_MASTER_KEY}
+      - LITELLM_SALT_KEY=${LITELLM_SALT_KEY:-${LITELLM_MASTER_KEY}}
+      
+      # AWS Configuration
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
-      - STORE_MODEL_IN_DB=True
+      - AWS_REGION=${AWS_REGION:-us-west-2}
+      - AWS_DEFAULT_REGION=${AWS_REGION:-us-west-2}
+      
+      # External Provider API Keys
+      - LITELLM_PROVIDER_OPENAI_API_KEY=${LITELLM_PROVIDER_OPENAI_API_KEY}
+      - LITELLM_PROVIDER_MISTRAL_API_KEY=${LITELLM_PROVIDER_MISTRAL_API_KEY}
+      - LITELLM_PROVIDER_XAI_API_KEY=${LITELLM_PROVIDER_XAI_API_KEY}
+      - LITELLM_PROVIDER_ANTHROPIC_API_KEY=${LITELLM_PROVIDER_ANTHROPIC_API_KEY}
+      - LITELLM_PROVIDER_HUGGINGFACE_API_KEY=${LITELLM_PROVIDER_HUGGINGFACE_API_KEY}
+      - LITELLM_PROVIDER_COHERE_API_KEY=${LITELLM_PROVIDER_COHERE_API_KEY}
+      
+      # Performance and Logging Configuration
+      - LITELLM_LOG=INFO
+      - LITELLM_REQUEST_TIMEOUT=600
+      - LITELLM_MAX_BUDGET=1000
+      - LITELLM_DROP_PARAMS=True
+      
+      # Security Configuration
+      - LITELLM_DISABLE_SPEND_LOGS=False
+      - LITELLM_ENABLE_CORS=True
     volumes:
-      - ./litellm_config.yaml:/app/config.yaml
-      - ./.env:/app/.env
+      - ./litellm_config.yaml:/app/config.yaml:ro
+      - ./.env:/app/.env:ro
     healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost:4000/health/liveness"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 60s
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4000/health/liveness || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
 
   bedrock-gateway:
     container_name: bedrock-gateway
